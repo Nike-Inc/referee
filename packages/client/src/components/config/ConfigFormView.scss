@@ -1,0 +1,86 @@
+@import '../../styles/shared';
+
+#canary-configuration-form-view {
+  padding: 10px;
+  color: $dark-background-color;
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  #group-tabs {
+    display: flex;
+    flex-flow: row;
+
+    padding-bottom: 8px;
+    border-bottom: lightgray 1px solid;
+    height: 47px;
+
+    .group-tab {
+      flex-grow: 0;
+      flex-shrink: 0;
+      padding-left: 5px;
+      padding-right: 5px;
+      overflow-x: auto;
+      display: flex;
+      flex-flow: row;
+      @extend .uppercase;
+      @extend .btn;
+      font-weight: bold;
+      vertical-align: middle;
+      text-align: center;
+      margin-right: 10px;
+
+      .input-group {
+        margin-top: 5px;
+      }
+
+      .group-tap-content {
+        //flex: 1;
+        justify-self: center;
+        align-self: center;
+        margin: auto;
+
+        display: flex;
+        justify-content: flex-end;
+
+        .label {
+          margin: auto;
+        }
+
+        .edit-btn {
+          margin-left: 10px;
+          align-self: center;
+          padding: 7px;
+          background: url("../../assets/edit-icon-black.svg") no-repeat;
+        }
+      }
+
+      &:hover {
+        border-bottom: $dark-background-color 2px solid;
+      }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      .btn {
+        margin: auto;
+        max-height: 40px;
+      }
+    }
+
+
+    .selected {
+      margin-bottom: -2px;
+      border-bottom: $dark-background-color 2px solid;
+    }
+  }
+
+  .metrics {
+   margin-top: 8px;
+  }
+}
+

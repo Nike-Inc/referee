@@ -1,0 +1,49 @@
+@import '../styles/shared';
+
+#header-wrapper {
+  z-index: 10000;
+  background-color: $dark-background-color;
+  color: $dark-bg-font-color;
+
+  #header {
+    @extend .horizontal-screen-scaling-content;
+    @extend .heading-font;
+
+    padding-left: 5px;
+    padding-right: 5px;
+
+    .navbar-brand {
+      @extend .btn;
+      @extend .heading-font;
+      display: flex;
+      font-weight: bold;
+      font-size: 25px;
+
+      #header-logo {
+        width: 35px;
+        height: 35px;
+      }
+
+      #header-label {
+        margin-left: 12px;
+      }
+    }
+
+    #basic-navbar-nav {
+      margin-top: 3px;
+    }
+
+    .navbar {
+      padding: 0;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+      color: $dark-bg-font-color;
+      font-weight: bold;
+    }
+
+    .dropdown-item {
+      @extend .btn;
+    }
+  }
+}

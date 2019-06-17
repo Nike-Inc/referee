@@ -1,0 +1,27 @@
+@import "../styles/shared";
+
+#kayenta-config-manager {
+  display: flex;
+  min-height: 100vh;
+  flex-flow: column;
+
+  #header-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+  }
+
+  .content-container {
+    @extend .content-font;
+    display: flex;
+    flex: 1;
+    align-content: center;
+    justify-content: center;
+    background-color: gray;
+
+    .content-container-inner-wrapper {
+      @extend .horizontal-screen-scaling-content;
+      background-color: $white;
+    }
+  }
+}

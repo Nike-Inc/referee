@@ -1,0 +1,16 @@
+{
+  "npmClient": "yarn",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "README.md"
+      ],
+      "message": "chore(release): publish"
+    }
+  },
+  "version": "0.0.2",
+  "useWorkspaces": true
+}

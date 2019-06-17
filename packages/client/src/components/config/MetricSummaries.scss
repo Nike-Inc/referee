@@ -1,0 +1,26 @@
+.metric-summaries-container {
+  display: flex;
+  flex-flow: column;
+
+  .metric-summaries {
+    display: flex;
+    flex-flow: column;
+    padding-bottom: 5px;
+
+    .btn {
+      margin-left: 5px;
+    }
+
+    .no-metrics-label {
+      font-style: italic;
+      color: grey;
+      font-size: 15px;
+      padding-left: 10px;
+    }
+  }
+
+  .metric-summaries-footer {
+    padding-top: 6px;
+    border-top: 1px solid lightgray;
+  }
+}

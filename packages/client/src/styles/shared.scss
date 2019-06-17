@@ -1,0 +1,67 @@
+@import 'typeface';
+
+$black: #111111;
+$white: #ffffff;
+
+$dark-background-color: #222222;
+$dark-bg-font-color: #F7F7F7;
+$off-white: #f2f2f2;
+
+.btn-outline-warning {
+  font-weight: bold!important;
+}
+
+.line-break {
+  align-self: center;
+  border-bottom: $black solid 1px;
+  width: 96%;
+}
+
+.un-selectable {
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
+}
+
+.btn {
+  @extend .un-selectable;
+  cursor: pointer;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.hidden {
+  display: none;
+}
+
+.horizontal-screen-scaling-content {
+  width: 100%;
+
+  @media (min-width: 1201px) {
+    width: 90%;
+  }
+
+  @media (min-width: 1500px) {
+    width: 80%;
+  }
+
+  @media (min-width: 1680px) {
+    width: 75%;
+  }
+
+  @media (min-width: 2000px) {
+    width: 65%;
+  }
+
+  @media (min-width: 2200px) {
+    width: 55%;
+  }
+}
+
+.center-me {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

@@ -1,0 +1,30 @@
+@import "../../styles/typeface";
+@import "../../styles/shared";
+
+.table-of-contents {
+
+  .home {
+    border-radius: 5px;
+    &:hover {
+      background-color: darkgray;
+    }
+  }
+
+  height: 100%;
+
+  .toc-entry {
+    margin-top: 5px;
+    .toc-entry-label {
+      @extend .heading-font;
+      font-size: 16px;
+      padding-left: 5px;
+    }
+
+    .toc-entry-page {
+      @extend .home;
+      margin-top: 2px;
+      @extend .btn;
+      padding-left: 10px;
+    }
+  }
+}

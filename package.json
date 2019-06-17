@@ -1,0 +1,38 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-plugin-flowtype": "^3.9.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "jest": "^24.8.0",
+    "lerna": "^3.14.1",
+    "prettier": "^1.17.1",
+    "typescript": "3.3.4000"
+  },
+  "scripts": {
+    "bootsrap": "lerna bootstrap",
+    "client-start": "yarn workspace client start",
+    "client-build": "yarn workspace client build",
+    "server-start": "yarn workspace server start",
+    "server-build": "yarn workspace server build",
+    "lint": "yarn workspaces run lint",
+    "format": "yarn workspaces run format",
+    "pretest": "yarn workspaces run lint",
+    "test": "yarn workspaces run test",
+    "build": "yarn workspaces run build",
+    "clean": "yarn workspaces run clean",
+    "prepare-artifacts": "yarn && yarn bootsrap && yarn clean && yarn test && yarn build"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

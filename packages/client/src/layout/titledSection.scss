@@ -1,0 +1,27 @@
+@import '../styles/shared.scss';
+
+.titled-section {
+
+  .titled-section-header {
+    @extend .heading-font;
+    font-weight: bold;
+    border-radius: 2px;
+    font-size: 20px;
+    padding-left: 8px;
+    padding-top: 3px;
+    background-color: $dark-background-color;
+    color: $dark-bg-font-color;
+  }
+
+  .titled-section-contents {
+    display: block;
+    overflow: scroll;
+    border-radius: 2px;
+    margin-top: 10px;
+    margin-left: 7px;
+    margin-right: 7px;
+    padding: 5px 25px;
+    background-color: $off-white;
+  }
+  margin-bottom: 15px;
+}

@@ -1,0 +1,28 @@
+.scoring-section {
+  .alert {
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+
+  .gw-wrapper {
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .no-metrics-label {
+    width: 100%;
+    font-style: italic;
+    color: grey;
+    font-size: 15px;
+    padding-left: 10px;
+  }
+
+  .weight-total {
+    margin-left: 5px;
+    margin-top: 5px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+}

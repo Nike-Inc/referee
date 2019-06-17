@@ -1,0 +1,80 @@
+{
+  "name": "client",
+  "version": "0.0.2",
+  "description": "The client lib for the Referee UX",
+  "author": "Justin Field <fieldju@gmail.com>",
+  "homepage": "https://example.com/dashboard/",
+  "proxy": "http://localhost:3001",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "autobind-decorator": "^2.4.0",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "capitalize": "^2.0.0",
+    "classnames": "^2.2.6",
+    "file-saver": "^2.0.1",
+    "formik": "^1.5.1",
+    "github-markdown-css": "^3.0.1",
+    "highlight.js": "^9.15.6",
+    "js-yaml": "^3.13.0",
+    "loglevel": "^1.6.1",
+    "marked": "^0.6.2",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
+    "optional-js": "^2.1.1",
+    "path-browserify": "^1.0.0",
+    "react": "^16.8.5",
+    "react-bootstrap": "^1.0.0-beta.6",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-dom": "^16.8.5",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "react-select": "^2.4.2",
+    "typeface-assistant": "^0.0.54",
+    "uuid": "^3.3.2",
+    "yup": "^0.27.0"
+  },
+  "devDependencies": {
+    "@types/capitalize": "^1.0.1",
+    "@types/classnames": "^2.2.7",
+    "@types/file-saver": "^2.0.0",
+    "@types/highlight.js": "^9.12.3",
+    "@types/jest": "24.0.11",
+    "@types/js-yaml": "^3.12.0",
+    "@types/loglevel": "^1.5.4",
+    "@types/marked": "^0.6.5",
+    "@types/react": "16.8.8",
+    "@types/react-dom": "16.8.3",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/react-select": "^2.0.15",
+    "@types/uuid": "^3.4.4",
+    "@types/yup": "^0.26.12",
+    "node-sass": "^4.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Nike-Inc/Referee.git"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "format": "prettier --write --single-quote --print-width=120 --tab-width=2 'src/**/*.{ts,tsx,js,jsx}'",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "check-build": "yarn lint && yarn test",
+    "clean": "rm -fr ./build",
+    "deploy": "yarn clean && yarn build && touch build/.nojekyll && gh-pages -d build -t",
+    "s3": "yarn clean && yarn build && aws s3 sync ./build s3://${REFEREE_BUCKET}/"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

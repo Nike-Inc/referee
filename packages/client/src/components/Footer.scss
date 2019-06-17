@@ -1,0 +1,24 @@
+@import '../styles/shared.scss';
+
+#footer {
+  @extend .heading-font;
+  background-color: $dark-background-color;
+  color: $dark-bg-font-color;
+
+  padding-bottom: 5px;
+  text-align: center;
+
+  a {
+    text-decoration: underline;
+    color: $dark-bg-font-color;
+  }
+
+  .row {
+    padding-top: 10px;
+  }
+
+  .footer-label {
+    font-size: 17px;
+    font-weight: bold;
+  }
+}

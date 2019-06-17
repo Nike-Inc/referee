@@ -1,0 +1,68 @@
+@import "../../styles/shared";
+@import "../../styles/typeface";
+
+.documentation-wrapper {
+  @media (max-width: 500px) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  display: flex;
+  flex: 1;
+  height: 100%;
+
+  .selected {
+    background-color: lightgrey;
+  }
+
+  .table-of-contents {
+    overflow-y: scroll;
+    background-color: #f2f2f2;
+    flex: 1;
+    padding: 5px;
+    border-right: 1px solid lightgrey;
+  }
+
+  .markdown-body {
+    flex: 3;
+    overflow-y: scroll;
+    width: 100%;
+    padding: 15px 20px;
+
+    $baseSize: 30px;
+
+    h1 {
+      @extend .heading-font;
+      font-size: $baseSize;
+    }
+
+    h2 {
+      @extend .heading-font;
+      font-size: $baseSize * .85;
+      border-bottom: none;
+    }
+
+    h3 {
+      @extend .heading-font;
+      font-size: $baseSize * .7;
+    }
+
+    h4 {
+      @extend .heading-font;
+      font-size: $baseSize * .55;
+    }
+
+    h5 {
+      @extend .heading-font;
+      font-size: $baseSize * .40;
+    }
+
+    pre {
+      border-radius: 5px;
+      width: 100%;
+      padding: 10px;
+      color: $dark-bg-font-color;
+      background-color: $dark-background-color;
+    }
+  }
+}

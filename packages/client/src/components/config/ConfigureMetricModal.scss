@@ -1,0 +1,38 @@
+@import '../../styles/shared';
+
+.modal-lg {
+  @media (min-width: 1275px) {
+    max-width: 1250px!important;
+  }
+}
+
+#configure-metric-modal {
+  .form-label {
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-text {
+    margin-left: 20px;
+    margin-bottom: 3px;
+  }
+
+  #add-dimension-btn {
+    margin-top: 10px;
+  }
+
+  .configure-metric-form-error-wrapper {
+    border-radius: 4px;
+    border: 2px red solid;
+    padding: 10px;
+
+    .alert {
+      margin-top: 10px;
+      margin-bottom: 0 !important;
+    }
+  }
+}

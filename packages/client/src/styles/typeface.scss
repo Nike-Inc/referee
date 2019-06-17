@@ -1,0 +1,13 @@
+.heading-font {
+  font-family: Helvetica, Arial, serif;
+  font-weight: bold;
+}
+
+.content-font {
+  font-family: Assistant, Bungee, Roboto, serif;
+}
+
+h3 {
+  @extend .heading-font;
+  font-weight: bold!important;
+}
