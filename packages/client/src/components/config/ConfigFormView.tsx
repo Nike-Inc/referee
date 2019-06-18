@@ -13,8 +13,9 @@ import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
 import { MetricsSection } from './MetricsSection';
 import { KvMap } from '../../domain/CustomTypes';
+import { RouterProps } from 'react-router';
 
-interface Props {}
+interface Props extends RouterProps {}
 interface Stores {
   configEditorStore: ConfigEditorStore;
   modalStore: StackStore<JSX.Element>;
@@ -25,7 +26,7 @@ interface Stores {
   'modalStore'
 )
 @observer
-export default class ConfigFormView extends ConnectedComponent<{}, Stores> {
+export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
   groupEdit: any;
 
   constructor(props: Props) {
@@ -141,6 +142,8 @@ export default class ConfigFormView extends ConnectedComponent<{}, Stores> {
       isCanaryConfigValid
     } = this.stores.configEditorStore;
 
+    const { history } = this.props;
+
     return (
       <div id="canary-configuration-form-view">
         <Form>
@@ -186,6 +189,7 @@ export default class ConfigFormView extends ConnectedComponent<{}, Stores> {
             hasTheCopyOrSaveButtonBeenClicked={hasTheCopyOrSaveButtonBeenClicked}
             isCanaryConfigValid={isCanaryConfigValid}
             markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue={this.markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue}
+            history={history}
           />
         </Form>
       </div>

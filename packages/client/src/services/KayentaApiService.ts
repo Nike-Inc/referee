@@ -1,12 +1,15 @@
 import axios from 'axios';
 import log from '../util/LoggerFactory';
 import KayentaCredential from '../domain/KayentaCredential';
-import CanaryExecutionResponse from '../domain/CanaryExecutionResponse';
+import { CanaryExecutionResponse } from '../domain/CanaryExecutionResponse';
+import { stores } from '../stores';
 
 const kayentaClient = axios.create({
   baseURL: `${process.env.PUBLIC_URL}/kayenta/`,
   timeout: 5000
 });
+
+const { canaryExecutorStore } = stores;
 
 export default class KayentaApiService {
   async fetchCredentials(): Promise<KayentaCredential[]> {
@@ -19,17 +22,23 @@ export default class KayentaApiService {
     }
   }
 
-  async triggerCanary(json: string): Promise<CanaryExecutionResponse> {
+  async triggerCanary(json: any): Promise<CanaryExecutionResponse> {
+    // TODO add better validation here
+    const application: string = canaryExecutorStore.applicationName;
+    const metricsAccountName: string = canaryExecutorStore.metricsAccountName;
+    const storageAccountName: string = canaryExecutorStore.storageAccountName;
+
     try {
-      const response = await kayentaClient.post(
-        '/standalone_canary_analysis?user=melana.hammel@nike.com&application=example-canary-microservice&metricsAccountName=sfx-architecture&storageAccountName=in-memory-store',
-        json,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
+      const response = await kayentaClient.post('/canary', json, {
+        params: {
+          application: application,
+          metricsAccountName: metricsAccountName,
+          storageAccountName: storageAccountName
+        },
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
       log.info(response);
       return response.data;
     } catch (error) {

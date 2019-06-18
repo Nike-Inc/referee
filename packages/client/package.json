@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@types/react-flatpickr": "^3.7.1",
     "autobind-decorator": "^2.4.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
@@ -22,12 +23,14 @@
     "marked": "^0.6.2",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
+    "moment": "^2.24.0",
     "optional-js": "^2.1.1",
     "path-browserify": "^1.0.0",
     "react": "^16.8.5",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.5",
+    "react-flatpickr": "^3.9.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-select": "^2.4.2",
@@ -54,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Nike-Inc/Referee.git"
+    "url": "git@github.nike.com:cop-canary/referee.git"
   },
   "scripts": {
     "start": "react-scripts start",

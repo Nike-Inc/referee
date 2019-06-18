@@ -99,3 +99,6 @@ public/static/
 !public/static/.gitkeep
 .env_*
 dist
+.DS_Store
+packages/client/public/docs
+packages/client/public/templates
