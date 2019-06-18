@@ -6,7 +6,7 @@ import path from 'path';
 import { publicRoot } from './const/appPaths';
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 app.get('/', (req, res) => res.redirect(301, '/dashboard'));
 
