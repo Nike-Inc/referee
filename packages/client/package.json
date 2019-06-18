@@ -57,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.nike.com:cop-canary/referee.git"
+    "url": "git@github.com:Nike-Inc/referee.git"
   },
   "scripts": {
     "start": "react-scripts start",
