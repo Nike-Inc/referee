@@ -20,6 +20,10 @@ app.use(
   })
 );
 
+app.get('/health', (req, res) => {
+  res.status(204).end();
+});
+
 // Route all other traffic to the public dir
 app.use('/dashboard/', express.static(publicRoot));
 
