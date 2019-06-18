@@ -1,0 +1,17 @@
+@import "../../styles/shared";
+
+.canary-executor-button-section {
+  border-top: 1px solid lightgray;
+  padding-top: 10px;
+  display: flex;
+
+  .btn-wrapper {
+    margin-left: auto;
+
+    margin-right: 10px;
+
+    .btn {
+      margin-left: 10px;
+    }
+  }
+}

@@ -1,3 +1,3 @@
-export default interface CanaryExecutionResponse {
+export interface CanaryExecutionResponse {
   canaryExecutionId: string;
 }

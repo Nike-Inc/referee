@@ -6,18 +6,21 @@ import { Button } from 'react-bootstrap';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './ConfigFormButtonSection.scss';
+import * as H from 'history';
 
 export const ConfigFormButtonSection = observer(
   ({
     canaryConfig,
     hasTheCopyOrSaveButtonBeenClicked,
     isCanaryConfigValid,
-    markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue
+    markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue,
+    history
   }: {
     canaryConfig: CanaryConfig;
     hasTheCopyOrSaveButtonBeenClicked: boolean;
     isCanaryConfigValid: boolean;
     markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue: () => void;
+    history: H.History;
   }): JSX.Element => {
     return (
       <div className="config-form-button-section">
@@ -47,6 +50,16 @@ export const ConfigFormButtonSection = observer(
             }}
           >
             Save as File
+          </Button>
+          <Button
+            disabled={hasTheCopyOrSaveButtonBeenClicked && !isCanaryConfigValid}
+            onClick={() => {
+              markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();
+              history.push('/dev-tools/canary-executor');
+            }}
+            variant="dark"
+          >
+            Test Config
           </Button>
         </div>
       </div>

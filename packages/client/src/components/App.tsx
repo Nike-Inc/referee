@@ -10,11 +10,13 @@ import Footer from './Footer';
 import Landing from './Landing';
 import ModalViewer from './ModalViewer';
 import ConfigEditor from './config/ConfigEditor';
+import CanaryExecutor from './canary-executor/CanaryExecutor';
 import Docs from './docs/Docs';
 
 import './App.scss';
 import 'typeface-assistant/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import CanaryExecutorResults from './results/CanaryExecutorResults';
 
 interface AppProps {}
 
@@ -31,6 +33,8 @@ export default class App extends React.Component<AppProps> {
                 <Route exact={true} path="/" component={Landing} />
                 <Route path="/docs/:path(.*)" component={Docs} />
                 <Route path="/config/edit/local" component={ConfigEditor} />
+                <Route path="/dev-tools/canary-executor" component={CanaryExecutor} />
+                <Route path="/dev-tools/results" component={CanaryExecutorResults} />
               </div>
             </div>
             <Footer />

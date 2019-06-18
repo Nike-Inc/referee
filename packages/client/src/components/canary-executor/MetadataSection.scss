@@ -1,0 +1,17 @@
+#canary-executor-form-view {
+  .metadata {
+    .titled-section-contents {
+      overflow: visible;
+
+      #dropdown-label {
+        padding: 15px;
+        margin-right: 30px;
+      }
+
+      #dropdown {
+        flex: 1;
+        padding: 10px;
+      }
+    }
+  }
+}

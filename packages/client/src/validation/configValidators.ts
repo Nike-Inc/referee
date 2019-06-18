@@ -101,8 +101,7 @@ const judgeSchema = object().required();
 const canaryConfigSchema = object().shape({
   applications: array()
     .of(string().required())
-    .min(1)
-    .required(),
+    .min(1),
   id: string(),
   createdTimestamp: number(),
   updatedTimestamp: number(),

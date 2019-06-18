@@ -221,7 +221,7 @@ export default class ConfigEditorStore {
     }
     const metricToCopy = metricToCopyArray[0];
 
-    // find a name that is unique
+    // find a application that is unique
     let newMetricName: string;
     let i = 1;
     do {

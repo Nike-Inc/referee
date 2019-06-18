@@ -4,6 +4,7 @@ import * as React from 'react';
 export const TextInputGroup = ({
   name,
   label,
+  placeHolderText,
   value,
   onChange,
   area = false,
@@ -14,6 +15,7 @@ export const TextInputGroup = ({
 }: {
   name: string;
   label: string;
+  placeHolderText?: string;
   value?: string;
   onChange?: any;
   area?: boolean;
@@ -38,6 +40,7 @@ export const TextInputGroup = ({
             as={area ? 'textarea' : 'input'}
             rows={rows}
             value={value}
+            placeholder={placeHolderText}
             onChange={onChange}
           />
           {touched && error && <Alert variant="danger">{error}</Alert>}
