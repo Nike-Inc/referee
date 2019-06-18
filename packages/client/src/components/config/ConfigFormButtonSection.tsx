@@ -55,6 +55,9 @@ export const ConfigFormButtonSection = observer(
             disabled={hasTheCopyOrSaveButtonBeenClicked && !isCanaryConfigValid}
             onClick={() => {
               markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();
+              if (!isCanaryConfigValid) {
+                return;
+              }
               history.push('/dev-tools/canary-executor');
             }}
             variant="dark"
