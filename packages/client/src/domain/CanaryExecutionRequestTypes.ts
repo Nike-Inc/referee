@@ -17,5 +17,5 @@ export interface CanaryScope {
   step: number;
   start: string;
   end: string;
-  extendedScopeParams: {};
+  extendedScopeParams: { [key: string]: string };
 }

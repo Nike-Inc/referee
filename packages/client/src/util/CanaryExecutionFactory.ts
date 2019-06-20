@@ -6,22 +6,24 @@ export default class CanaryExecutionFactory {
       scopes: {
         default: {
           controlScope: {
-            scope: 'excanarymicroservice-v003',
+            scope: 'default',
             location: 'us-west-2',
             step: 60,
-            // start: '',
-            // end: '',
-            start: '2019-01-04T18:56:02.816Z',
-            end: '2019-01-04T21:56:02.816Z',
-            extendedScopeParams: {}
+            start: '',
+            end: '',
+            extendedScopeParams: {
+              _scope_key: 'default'
+            }
           },
           experimentScope: {
-            scope: 'excanarymicroservice-v004',
+            scope: 'default',
             location: 'us-west-2',
             step: 60,
-            start: '2019-01-04T18:56:02.816Z',
-            end: '2019-01-04T21:56:02.816Z',
-            extendedScopeParams: {}
+            start: '',
+            end: '',
+            extendedScopeParams: {
+              _scope_key: 'default'
+            }
           }
         }
       },

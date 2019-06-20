@@ -27,7 +27,7 @@ interface Props extends RouterProps {}
 @observer
 export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
   @boundMethod
-  private handleRunButtonClick(): void {
+  private async handleRunButtonClick(): Promise<void> {
     const canaryAdhocExecutionRequest: any = {};
 
     this.stores.canaryExecutorStore.markHasTheRunButtonBeenClickedFlagAsTrue();
@@ -37,17 +37,16 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
 
     canaryAdhocExecutionRequest['canaryConfig'] = this.stores.configEditorStore.canaryConfigObject;
     canaryAdhocExecutionRequest['executionRequest'] = this.stores.canaryExecutorStore.canaryExecutionRequestObject;
-    kayentaApiService
-      .triggerCanary(canaryAdhocExecutionRequest)
-      .then(data => {
-        this.stores.resultsStore.setCanaryExecutionId(data);
-      })
-      .catch(e => {
-        log.error('Failed to fetch response: ', e);
-        throw e;
-      });
 
-    this.props.history.push('/dev-tools/results/');
+    try {
+      const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
+      this.stores.resultsStore.clearResultsRequestComplete();
+      this.stores.resultsStore.setCanaryExecutionId(data.canaryExecutionId);
+      this.props.history.push('/dev-tools/canary-executor/results/');
+    } catch (e) {
+      log.error('Failed to fetch response: ', e);
+      throw e;
+    }
   }
 
   render(): React.ReactNode {
@@ -56,7 +55,7 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
         <div className="btn-wrapper">
           <Button
             onClick={() => {
-              this.props.history.push('/config/edit/local');
+              this.props.history.push('/config/edit');
             }}
             variant="dark"
           >

@@ -103,6 +103,9 @@ export default class CanaryExecutorStore {
   updateCanaryScope(newScope: CanaryScope, type: string) {
     if (type === 'control') {
       this.canaryExecutionRequestObject.scopes.default.controlScope = newScope;
+      if (this.testingType === 'AA') {
+        this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
+      }
     } else if (type === 'experiment') {
       this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
     }

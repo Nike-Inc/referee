@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@types/react-flatpickr": "^3.7.1",
+    "@types/react-tooltip": "^3.9.2",
     "autobind-decorator": "^2.4.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
@@ -27,6 +28,7 @@
     "optional-js": "^2.1.1",
     "path-browserify": "^1.0.0",
     "react": "^16.8.5",
+    "react-accessible-accordion": "^3.0.0",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.5",
@@ -34,6 +36,8 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-select": "^2.4.2",
+    "react-spinners": "^0.5.4",
+    "react-tooltip": "^3.10.0",
     "typeface-assistant": "^0.0.54",
     "uuid": "^3.3.2",
     "yup": "^0.27.0"

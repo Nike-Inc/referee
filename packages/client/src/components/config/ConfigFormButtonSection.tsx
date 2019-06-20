@@ -58,7 +58,7 @@ export const ConfigFormButtonSection = observer(
               if (!isCanaryConfigValid) {
                 return;
               }
-              history.push('/dev-tools/canary-executor');
+              history.push('/dev-tools/canary-executor/setup');
             }}
             variant="dark"
           >

@@ -25,7 +25,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
   @boundMethod
   private loadCanaryFromJsonObject(config: CanaryConfig): void {
     this.stores.configEditorStore.setCanaryConfigObject(config);
-    this.props.history.push('/config/edit/local');
+    this.props.history.push('/config/edit');
   }
 
   render(): React.ReactNode {
@@ -54,7 +54,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
                   <NavDropdown.Item
                     onClick={() => {
                       this.stores.configEditorStore.setCanaryConfigObject(CanaryConfigFactory.createNewCanaryConfig());
-                      this.props.history.push('/config/edit/local');
+                      this.props.history.push('/config/edit');
                     }}
                   >
                     Create a New Kayenta Canary Config
