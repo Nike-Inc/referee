@@ -32,6 +32,9 @@ interface Props extends RouterProps {}
 
 let response: CanaryExecutionStatusResponse | any = {};
 const DEFAULT_CANARY_SCORE_DISPLAY = '1';
+const SUCCESS = 'succeeded';
+const TERMINAL = 'Terminal';
+const TERMINAL_SCORE = 0;
 
 @connect(
   'canaryExecutorStore',
@@ -40,7 +43,6 @@ const DEFAULT_CANARY_SCORE_DISPLAY = '1';
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
   async componentDidMount(): Promise<void> {
-    log.info(this.stores.resultsStore.canaryExecutionId);
     if (this.stores.resultsStore.canaryExecutionId === '') {
       const path = window.location.pathname;
       const queryId = path.split('/').pop();
@@ -53,18 +55,17 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
     do {
       const data = async () => {
         await delay(1000);
-        log.info(this.stores.resultsStore.canaryExecutionId);
         response = await kayentaApiService.fetchCanaryRunStatusAndResults(this.stores.resultsStore.canaryExecutionId);
-        log.info(response.stageStatus);
-
         this.stores.resultsStore.updateStageStatus(response.stageStatus);
       };
       await data();
     } while (!response.complete);
 
-    log.info(this.stores.resultsStore.canaryExecutionId);
+    if (response.status === SUCCESS) {
+      this.stores.resultsStore.updateCanaryExecutionStatusResponse(response);
+    }
+
     this.stores.resultsStore.updateResultsRequestComplete();
-    this.stores.resultsStore.updateCanaryExecutionStatusResponse(response);
     this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
   }
 
@@ -73,48 +74,33 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
 
     return (
       <div className="canary-executor-results">
-        {resultsStore.resultsRequestComplete ? (
-          <div>
-            <TitledSection title="Canary Results" />
-
-            <div className="widget">
-              <div className="standalone-canary-analysis-summary">
-                <div className="summary-container  ">
-                  <div className="metadata-container">
-                    <div className="result-container">
-                      <div className="result-label headline-md-base">Passed Thresholds</div>
-                      <div className="result-value-container">
-                        <div className="result-value headline-md-brand">
-                          {resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.classification === 'Pass'
-                            ? 'Yes'
-                            : 'No'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="score-container">
-                      <div className="score-label headline-md-base">Canary Score</div>
-                      <div className="score-value headline-md-brand">
-                        {resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.score}
-                      </div>
-                    </div>
-
-                    <div className="mode-container">
-                      <div className="mode-label headline-md-base">Testing Type</div>
-                      <div className="mode-value headline-md-brand">
-                        {canaryExecutorStore.testingType === 'AA' ? 'A-A' : 'A-B'}
-                      </div>
-                    </div>
-                  </div>
-                  <Meter />
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {!resultsStore.resultsRequestComplete ? (
           <div>
             <h5>Loading</h5>
             <ClipLoader />
+          </div>
+        ) : (
+          <div>
+            <TitledSection title="Canary Results" />
+            <div className="widget">
+              <div className="standalone-canary-analysis-summary">
+                <Summary
+                  classification={
+                    resultsStore.canaryExecutionStatusResponse
+                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.classification
+                      : TERMINAL
+                  }
+                  score={
+                    resultsStore.canaryExecutionStatusResponse
+                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.score
+                      : TERMINAL_SCORE
+                  }
+                  testingType={canaryExecutorStore.testingType}
+                  marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
+                  pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -122,34 +108,63 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
   }
 }
 
-const Meter = (): JSX.Element => {
+const Summary = ({
+  classification,
+  score,
+  testingType,
+  marginal,
+  pass
+}: {
+  classification: string;
+  score: number;
+  testingType: string;
+  marginal: number;
+  pass: number;
+}): JSX.Element => {
   let meterStyle = {
     width: `${DEFAULT_CANARY_SCORE_DISPLAY}%`
   };
-  if (response.result.judgeResult.score.score > 0) {
+  if (score > 0) {
     meterStyle = {
-      width: `${response.result.judgeResult.score.score}%`
+      width: `${score}%`
     };
   }
 
   const marginalLineStyle = {
-    left: `${response.canaryExecutionRequest.thresholds.marginal}%`
+    left: `${marginal}%`
   };
   const passLineStyle = {
-    left: `${response.canaryExecutionRequest.thresholds.pass}%`
+    left: `${pass}%`
   };
 
   return (
-    <div className="meter-wrapper">
-      <div
-        className={['meter', response.result.judgeResult.score.classification === 'Pass' ? 'pass' : 'fail'].join(' ')}
-        style={meterStyle}
-      />
-      <div className="marginal-line" style={marginalLineStyle}>
-        <div className="threshold-label headline-md-base">{response.canaryExecutionRequest.thresholds.marginal}</div>
+    <div className="summary-container">
+      <div className="metadata-container">
+        <div className="result-container">
+          <div className="result-label headline-md-base">Passed Thresholds</div>
+          <div className="result-value-container">
+            <div className="result-value headline-md-brand">
+              {classification === TERMINAL ? 'Terminal' : classification === 'Pass' ? 'Yes' : 'No'}
+            </div>
+          </div>
+        </div>
+        <div className="score-container">
+          <div className="score-label headline-md-base">Canary Score</div>
+          <div className="score-value headline-md-brand">{score}</div>
+        </div>
+        <div className="mode-container">
+          <div className="mode-label headline-md-base">Testing Type</div>
+          <div className="mode-value headline-md-brand">{testingType === 'AA' ? 'A-A' : 'A-B'}</div>
+        </div>
       </div>
-      <div className="pass-line" style={passLineStyle}>
-        <div className="threshold-label headline-md-base">{response.canaryExecutionRequest.thresholds.pass}</div>
+      <div className="meter-wrapper">
+        <div className={['meter', classification === 'Pass' ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
+        <div className="marginal-line" style={marginalLineStyle}>
+          <div className="threshold-label headline-md-base">{marginal}</div>
+        </div>
+        <div className="pass-line" style={passLineStyle}>
+          <div className="threshold-label headline-md-base">{pass}</div>
+        </div>
       </div>
     </div>
   );

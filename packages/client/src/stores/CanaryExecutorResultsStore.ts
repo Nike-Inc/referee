@@ -1,13 +1,12 @@
 import { action, observable } from 'mobx';
 import { CanaryExecutionStatusResponse } from '../domain/CanaryExecutionStatusResponse';
-import CanaryExecutionStatusResponseFactory from '../util/CanaryExecutionStatusResponseFactory';
 
 export default class CanaryExecutorResultsStore {
   @observable
   canaryExecutionId = '';
 
   @observable
-  canaryExecutionStatusResponse: CanaryExecutionStatusResponse = CanaryExecutionStatusResponseFactory.createNewCanaryExecutionStatusResponse();
+  canaryExecutionStatusResponse: CanaryExecutionStatusResponse | undefined;
 
   @observable
   resultsRequestComplete = false;

@@ -1,3 +1,5 @@
+import { KvMap } from './CustomTypes';
+
 export interface CanaryExecutionRequest {
   scopes: {
     default: {
@@ -17,5 +19,5 @@ export interface CanaryScope {
   step: number;
   start: string;
   end: string;
-  extendedScopeParams: { [key: string]: string };
+  extendedScopeParams: KvMap<string>;
 }

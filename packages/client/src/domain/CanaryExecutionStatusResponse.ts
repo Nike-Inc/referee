@@ -1,5 +1,6 @@
 import { CanaryExecutionRequest } from './CanaryExecutionRequestTypes';
 import { CanaryConfig } from './CanaryConfigTypes';
+import { KvMap } from './CustomTypes';
 
 export interface CanaryExecutionStatusResponse {
   application: string;
@@ -9,7 +10,7 @@ export interface CanaryExecutionStatusResponse {
   complete: boolean;
   status: string;
   exception: {};
-  stageStatus: { [key: string]: string };
+  stageStatus: KvMap<string>;
 
   buildTimeIso: string;
   buildTimeMillis: number;
@@ -61,7 +62,7 @@ export interface CanaryAnalysisResult {
   controlMetadata: {};
   experimentMetadata: {};
   resultMetadata: {};
-  tags: { [key: string]: string };
+  tags: KvMap<string>;
 }
 
 export interface CanaryJudgeScore {
