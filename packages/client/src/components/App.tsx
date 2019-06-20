@@ -36,7 +36,7 @@ export default class App extends React.Component<AppProps> {
                 <Route path="/dev-tools/canary-executor/setup" component={CanaryExecutor} />
                 <Route
                   exact
-                  path="/dev-tools/canary-executor/results\/([0-9A-Z]{26})*"
+                  path="/dev-tools/canary-executor/results\/:canaryExecutionId(\w+)"
                   component={CanaryExecutorResults}
                 />
               </div>

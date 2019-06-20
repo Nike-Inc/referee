@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
-import { RouterProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import CanaryExecutorStore from '../../stores/CanaryExecutorStore';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
@@ -13,7 +12,6 @@ import { CanaryExecutionStatusResponse } from '../../domain/CanaryExecutionStatu
 import { delay } from 'q';
 import { ClipLoader } from 'react-spinners';
 import TitledSection from '../../layout/titledSection';
-import CanaryExecutorButtonSection from '../canary-executor/CanaryExecutorButtonSection';
 import {
   Accordion,
   AccordionItem,
@@ -28,7 +26,11 @@ interface Stores {
   resultsStore: CanaryExecutorResultsStore;
 }
 
-interface Props extends RouterProps {}
+interface ResultsPathParams {
+  canaryExecutionId: string;
+}
+
+interface Props extends RouteComponentProps<ResultsPathParams> {}
 
 let response: CanaryExecutionStatusResponse | any = {};
 const DEFAULT_CANARY_SCORE_DISPLAY = '1';
@@ -43,14 +45,7 @@ const TERMINAL_SCORE = 0;
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
   async componentDidMount(): Promise<void> {
-    if (this.stores.resultsStore.canaryExecutionId === '') {
-      const path = window.location.pathname;
-      const queryId = path.split('/').pop();
-
-      if (queryId !== undefined) {
-        this.stores.resultsStore.setCanaryExecutionId(queryId);
-      }
-    }
+    this.stores.resultsStore.setCanaryExecutionId(this.props.match.params.canaryExecutionId);
 
     do {
       const data = async () => {
@@ -66,7 +61,6 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
     }
 
     this.stores.resultsStore.updateResultsRequestComplete();
-    this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
   }
 
   render(): React.ReactNode {

@@ -42,7 +42,7 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
       const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
       this.stores.resultsStore.clearResultsRequestComplete();
       this.stores.resultsStore.setCanaryExecutionId(data.canaryExecutionId);
-      this.props.history.push('/dev-tools/canary-executor/results/');
+      this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
     } catch (e) {
       log.error('Failed to fetch response: ', e);
       throw e;
