@@ -6,7 +6,7 @@ import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
-import { FormLabel, Row } from 'react-bootstrap';
+import { FormLabel } from 'react-bootstrap';
 
 interface ScopeProps {
   scopeType: string;
@@ -114,21 +114,23 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           error={errors['scopes.default.' + scopeType + 'Scope.step']}
         />
         {!disabled && (
-          <Row>
+          <div id="scope-row">
             <FormLabel id="scope-item-label">Start Time</FormLabel>
-            <Flatpickr
-              id="scope-time-picker"
-              data-enable-time
-              value={scope.start}
-              onChange={date => {
-                if (date && date.length) {
-                  const newScope = this.handleStartChange(date[0].toISOString(), scope);
-                  updateCanaryScope(newScope, scopeType);
-                }
-              }}
-              options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
-            />
-          </Row>
+            <div className="scope-time-picker-container">
+              <Flatpickr
+                id="scope-time-picker"
+                data-enable-time
+                value={scope.start}
+                onChange={date => {
+                  if (date && date.length) {
+                    const newScope = this.handleStartChange(date[0].toISOString(), scope);
+                    updateCanaryScope(newScope, scopeType);
+                  }
+                }}
+                options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
+              />
+            </div>
+          </div>
         )}
         <InlineTextGroup
           id={scopeType + '-start'}
@@ -147,21 +149,23 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           error={errors['scopes.default.' + scopeType + 'Scope.start']}
         />
         {!disabled && (
-          <Row>
+          <div id="scope-row">
             <FormLabel id="scope-item-label">End Time</FormLabel>
-            <Flatpickr
-              id="scope-time-picker"
-              data-enable-time
-              value={scope.end}
-              onChange={date => {
-                if (date && date.length) {
-                  const newScope = this.handleEndChange(date[0].toISOString(), scope);
-                  updateCanaryScope(newScope, scopeType);
-                }
-              }}
-              options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
-            />
-          </Row>
+            <div className="scope-time-picker-container">
+              <Flatpickr
+                id="scope-time-picker"
+                data-enable-time
+                value={scope.end}
+                onChange={date => {
+                  if (date && date.length) {
+                    const newScope = this.handleEndChange(date[0].toISOString(), scope);
+                    updateCanaryScope(newScope, scopeType);
+                  }
+                }}
+                options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
+              />
+            </div>
+          </div>
         )}
         <InlineTextGroup
           id={scopeType + '-end'}

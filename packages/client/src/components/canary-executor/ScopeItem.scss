@@ -1,26 +1,51 @@
-#scope-item {
+.titled-section-contents {
+
+  #scope-item {
 
     flex: 1;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
 
+    .row {
+      .col-sm-10 {
+        flex: 0 0 70%;
+      }
+    }
+
     #scope-title {
-        padding-bottom: 5px;
-        font-size: 20px;
-        font-weight: bold;
-        text-transform: capitalize;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: capitalize;
+      padding-bottom: 5px;
     }
 
-    #scope-item-label {
-        padding: 15px;
-        margin-right: 30px;
-    }
+    #scope-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+      margin-right: 2px;
+      margin-left: 3px;
 
-    #scope-time-picker {
-        flex: 1;
-        margin: 10px;
+      label {
+        margin-bottom: 0px;
+      }
+
+      .scope-time-picker-container {
+        display: flex;
+        flex-basis: 70%;
+        padding-left: 8px;
+      }
+
+      #scope-time-picker {
+        flex-grow: 1;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 5px 10px;
+        color: #495057;
+      }
     }
+  }
 }
-
-
