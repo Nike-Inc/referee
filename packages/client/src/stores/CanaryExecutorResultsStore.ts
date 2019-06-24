@@ -14,6 +14,9 @@ export default class CanaryExecutorResultsStore {
   @observable
   stageStatus = [];
 
+  @observable
+  isAccordionExpanded = false;
+
   @action.bound
   setCanaryExecutionId(canaryExecutionId: string): void {
     this.canaryExecutionId = canaryExecutionId;
@@ -27,6 +30,16 @@ export default class CanaryExecutorResultsStore {
   @action.bound
   clearResultsRequestComplete(): void {
     this.resultsRequestComplete = false;
+  }
+
+  @action.bound
+  toggleIsAccordionExpanded(): void {
+    this.isAccordionExpanded = !this.isAccordionExpanded;
+  }
+
+  @action.bound
+  resetIsAccordionExpanded(): void {
+    this.isAccordionExpanded = false;
   }
 
   @action.bound

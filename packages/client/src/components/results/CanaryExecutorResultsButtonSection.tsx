@@ -6,10 +6,10 @@ import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import log from '../../util/LoggerFactory';
-import { kayentaApiService } from '../../services';
+import { fetchCanaryResultsService, kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
 import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore';
-import './CanaryExecutorButtonSection.scss';
+import './CanaryExecutorResultsButtonSection.scss';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
@@ -25,13 +25,18 @@ interface Props extends RouterProps {}
   'resultsStore'
 )
 @observer
-export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
+export default class CanaryExecutorResultsButtonSection extends ConnectedComponent<Props, Stores> {
   @boundMethod
   private async handleRunButtonClick(): Promise<void> {
     const canaryAdhocExecutionRequest: any = {};
 
+    this.stores.configEditorStore.markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();
     this.stores.canaryExecutorStore.markHasTheRunButtonBeenClickedFlagAsTrue();
-    if (!this.stores.canaryExecutorStore.isExecutionRequestValid) {
+
+    if (
+      !this.stores.configEditorStore.isCanaryConfigValid ||
+      !this.stores.canaryExecutorStore.isExecutionRequestValid
+    ) {
       return;
     }
 
@@ -41,8 +46,10 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
     try {
       const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
       this.stores.resultsStore.clearResultsRequestComplete();
+      this.stores.resultsStore.resetIsAccordionExpanded();
       this.stores.resultsStore.setCanaryExecutionId(data.canaryExecutionId);
       this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
+      fetchCanaryResultsService.fetchCanaryResults(this.stores.resultsStore.canaryExecutionId);
     } catch (e) {
       log.error('Failed to fetch response: ', e);
       throw e;
@@ -51,23 +58,15 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
 
   render(): React.ReactNode {
     return (
-      <div className="canary-executor-button-section">
+      <div className="canary-executor-results-button-section">
         <div className="btn-wrapper">
-          <Button
-            onClick={() => {
-              this.props.history.push('/config/edit');
-            }}
-            variant="dark"
-          >
-            Back to Canary Config
-          </Button>
           <Button
             onClick={() => {
               this.handleRunButtonClick();
             }}
             variant="dark"
           >
-            Run Manual Execution
+            Run Again
           </Button>
         </div>
       </div>

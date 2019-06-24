@@ -75,6 +75,11 @@ export default class CanaryExecutorStore {
   }
 
   @action.bound
+  setCanaryExecutionRequestObject(value: CanaryExecutionRequest): void {
+    this.canaryExecutionRequestObject = value;
+  }
+
+  @action.bound
   updateApplicationName(value: string): void {
     this.applicationName = value;
   }

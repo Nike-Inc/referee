@@ -7,10 +7,11 @@ import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore'
 import CanaryExecutorFormView from '../canary-executor/CanaryExecutorFormView';
 import ConfigFormView from '../config/ConfigFormView';
 import log from '../../util/LoggerFactory';
-import { kayentaApiService } from '../../services';
-import { CanaryExecutionStatusResponse } from '../../domain/CanaryExecutionStatusResponse';
-import { delay } from 'q';
+import { fetchCanaryResultsService, kayentaApiService } from '../../services';
 import { ClipLoader } from 'react-spinners';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import TitledSection from '../../layout/titledSection';
 import {
   Accordion,
@@ -19,9 +20,13 @@ import {
   AccordionItemButton,
   AccordionItemPanel
 } from 'react-accessible-accordion';
+
+import CanaryExecutorResultsButtonSection from './CanaryExecutorResultsButtonSection';
+import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import './CanaryExecutorResults.scss';
 
 interface Stores {
+  configEditorStore: ConfigEditorStore;
   canaryExecutorStore: CanaryExecutorStore;
   resultsStore: CanaryExecutorResultsStore;
 }
@@ -32,35 +37,20 @@ interface ResultsPathParams {
 
 interface Props extends RouteComponentProps<ResultsPathParams> {}
 
-let response: CanaryExecutionStatusResponse | any = {};
 const DEFAULT_CANARY_SCORE_DISPLAY = '1';
-const SUCCESS = 'succeeded';
 const TERMINAL = 'Terminal';
 const TERMINAL_SCORE = 0;
 
 @connect(
+  'configEditorStore',
   'canaryExecutorStore',
   'resultsStore'
 )
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
   async componentDidMount(): Promise<void> {
-    this.stores.resultsStore.setCanaryExecutionId(this.props.match.params.canaryExecutionId);
-
-    do {
-      const data = async () => {
-        await delay(1000);
-        response = await kayentaApiService.fetchCanaryRunStatusAndResults(this.stores.resultsStore.canaryExecutionId);
-        this.stores.resultsStore.updateStageStatus(response.stageStatus);
-      };
-      await data();
-    } while (!response.complete);
-
-    if (response.status === SUCCESS) {
-      this.stores.resultsStore.updateCanaryExecutionStatusResponse(response);
-    }
-
-    this.stores.resultsStore.updateResultsRequestComplete();
+    fetchCanaryResultsService.fetchCanaryResults(this.props.match.params.canaryExecutionId);
+    this.stores.resultsStore.resetIsAccordionExpanded();
   }
 
   render(): React.ReactNode {
@@ -95,6 +85,34 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
                 />
               </div>
             </div>
+            <Accordion
+              allowZeroExpanded={true}
+              onChange={() => {
+                this.stores.resultsStore.toggleIsAccordionExpanded();
+              }}
+            >
+              <AccordionItem>
+                <AccordionItemHeading>
+                  <AccordionItemButton>
+                    <div className="row-component">
+                      {this.stores.resultsStore.isAccordionExpanded ? (
+                        <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronDown} />
+                      ) : (
+                        <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronRight} />
+                      )}
+                      <div className="row-item">
+                        <TitledSection title="Edit Configuration" />
+                      </div>
+                    </div>
+                  </AccordionItemButton>
+                </AccordionItemHeading>
+                <AccordionItemPanel>
+                  <ConfigFormView history={this.props.history} />
+                  <CanaryExecutorFormView />
+                  <CanaryExecutorResultsButtonSection history={this.props.history} />
+                </AccordionItemPanel>
+              </AccordionItem>
+            </Accordion>
           </div>
         )}
       </div>

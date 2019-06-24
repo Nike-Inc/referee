@@ -4,6 +4,7 @@ import './ConfigEditor.scss';
 import ConfigFormView from './ConfigFormView';
 import { loadCanaryConfigService } from '../../services';
 import { RouterProps } from 'react-router';
+import ConfigFormButtonSection from './ConfigFormButtonSection';
 
 interface Props extends RouterProps {}
 
@@ -16,6 +17,7 @@ export default class ConfigEditor extends React.Component<Props> {
     return (
       <div className="config-editor">
         <ConfigFormView history={this.props.history} />
+        <ConfigFormButtonSection history={this.props.history} />
       </div>
     );
   }

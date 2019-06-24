@@ -6,16 +6,17 @@
   .row-component {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid lightgray;
-    border-top: 1px solid lightgray;
+    background-color: $dark-background-color;
+    height: 33px;
+
+    .chevron {
+      height: 33px;
+      margin-left: 10px;
+    }
 
     .row-item {
       font-size: 15px;
-      margin-right: 10px;
-      margin-top: 5px;
-      margin-bottom: 5px;
+      flex-grow: 1;
     }
   }
 
