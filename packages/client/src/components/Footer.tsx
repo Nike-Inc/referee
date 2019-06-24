@@ -9,7 +9,6 @@ export default class Footer extends React.Component {
     return (
       <Container fluid={true} id="footer">
         <Row>
-          <Col />
           <Col>
             <div className="footer-label" id="about">
               About
@@ -17,11 +16,18 @@ export default class Footer extends React.Component {
             <div>Version: {version}</div>
           </Col>
           <Col>
+            <div className="footer-label" id="about">
+              Attributions
+            </div>
+            <div className="citations">
+              This site makes use of icons from <a href="https://github.com/FortAwesome/Font-Awesome">FontAwesome</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+            </div>
+          </Col>
+          <Col>
             <div className="footer-label" id="help">
               Help
             </div>
           </Col>
-          <Col />
         </Row>
       </Container>
     );

@@ -39,10 +39,12 @@
 
           .info-container {
             display: flex;
-            padding-left: 2px;
+            justify-content: center;
+            align-items: center;
+            padding-left: 5px;
 
             .info {
-              width: 13px;
+              font-size: .75em;
             }
           }
 
