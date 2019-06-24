@@ -10,7 +10,7 @@ interface Props extends RouterProps {}
 
 export default class ConfigEditor extends React.Component<Props> {
   async componentDidMount(): Promise<void> {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     await loadCanaryConfigService.loadCanaryFromTemplate();
   }
 

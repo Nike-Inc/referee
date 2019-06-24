@@ -18,8 +18,8 @@ app.use(
       proxyReqOpts.rejectUnauthorized = !!process.env.DISABLE_KAYENTA_SSL_VERIFICATION;
       return proxyReqOpts;
     },
-    proxyReqPathResolver: function (req) {
-      return `${process.env.KAYENTA_BASE_PATH}${req.url}`
+    proxyReqPathResolver: function(req) {
+      return `${process.env.KAYENTA_BASE_PATH}${req.url}`;
     }
   })
 );

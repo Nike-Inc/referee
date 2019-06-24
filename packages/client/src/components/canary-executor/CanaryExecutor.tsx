@@ -19,7 +19,7 @@ interface Props extends RouterProps {}
 @observer
 export default class CanaryExecutor extends ConnectedComponent<Props, Stores> {
   componentDidMount(): void {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     kayentaApiService.fetchCredentials().then(data => this.stores.canaryExecutorStore.setKayentaCredentials(data));
   }
 

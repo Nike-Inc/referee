@@ -7,7 +7,7 @@ import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
 import { FormLabel } from 'react-bootstrap';
-import {boundMethod} from "autobind-decorator";
+import { boundMethod } from 'autobind-decorator';
 
 interface ScopeProps {
   scopeType: string;
@@ -53,15 +53,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
   }
 
   render(): React.ReactNode {
-    const {
-      scopeType,
-      scope,
-      disabled,
-      touch,
-      touched,
-      errors,
-      hasTheRunButtonBeenClicked
-    } = this.props;
+    const { scopeType, scope, disabled, touch, touched, errors, hasTheRunButtonBeenClicked } = this.props;
 
     return (
       <div id="scope-item">
@@ -101,7 +93,8 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Step (s)"
           value={scope.step.toString()}
           disabled={disabled}
-          onChange={e => {this.handleStepChange(
+          onChange={e => {
+            this.handleStepChange(
               parseInt((e.target as HTMLInputElement).value, 10)
                 ? parseInt((e.target as HTMLInputElement).value, 10)
                 : 0,
@@ -180,11 +173,8 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           touched={touched[scopeType + '-end'] || hasTheRunButtonBeenClicked}
           error={errors['scopes.default.' + scopeType + 'Scope.end']}
         />
-        {!disabled && (
-          <div></div>
-        )}
+        {!disabled && <div></div>}
       </div>
     );
   }
 }
-

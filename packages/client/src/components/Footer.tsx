@@ -20,7 +20,8 @@ export default class Footer extends React.Component {
               Attributions
             </div>
             <div className="citations">
-              This site makes use of icons from <a href="https://github.com/FortAwesome/Font-Awesome">FontAwesome</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+              This site makes use of icons from <a href="https://github.com/FortAwesome/Font-Awesome">FontAwesome</a>{' '}
+              licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
             </div>
           </Col>
           <Col>

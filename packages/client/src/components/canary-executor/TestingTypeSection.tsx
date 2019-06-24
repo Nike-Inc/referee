@@ -4,8 +4,8 @@ import * as React from 'react';
 import { Form, FormLabel } from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import './TestingTypeSection.scss';
-import {faQuestionCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface TestingTypeProps {
   testingType: string;
@@ -42,7 +42,8 @@ export default class ConfigureMetricModal extends React.Component<TestingTypePro
                       A-A testing is helpful to confirm that your metrics and execution configurations are working."
                     size="sm"
                     color="black"
-                    icon={faQuestionCircle} />
+                    icon={faQuestionCircle}
+                  />
                 </div>
               </div>
               <div className="testing-type-item">
@@ -63,7 +64,8 @@ export default class ConfigureMetricModal extends React.Component<TestingTypePro
                     would be used in production."
                     size="sm"
                     color="black"
-                    icon={faQuestionCircle} />
+                    icon={faQuestionCircle}
+                  />
                 </div>
               </div>
             </div>
