@@ -8,11 +8,13 @@ export default class Landing extends React.Component<RouterProps> {
     return (
       <div className="landing-content">
         <div className="welcome-message">
-          <h3>Welcome to Referee</h3>
+          <h3>Welcome to the Referee Dashboard</h3>
           <p>
-            Referee is a user experience for using Spinnaker Kayenta as a standalone service.
+            Referee is a set of tools to create a complete user experience for using Spinnaker Kayenta as a standalone service.
             <br />
-            Use Referee to create, edit and test canary config as well as view canary results.
+            You can use the Referee UI to create, edit, test and iterate Kayenta canary config.
+            <br />
+            You can also use the Referee UI to browse and view canary and standalone canary analysis results (coming soon™).
           </p>
         </div>
       </div>
