@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "The client lib for the Referee UX",
   "author": "Justin Field <fieldju@gmail.com>",
   "homepage": "https://example.com/dashboard/",
