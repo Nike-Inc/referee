@@ -6,24 +6,20 @@ export default class CanaryExecutionFactory {
       scopes: {
         default: {
           controlScope: {
-            scope: 'default',
-            location: 'us-west-2',
-            step: 60,
+            scope: '',
+            location: '',
+            step: 0,
             start: '',
             end: '',
-            extendedScopeParams: {
-              _scope_key: 'default'
-            }
+            extendedScopeParams: {}
           },
           experimentScope: {
-            scope: 'default',
-            location: 'us-west-2',
-            step: 60,
+            scope: '',
+            location: '',
+            step: 0,
             start: '',
             end: '',
-            extendedScopeParams: {
-              _scope_key: 'default'
-            }
+            extendedScopeParams: {}
           }
         }
       },
