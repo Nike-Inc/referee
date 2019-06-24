@@ -28,11 +28,18 @@ app.get('/health', (req, res) => {
   res.status(204).end();
 });
 
+const nocache = (request: express.Request, response: express.Response, next: any) => {
+  response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  response.header('Expires', '-1');
+  response.header('Pragma', 'no-cache');
+  next();
+};
+
 // Route all other traffic to the public dir
-app.use('/dashboard/', express.static(publicRoot));
+app.use('/dashboard/', nocache, express.static(publicRoot));
 
 // Wild card route needed for React Router to support deep linking.
-app.get('/dashboard/*', (req, res) => {
+app.get('/dashboard/*', nocache, (req, res) => {
   res.sendFile(path.join(publicRoot, '/index.html'), err => {
     if (err) {
       res.status(500).send(util.inspect(err));
