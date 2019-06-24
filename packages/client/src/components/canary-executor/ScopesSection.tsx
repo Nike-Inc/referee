@@ -40,7 +40,7 @@ export const ScopesSection = observer(
           />
           <ScopeItem
             scopeType="experiment"
-            scope={testingType === 'AA' ? controlScope : experimentScope}
+            scope={experimentScope}
             updateCanaryScope={updateCanaryScope}
             disabled={testingType === 'AA'}
             touch={touch}

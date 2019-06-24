@@ -15,7 +15,7 @@ export default function TitledSection({ title, children, additionalClassname }: 
       <div className="titled-section-header">
         <div className="titled-section-title">{title}</div>
       </div>
-      <div className="titled-section-contents">{children}</div>
+      {children !== undefined && <div className="titled-section-contents">{children}</div>}
     </section>
   );
 }

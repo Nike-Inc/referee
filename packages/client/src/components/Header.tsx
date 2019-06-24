@@ -13,19 +13,30 @@ import LoadCanaryConfigNavItem from './config/LoadCanaryConfigNavItem';
 import { CanaryConfig } from '../domain/CanaryConfigTypes';
 import { boundMethod } from 'autobind-decorator';
 import Optional from 'optional-js';
-import { loadCanaryConfigService } from '../services';
+import { loadCanaryConfigService, docsService } from '../services';
+import DocsStore from '../stores/DocsStore';
+import { observer } from 'mobx-react';
 
 interface Props extends RouterProps {}
 interface Stores {
   configEditorStore: ConfigEditorStore;
+  docsStore: DocsStore;
 }
 
-@connect('configEditorStore')
+@connect(
+  'configEditorStore',
+  'docsStore'
+)
+@observer
 export default class Header extends ConnectedComponent<Props, Stores> {
+  componentDidMount(): void {
+    docsService.fetchAndUpdateToc();
+  }
+
   @boundMethod
   private loadCanaryFromJsonObject(config: CanaryConfig): void {
     this.stores.configEditorStore.setCanaryConfigObject(config);
-    this.props.history.push('/config/edit/local');
+    this.props.history.push('/config/edit');
   }
 
   render(): React.ReactNode {
@@ -43,18 +54,20 @@ export default class Header extends ConnectedComponent<Props, Stores> {
             </Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Nav.Link
-                  onClick={() => {
-                    this.props.history.push('/docs/');
-                  }}
-                >
-                  Docs
-                </Nav.Link>
+                {Optional.ofNullable(this.stores.docsStore.tableOfContents).isPresent() && (
+                  <Nav.Link
+                    onClick={() => {
+                      this.props.history.push('/docs/');
+                    }}
+                  >
+                    Docs
+                  </Nav.Link>
+                )}
                 <NavDropdown title="Configuration" id="basic-nav-dropdown">
                   <NavDropdown.Item
                     onClick={() => {
                       this.stores.configEditorStore.setCanaryConfigObject(CanaryConfigFactory.createNewCanaryConfig());
-                      this.props.history.push('/config/edit/local');
+                      this.props.history.push('/config/edit');
                     }}
                   >
                     Create a New Kayenta Canary Config

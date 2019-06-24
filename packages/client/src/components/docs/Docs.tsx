@@ -36,10 +36,18 @@ function sanitize(str: string) {
 }
 
 renderer.image = function(src, title, alt) {
-  const exec = /=\s*(\d*)\s*x\s*(\d*)\s*$/.exec(title);
-  let res = '<img src="' + sanitize(src) + '" alt="' + sanitize(alt);
-  if (exec && exec[1]) res += '" height="' + exec[1];
-  if (exec && exec[2]) res += '" width="' + exec[2];
+  let res = `<img src="${sanitize(src)}" alt="${sanitize(alt)}"`;
+
+  OptionalUtils.safeGet(() => /.*?width=&#39;(?<width>.*)&#39;.*?/.exec(title)!.groups!.width).ifPresent(
+    width => (res += ` width="${width}"`)
+  );
+  OptionalUtils.safeGet(() => /.*?height=&#39;(?<height>.*)&#39;.*?/.exec(title)!.groups!.height).ifPresent(
+    height => (res += ` height="${height}"`)
+  );
+  OptionalUtils.safeGet(() => /.*?class=&#39;(?<class>.*)&#39;.*?/.exec(title)!.groups!.class).ifPresent(
+    className => (res += ` class="${className}"`)
+  );
+
   return res + '">';
 };
 

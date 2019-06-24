@@ -14,8 +14,12 @@ app.use(
   '/kayenta',
   proxy(Optional.ofNullable(process.env.KAYENTA_BASE_URL).orElse('http://localhost:8090'), {
     proxyReqOptDecorator: (proxyReqOpts: any) => {
-      proxyReqOpts.rejectUnauthorized = false;
+      // Hook for self signed certs https://www.npmjs.com/package/express-http-proxy#q-how-to-ignore-self-signed-certificates-
+      proxyReqOpts.rejectUnauthorized = !!process.env.DISABLE_KAYENTA_SSL_VERIFICATION;
       return proxyReqOpts;
+    },
+    proxyReqPathResolver: function (req) {
+      return `${process.env.KAYENTA_BASE_PATH}${req.url}`
     }
   })
 );

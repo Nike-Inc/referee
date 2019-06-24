@@ -8,6 +8,7 @@ import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';
 import { boundMethod } from 'autobind-decorator';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
+import { KvMap } from '../../domain/CustomTypes';
 
 const initialState = {
   errors: {},
@@ -51,8 +52,8 @@ interface ConfigureMetricModelProps {
 }
 
 interface ConfigureMetricModelState {
-  errors: { [key: string]: string };
-  touched: { [key: string]: boolean };
+  errors: KvMap<string>;
+  touched: KvMap<boolean>;
   existingMetric?: CanaryMetricConfig<SignalFxCanaryMetricSetQueryConfig>;
   isValid: boolean;
   metric: CanaryMetricConfig<SignalFxCanaryMetricSetQueryConfig>;
@@ -319,7 +320,7 @@ export default class ConfigureMetricModal extends React.Component<
   }
 
   private touch(id: string): void {
-    const touched: { [key: string]: boolean } = {};
+    const touched: KvMap<boolean> = {};
     touched[id] = true;
     this.setState({
       touched: Object.assign({}, this.state.touched, touched)

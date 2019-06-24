@@ -1,3 +1,5 @@
+import { KvMap } from './CustomTypes';
+
 export interface CanaryConfig {
   applications: string[];
   id?: string;
@@ -9,7 +11,7 @@ export interface CanaryConfig {
   description: string;
   configVersion: string;
   metrics: CanaryMetricConfig[];
-  templates: { [key: string]: string };
+  templates: KvMap<string>;
   classifier: CanaryClassifierConfig;
   judge: CanaryJudgeConfig;
 }
@@ -55,7 +57,7 @@ export interface CanaryMetricEffectSizeConfig {
 
 export interface CanaryJudgeConfig {
   name: string;
-  judgeConfigurations: { [key: string]: any };
+  judgeConfigurations: KvMap<any>;
 }
 
 export interface SignalFxCanaryMetricSetQueryConfig extends CanaryMetricSetQueryConfig {

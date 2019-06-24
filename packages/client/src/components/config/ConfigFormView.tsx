@@ -8,7 +8,6 @@ import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { observer } from 'mobx-react';
 import StackStore from '../../stores/StackStore';
 import { boundMethod } from 'autobind-decorator';
-import { ConfigFormButtonSection } from './ConfigFormButtonSection';
 import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
 import { MetricsSection } from './MetricsSection';
@@ -183,13 +182,6 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
             updateGroupWeight={this.updateGroupWeight}
             error={errors['classifier.groupWeights']}
             touched={touched['groupWeights'] || hasTheCopyOrSaveButtonBeenClicked}
-          />
-          <ConfigFormButtonSection
-            canaryConfig={canaryConfigObject}
-            hasTheCopyOrSaveButtonBeenClicked={hasTheCopyOrSaveButtonBeenClicked}
-            isCanaryConfigValid={isCanaryConfigValid}
-            markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue={this.markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue}
-            history={history}
           />
         </Form>
       </div>

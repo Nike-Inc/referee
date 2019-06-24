@@ -1,50 +1,182 @@
 import * as React from 'react';
-import { RouterProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import CanaryExecutorStore from '../../stores/CanaryExecutorStore';
-import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
 import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore';
 import CanaryExecutorFormView from '../canary-executor/CanaryExecutorFormView';
 import ConfigFormView from '../config/ConfigFormView';
-import log from '../../util/LoggerFactory';
+import { fetchCanaryResultsService } from '../../services';
+import { ClipLoader } from 'react-spinners';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import TitledSection from '../../layout/titledSection';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionItemHeading,
+  AccordionItemButton,
+  AccordionItemPanel
+} from 'react-accessible-accordion';
+
+import CanaryExecutorResultsButtonSection from './CanaryExecutorResultsButtonSection';
+import ConfigEditorStore from '../../stores/ConfigEditorStore';
+import './CanaryExecutorResults.scss';
 
 interface Stores {
-  canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
+  canaryExecutorStore: CanaryExecutorStore;
   resultsStore: CanaryExecutorResultsStore;
 }
 
-interface Props extends RouterProps {}
+interface ResultsPathParams {
+  canaryExecutionId: string;
+}
+
+interface Props extends RouteComponentProps<ResultsPathParams> {}
+
+const DEFAULT_CANARY_SCORE_DISPLAY = '1';
+const TERMINAL = 'Terminal';
+const TERMINAL_SCORE = 0;
 
 @connect(
-  'canaryExecutorStore',
   'configEditorStore',
+  'canaryExecutorStore',
   'resultsStore'
 )
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
+  async componentDidMount(): Promise<void> {
+    fetchCanaryResultsService.fetchCanaryResults(this.props.match.params.canaryExecutionId);
+    this.stores.resultsStore.resetIsAccordionExpanded();
+  }
+
   render(): React.ReactNode {
-    const { canaryExecutorStore, configEditorStore, resultsStore } = this.stores;
+    const { canaryExecutorStore, resultsStore } = this.stores;
 
     return (
-      <div>
-        <h5>
-          <br /> Canary Execution Id: <br />
-          {resultsStore.canaryExecutionId}
-        </h5>
-        <h5>
-          <br /> Canary Config: <br />{' '}
-        </h5>
-        <pre> {JSON.stringify(configEditorStore.canaryConfigObject, null, 2)}</pre>
-        <h5>
-          <br /> Execution Config: <br />{' '}
-        </h5>
-        <pre> {JSON.stringify(canaryExecutorStore.canaryExecutionRequestObject, null, 2)}</pre>
-
-        {/*<ConfigFormView history={this.props.history} />*/}
-        {/*<CanaryExecutorFormView />*/}
+      <div className="canary-executor-results">
+        {!resultsStore.resultsRequestComplete ? (
+          <div>
+            <h5>Loading</h5>
+            <ClipLoader />
+          </div>
+        ) : (
+          <div>
+            <TitledSection title="Canary Results" />
+            <div className="widget">
+              <div className="standalone-canary-analysis-summary">
+                <Summary
+                  classification={
+                    resultsStore.canaryExecutionStatusResponse
+                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.classification
+                      : TERMINAL
+                  }
+                  score={
+                    resultsStore.canaryExecutionStatusResponse
+                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.score
+                      : TERMINAL_SCORE
+                  }
+                  testingType={canaryExecutorStore.testingType}
+                  marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
+                  pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
+                />
+              </div>
+            </div>
+            <Accordion
+              allowZeroExpanded={true}
+              onChange={() => {
+                this.stores.resultsStore.toggleIsAccordionExpanded();
+              }}
+            >
+              <AccordionItem>
+                <AccordionItemHeading>
+                  <AccordionItemButton>
+                    <div className="row-component">
+                      {this.stores.resultsStore.isAccordionExpanded ? (
+                        <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronDown} />
+                      ) : (
+                        <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronRight} />
+                      )}
+                      <div className="row-item">
+                        <TitledSection title="Edit Configuration" />
+                      </div>
+                    </div>
+                  </AccordionItemButton>
+                </AccordionItemHeading>
+                <AccordionItemPanel>
+                  <ConfigFormView history={this.props.history} />
+                  <CanaryExecutorFormView />
+                  <CanaryExecutorResultsButtonSection history={this.props.history} />
+                </AccordionItemPanel>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        )}
       </div>
     );
   }
 }
+
+const Summary = ({
+  classification,
+  score,
+  testingType,
+  marginal,
+  pass
+}: {
+  classification: string;
+  score: number;
+  testingType: string;
+  marginal: number;
+  pass: number;
+}): JSX.Element => {
+  let meterStyle = {
+    width: `${DEFAULT_CANARY_SCORE_DISPLAY}%`
+  };
+  if (score > 0) {
+    meterStyle = {
+      width: `${score}%`
+    };
+  }
+
+  const marginalLineStyle = {
+    left: `${marginal}%`
+  };
+  const passLineStyle = {
+    left: `${pass}%`
+  };
+
+  return (
+    <div className="summary-container">
+      <div className="metadata-container">
+        <div className="result-container">
+          <div className="result-label headline-md-base">Passed Thresholds</div>
+          <div className="result-value-container">
+            <div className="result-value headline-md-brand">
+              {classification === TERMINAL ? 'Terminal' : classification === 'Pass' ? 'Yes' : 'No'}
+            </div>
+          </div>
+        </div>
+        <div className="score-container">
+          <div className="score-label headline-md-base">Canary Score</div>
+          <div className="score-value headline-md-brand">{score}</div>
+        </div>
+        <div className="mode-container">
+          <div className="mode-label headline-md-base">Testing Type</div>
+          <div className="mode-value headline-md-brand">{testingType === 'AA' ? 'A-A' : 'A-B'}</div>
+        </div>
+      </div>
+      <div className="meter-wrapper">
+        <div className={['meter', classification === 'Pass' ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
+        <div className="marginal-line" style={marginalLineStyle}>
+          <div className="threshold-label headline-md-base">{marginal}</div>
+        </div>
+        <div className="pass-line" style={passLineStyle}>
+          <div className="threshold-label headline-md-base">{pass}</div>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -18,7 +18,7 @@ interface Stores {
 
 @connect('canaryExecutorStore')
 @observer
-export default class CanaryExecutorFormView extends ConnectedComponent<{}, Stores> {
+export default class CanaryExecutorFormView extends ConnectedComponent<Props, Stores> {
   @boundMethod
   updateApplicationName(value: string): void {
     this.stores.canaryExecutorStore.updateApplicationName(value);

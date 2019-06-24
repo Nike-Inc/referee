@@ -1,31 +1,34 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import * as FileSaver from 'file-saver';
-import { CanaryConfig } from '../../domain/CanaryConfigTypes';
 import { Button } from 'react-bootstrap';
-
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import './ConfigFormButtonSection.scss';
-import * as H from 'history';
+import ConfigEditorStore from '../../stores/ConfigEditorStore';
+import { RouterProps } from 'react-router';
+import { connect, ConnectedComponent } from '../connectedComponent';
 
-export const ConfigFormButtonSection = observer(
-  ({
-    canaryConfig,
-    hasTheCopyOrSaveButtonBeenClicked,
-    isCanaryConfigValid,
-    markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue,
-    history
-  }: {
-    canaryConfig: CanaryConfig;
-    hasTheCopyOrSaveButtonBeenClicked: boolean;
-    isCanaryConfigValid: boolean;
-    markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue: () => void;
-    history: H.History;
-  }): JSX.Element => {
+interface Stores {
+  configEditorStore: ConfigEditorStore;
+}
+
+interface Props extends RouterProps {}
+
+@connect('configEditorStore')
+@observer
+export default class ConfigFormButtonSection extends ConnectedComponent<Props, Stores> {
+  render(): React.ReactNode {
+    const {
+      canaryConfigObject,
+      hasTheCopyOrSaveButtonBeenClicked,
+      isCanaryConfigValid,
+      markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue
+    } = this.stores.configEditorStore;
+
     return (
       <div className="config-form-button-section">
         <div className="btn-wrapper">
-          <CopyToClipboard text={JSON.stringify(canaryConfig, null, 2)}>
+          <CopyToClipboard text={JSON.stringify(canaryConfigObject, null, 2)}>
             <Button
               disabled={hasTheCopyOrSaveButtonBeenClicked && !isCanaryConfigValid}
               onClick={() => {
@@ -44,8 +47,10 @@ export const ConfigFormButtonSection = observer(
               if (!isCanaryConfigValid) {
                 return;
               }
-              const blob = new Blob([JSON.stringify(canaryConfig, null, 2)], { type: 'text/plain;charset=utf-8' });
-              const fileName = `${canaryConfig.name.replace(/[\W]/g, '-')}.json`;
+              const blob = new Blob([JSON.stringify(canaryConfigObject, null, 2)], {
+                type: 'text/plain;charset=utf-8'
+              });
+              const fileName = `${canaryConfigObject.name.replace(/[\W]/g, '-')}.json`;
               FileSaver.saveAs(blob, fileName);
             }}
           >
@@ -55,7 +60,10 @@ export const ConfigFormButtonSection = observer(
             disabled={hasTheCopyOrSaveButtonBeenClicked && !isCanaryConfigValid}
             onClick={() => {
               markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();
-              history.push('/dev-tools/canary-executor');
+              if (!isCanaryConfigValid) {
+                return;
+              }
+              this.props.history.push('/dev-tools/canary-executor/setup');
             }}
             variant="dark"
           >
@@ -65,4 +73,4 @@ export const ConfigFormButtonSection = observer(
       </div>
     );
   }
-);
+}

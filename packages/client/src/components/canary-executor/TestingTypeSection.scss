@@ -1,0 +1,59 @@
+.titled-section-contents {
+
+  .tooltip {
+    position: fixed;
+  }
+
+  .testing-type {
+    display: flex;
+    flex-direction: row;
+    margin-left: -2px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+
+    .testing-type-row {
+      display: flex;
+      flex-direction: row;
+      padding-top: 5px;
+      flex-grow: 1;
+
+      .testing-type-label {
+        flex-basis: 15%;
+      }
+
+      label {
+        margin-bottom: 0px;
+        display: flex;
+        align-self: center;
+      }
+
+      .testing-type-content {
+        display: flex;
+        flex-grow: 1;
+        padding-left: 7px;
+
+        .testing-type-item {
+          display: flex;
+          flex-direction: row;
+          padding-right: 50px;
+
+          .info-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 5px;
+
+            .info {
+              font-size: .75em;
+            }
+          }
+
+          .form-check {
+            margin-right: 3px;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}

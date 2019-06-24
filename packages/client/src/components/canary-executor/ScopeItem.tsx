@@ -6,7 +6,8 @@ import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
-import { FormLabel, Row } from 'react-bootstrap';
+import { FormLabel } from 'react-bootstrap';
+import {boundMethod} from "autobind-decorator";
 
 interface ScopeProps {
   scopeType: string;
@@ -21,36 +22,40 @@ interface ScopeProps {
 
 @observer
 export default class ScopeItem extends React.Component<ScopeProps> {
-  private handleNameChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleNameChange(value: string, scope: CanaryScope): void {
     scope.scope = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleLocationChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleLocationChange(value: string, scope: CanaryScope): void {
     scope.location = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleStepChange(value: number, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleStepChange(value: number, scope: CanaryScope): void {
     scope.step = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleStartChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleStartChange(value: string, scope: CanaryScope): void {
     scope.start = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleEndChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleEndChange(value: string, scope: CanaryScope): void {
     scope.end = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
   render(): React.ReactNode {
     const {
       scopeType,
       scope,
-      updateCanaryScope,
       disabled,
       touch,
       touched,
@@ -68,8 +73,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="stack name or server group"
           onChange={e => {
-            const newScope = this.handleNameChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleNameChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-scope-name');
@@ -84,8 +88,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="AWS region"
           onChange={e => {
-            const newScope = this.handleLocationChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleLocationChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-location');
@@ -98,14 +101,12 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Step (s)"
           value={scope.step.toString()}
           disabled={disabled}
-          onChange={e => {
-            const newScope = this.handleStepChange(
+          onChange={e => {this.handleStepChange(
               parseInt((e.target as HTMLInputElement).value, 10)
                 ? parseInt((e.target as HTMLInputElement).value, 10)
                 : 0,
               scope
             );
-            updateCanaryScope(newScope, scopeType);
           }}
           onBlur={() => {
             touch(scopeType + '-step');
@@ -114,21 +115,22 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           error={errors['scopes.default.' + scopeType + 'Scope.step']}
         />
         {!disabled && (
-          <Row>
+          <div id="scope-row">
             <FormLabel id="scope-item-label">Start Time</FormLabel>
-            <Flatpickr
-              id="scope-time-picker"
-              data-enable-time
-              value={scope.start}
-              onChange={date => {
-                if (date && date.length) {
-                  const newScope = this.handleStartChange(date[0].toISOString(), scope);
-                  updateCanaryScope(newScope, scopeType);
-                }
-              }}
-              options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
-            />
-          </Row>
+            <div className="scope-time-picker-container">
+              <Flatpickr
+                id="scope-time-picker"
+                data-enable-time
+                value={scope.start}
+                onChange={date => {
+                  if (date && date.length) {
+                    this.handleStartChange(date[0].toISOString(), scope);
+                  }
+                }}
+                options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
+              />
+            </div>
+          </div>
         )}
         <InlineTextGroup
           id={scopeType + '-start'}
@@ -137,8 +139,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="start time stamp"
           onChange={e => {
-            const newScope = this.handleStartChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleStartChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-start');
@@ -147,21 +148,22 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           error={errors['scopes.default.' + scopeType + 'Scope.start']}
         />
         {!disabled && (
-          <Row>
+          <div id="scope-row">
             <FormLabel id="scope-item-label">End Time</FormLabel>
-            <Flatpickr
-              id="scope-time-picker"
-              data-enable-time
-              value={scope.end}
-              onChange={date => {
-                if (date && date.length) {
-                  const newScope = this.handleEndChange(date[0].toISOString(), scope);
-                  updateCanaryScope(newScope, scopeType);
-                }
-              }}
-              options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
-            />
-          </Row>
+            <div className="scope-time-picker-container">
+              <Flatpickr
+                id="scope-time-picker"
+                data-enable-time
+                value={scope.end}
+                onChange={date => {
+                  if (date && date.length) {
+                    this.handleEndChange(date[0].toISOString(), scope);
+                  }
+                }}
+                options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
+              />
+            </div>
+          </div>
         )}
         <InlineTextGroup
           id={scopeType + '-end'}
@@ -170,8 +172,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="end time stamp"
           onChange={e => {
-            const newScope = this.handleEndChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleEndChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-end');
@@ -179,7 +180,11 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           touched={touched[scopeType + '-end'] || hasTheRunButtonBeenClicked}
           error={errors['scopes.default.' + scopeType + 'Scope.end']}
         />
+        {!disabled && (
+          <div></div>
+        )}
       </div>
     );
   }
 }
+

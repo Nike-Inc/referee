@@ -54,7 +54,7 @@ export const MetadataSection = observer(
           error={''}
         />
         <div>
-          <Row>
+          <div className="dropdown-row">
             <FormLabel id="dropdown-label">Metrics Account</FormLabel>
             <Select
               id="dropdown"
@@ -65,8 +65,8 @@ export const MetadataSection = observer(
                 updateMetricsAccountName(e.value);
               }}
             />
-          </Row>
-          <Row>
+          </div>
+          <div className="dropdown-row">
             <FormLabel id="dropdown-label">Storage Account</FormLabel>
             <Select
               id="dropdown"
@@ -77,9 +77,8 @@ export const MetadataSection = observer(
                 updateStorageAccountName(e.value);
               }}
             />
-          </Row>
+          </div>
         </div>
-        {/*{touched && error && <Alert variant="danger">{error}</Alert>}*/}
       </TitledSection>
     );
   }

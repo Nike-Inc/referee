@@ -75,6 +75,11 @@ export default class CanaryExecutorStore {
   }
 
   @action.bound
+  setCanaryExecutionRequestObject(value: CanaryExecutionRequest): void {
+    this.canaryExecutionRequestObject = value;
+  }
+
+  @action.bound
   updateApplicationName(value: string): void {
     this.applicationName = value;
   }
@@ -103,6 +108,9 @@ export default class CanaryExecutorStore {
   updateCanaryScope(newScope: CanaryScope, type: string) {
     if (type === 'control') {
       this.canaryExecutionRequestObject.scopes.default.controlScope = newScope;
+      if (this.testingType === 'AA') {
+        this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
+      }
     } else if (type === 'experiment') {
       this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
     }
