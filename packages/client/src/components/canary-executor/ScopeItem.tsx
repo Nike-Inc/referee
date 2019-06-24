@@ -6,11 +6,8 @@ import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
-import { Button, FormControl, FormLabel } from 'react-bootstrap';
-import { FormGroup } from '../../layout/FormGroup';
-import { KvPair } from '../../domain/CanaryConfigTypes';
-import InputGroup from 'react-bootstrap/InputGroup';
-import { action, computed, observable } from 'mobx';
+import { FormLabel } from 'react-bootstrap';
+import {boundMethod} from "autobind-decorator";
 
 interface ScopeProps {
   scopeType: string;
@@ -23,102 +20,48 @@ interface ScopeProps {
   hasTheRunButtonBeenClicked: boolean;
 }
 
-const KEY = 0;
-const VALUE = 1;
-let extendedParamsMap: KvMap<string> = {
-  testkey: 'testvalue',
-  testkey2: 'testvalue2'
-  // "": ""
-};
-//
-// let extendedParamsArray: KvPair[] = [{
-//   "key" : "testvalue1",
-//   "value" : "testvalue2",
-//   // "": ""
-// }];
-
 @observer
 export default class ScopeItem extends React.Component<ScopeProps> {
-  // private convertArrayToMap(extendedParamsArray: KvPair[]): KvMap<string> {
-  //   let map: KvMap<string> = {};
-  //   extendedParamsArray.map((kvPair: KvPair, i: number) => {
-  //     map[kvPair.key] = kvPair.value;
-  //   });
-  //   return map;
-  // }
-
-  private handleNameChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleNameChange(value: string, scope: CanaryScope): void {
     scope.scope = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleLocationChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleLocationChange(value: string, scope: CanaryScope): void {
     scope.location = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleStepChange(value: number, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleStepChange(value: number, scope: CanaryScope): void {
     scope.step = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleStartChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleStartChange(value: string, scope: CanaryScope): void {
     scope.start = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
-  private handleEndChange(value: string, scope: CanaryScope): CanaryScope {
+  @boundMethod
+  private handleEndChange(value: string, scope: CanaryScope): void {
     scope.end = value;
-    return scope;
+    this.props.updateCanaryScope(scope, this.props.scopeType);
   }
-
-  private handleAddExtendedScopeParam(scope: CanaryScope): CanaryScope {
-    extendedParamsMap[''] = '';
-    scope.extendedScopeParams = extendedParamsMap;
-
-    // const newParams = this.extendedParamsArray ? this.extendedParamsArray.slice() : [];
-    // newParams.push({ key: '', value: '' });
-    // this.extendedParamsArray = newParams;
-
-    return scope;
-  }
-
-  private handleExtendedScopeParamKeyChange(index: number, newKey: string, kvPair: [string, string]): void {
-    // console.log(JSON.stringify(this.extendedParamsArray))
-    //
-    // if (this.extendedParamsArray === undefined) {
-    //   return;
-    // }
-    // const newParams = [
-    //   ...this.extendedParamsArray.slice(0, index),
-    //   Object.assign({}, this.extendedParamsArray[index], { key: value }),
-    //   ...this.extendedParamsArray.slice(index + 1)
-    // ];
-
-    kvPair[KEY] = newKey;
-    Object.entries(extendedParamsMap)[index] = kvPair;
-    extendedParamsMap[kvPair[KEY]] = kvPair[VALUE];
-  }
-  private handleExtendedScopeParamValueChange() {}
-  private handleDeleteExtendedScopeParam() {}
 
   render(): React.ReactNode {
     const {
       scopeType,
       scope,
-      updateCanaryScope,
       disabled,
       touch,
       touched,
       errors,
       hasTheRunButtonBeenClicked
     } = this.props;
-
-    const mapx: KvMap<string> = {
-      testkey: 'testvalue',
-      testkey2: 'testvalue2'
-      // "": ""
-    };
 
     return (
       <div id="scope-item">
@@ -130,8 +73,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="stack name or server group"
           onChange={e => {
-            const newScope = this.handleNameChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleNameChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-scope-name');
@@ -146,8 +88,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="AWS region"
           onChange={e => {
-            const newScope = this.handleLocationChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleLocationChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-location');
@@ -160,14 +101,12 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Step (s)"
           value={scope.step.toString()}
           disabled={disabled}
-          onChange={e => {
-            const newScope = this.handleStepChange(
+          onChange={e => {this.handleStepChange(
               parseInt((e.target as HTMLInputElement).value, 10)
                 ? parseInt((e.target as HTMLInputElement).value, 10)
                 : 0,
               scope
             );
-            updateCanaryScope(newScope, scopeType);
           }}
           onBlur={() => {
             touch(scopeType + '-step');
@@ -185,8 +124,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
                 value={scope.start}
                 onChange={date => {
                   if (date && date.length) {
-                    const newScope = this.handleStartChange(date[0].toISOString(), scope);
-                    updateCanaryScope(newScope, scopeType);
+                    this.handleStartChange(date[0].toISOString(), scope);
                   }
                 }}
                 options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
@@ -201,8 +139,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="start time stamp"
           onChange={e => {
-            const newScope = this.handleStartChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleStartChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-start');
@@ -220,8 +157,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
                 value={scope.end}
                 onChange={date => {
                   if (date && date.length) {
-                    const newScope = this.handleEndChange(date[0].toISOString(), scope);
-                    updateCanaryScope(newScope, scopeType);
+                    this.handleEndChange(date[0].toISOString(), scope);
                   }
                 }}
                 options={{ enableTime: true, dateFormat: 'Y-m-d H:i', defaultDate: 'today' }}
@@ -236,8 +172,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           disabled={disabled}
           placeHolderText="end time stamp"
           onChange={e => {
-            const newScope = this.handleEndChange(e.target.value, scope);
-            updateCanaryScope(newScope, scopeType);
+            this.handleEndChange(e.target.value, scope);
           }}
           onBlur={() => {
             touch(scopeType + '-end');
@@ -246,156 +181,10 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           error={errors['scopes.default.' + scopeType + 'Scope.end']}
         />
         {!disabled && (
-          <FormGroup
-            id="kv-pairs"
-            label="Extended Params"
-            // touched={this.state.touched.dimensions}
-            // error={this.state.errors['dimensions']}
-          >
-            {/*{this.extendedParamsArray &&*/}
-            {/*this.extendedParamsArray.map((kvPair, i) => (*/}
-            {/*<KeyValuePair*/}
-            {/*key={i}*/}
-            {/*index={i}*/}
-            {/*kvPair={kvPair}*/}
-            {/*onKeyChange={this.handleExtendedScopeParamKeyChange}*/}
-            {/*extendedScopeArray={this.extendedParamsArray}*/}
-            {/*// onValueChange={this.handleDimensionValueChange}*/}
-            {/*// handleDelete={this.handleDimensionDelete}*/}
-            {/*/>*/}
-            {/*))}*/}
-            {/*<Button*/}
-            {/*onClick={() => {*/}
-            {/*this.handleAddExtendedScopeParam(scope);*/}
-            {/*}}*/}
-            {/*size="sm"*/}
-            {/*id="add-dimension-btn"*/}
-            {/*variant="outline-dark"*/}
-            {/*>*/}
-            {/*Add Dimension*/}
-            {/*</Button>*/}
-
-            {extendedParamsMap &&
-              Object.entries(scope.extendedScopeParams).map((kvPair: [string, string], i: number) => (
-                <KeyValuePair
-                  key={i}
-                  index={i}
-                  kvPair={kvPair}
-                  onKeyChange={this.handleExtendedScopeParamKeyChange}
-                  // onValueChange={this.handleDimensionValueChange}
-                  // handleDelete={this.handleDimensionDelete}
-                />
-              ))}
-            <Button
-              onClick={() => {
-                this.handleAddExtendedScopeParam(scope);
-              }}
-              size="sm"
-              id="add-dimension-btn"
-              variant="outline-dark"
-            >
-              Add Extended Param
-            </Button>
-          </FormGroup>
+          <div></div>
         )}
       </div>
     );
   }
 }
 
-// const KeyValuePair = ({
-//                         // handleDelete,
-//                         index,
-//                         onKeyChange,
-//                         // onValueChange,
-//                         kvPair,
-//   extendedScopeArray
-//                       }: {
-//   // handleDelete: (i: number) => void;
-//   index: number;
-//   onKeyChange: (i: number, v: any) => void;
-//   // onValueChange: (i: number, v: any) => void;
-//   kvPair: KvPair;
-//   extendedScopeArray: KvPair[]
-// }): JSX.Element => {
-//   return (
-//     <InputGroup>
-//       <InputGroup.Prepend>
-//         <InputGroup.Text>Key: </InputGroup.Text>
-//       </InputGroup.Prepend>
-//       <FormControl
-//         onChange={(e: any) => {
-//           // console.log(JSON.stringify())
-//
-//           onKeyChange(index, e.target.value);
-//         }}
-//         value={kvPair.key}
-//       />
-//       <InputGroup.Prepend>
-//         <InputGroup.Text>Value: </InputGroup.Text>
-//       </InputGroup.Prepend>
-//       <FormControl
-//         // onChange={(e: any) => {
-//         //   onValueChange(index, e.target.value);
-//         // }}
-//         value={kvPair.value}
-//       />
-//       <InputGroup.Append>
-//         <Button variant="outline-danger"
-//                 // onMouseDown={() => handleDelete(index)}
-//         >
-//           Delete
-//         </Button>
-//       </InputGroup.Append>
-//     </InputGroup>
-//   );
-// };
-//
-
-const KeyValuePair = ({
-  // handleDelete,
-  index,
-  onKeyChange,
-  // onValueChange,
-  kvPair
-}: {
-  // handleDelete: (i: number) => void;
-  index: number;
-  onKeyChange: (i: number, v: any, kvPair: [string, string]) => void;
-  // onValueChange: (i: number, v: any) => void;
-  kvPair: [string, string];
-}): JSX.Element => {
-  return (
-    <InputGroup>
-      <InputGroup.Prepend>
-        <InputGroup.Text>Key: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          console.log('changed value: ' + e.target.value);
-          console.log('displayed value: ' + Object.keys(extendedParamsMap)[index]);
-          onKeyChange(index, e.target.value, kvPair);
-        }}
-        value={kvPair[KEY]}
-      />
-      <InputGroup.Prepend>
-        <InputGroup.Text>Value: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          console.log(e);
-          // onValueChange(index, e.target.value);
-        }}
-        value={kvPair[VALUE]}
-      />
-      <InputGroup.Append>
-        <Button
-          variant="outline-danger"
-          // onMouseDown={() => handleDelete(index)}
-        >
-          Delete
-        </Button>
-      </InputGroup.Append>
-    </InputGroup>
-  );
-};
