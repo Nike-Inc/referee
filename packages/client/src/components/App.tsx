@@ -23,7 +23,7 @@ interface AppProps {}
 export default class App extends React.Component<AppProps> {
   render(): React.ReactNode {
     return (
-      <BrowserRouter basename="/dashboard">
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Provider {...stores}>
           <div id="kayenta-config-manager">
             <ModalViewer />

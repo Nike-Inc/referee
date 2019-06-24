@@ -8,6 +8,7 @@ import path from 'path-browserify';
 import Optional from 'optional-js';
 import hljs from 'highlight.js';
 import marked from 'marked';
+import { observer } from 'mobx-react';
 
 const { docsStore } = stores;
 
