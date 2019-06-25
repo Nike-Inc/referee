@@ -28,7 +28,7 @@ app.get('/health', (req, res) => {
   res.status(204).end();
 });
 
-const nocache = (request: express.Request, response: express.Response, next: any) => {
+const nocache = (request: express.Request, response: express.Response, next: any): void => {
   response.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   response.header('Expires', '-1');
   response.header('Pragma', 'no-cache');
