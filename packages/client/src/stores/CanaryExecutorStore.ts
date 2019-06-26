@@ -1,8 +1,11 @@
 import { observable, action, computed } from 'mobx';
-import KayentaCredential from '../domain/KayentaCredential';
-import { CanaryExecutionRequest, CanaryScope } from '../domain/CanaryExecutionRequestTypes';
+import {
+  CanaryExecutionRequest,
+  CanaryExecutionStatusResponse,
+  CanaryScope,
+  KayentaCredential
+} from '../domain/Kayenta';
 import CanaryExecutionFactory from '../util/CanaryExecutionFactory';
-import { KvMap } from '../domain/CustomTypes';
 import { validateCanaryExecution } from '../validation/executionValidators';
 
 const METRICS_STORE = 'METRICS_STORE';
@@ -32,6 +35,21 @@ export default class CanaryExecutorStore {
 
   @observable
   testingType = 'AA';
+
+  @observable
+  canaryExecutionId = '';
+
+  @observable
+  canaryExecutionStatusResponse?: CanaryExecutionStatusResponse;
+
+  @observable
+  resultsRequestComplete = false;
+
+  @observable
+  stageStatus = [];
+
+  @observable
+  isAccordionExpanded = false;
 
   @computed
   get errors(): KvMap<string> {
@@ -129,5 +147,40 @@ export default class CanaryExecutorStore {
   @action.bound
   markHasTheRunButtonBeenClickedFlagAsTrue(): void {
     this.hasTheRunButtonBeenClicked = true;
+  }
+
+  @action.bound
+  setCanaryExecutionId(canaryExecutionId: string): void {
+    this.canaryExecutionId = canaryExecutionId;
+  }
+
+  @action.bound
+  updateResultsRequestComplete(): void {
+    this.resultsRequestComplete = true;
+  }
+
+  @action.bound
+  clearResultsRequestComplete(): void {
+    this.resultsRequestComplete = false;
+  }
+
+  @action.bound
+  toggleIsAccordionExpanded(): void {
+    this.isAccordionExpanded = !this.isAccordionExpanded;
+  }
+
+  @action.bound
+  resetIsAccordionExpanded(): void {
+    this.isAccordionExpanded = false;
+  }
+
+  @action.bound
+  updateStageStatus(value: any): void {
+    this.stageStatus = value;
+  }
+
+  @action.bound
+  updateCanaryExecutionStatusResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse): void {
+    this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
   }
 }

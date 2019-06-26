@@ -1,5 +1,5 @@
 import { string, object, array } from 'yup';
-import { KvMap, ValidationResultsWrapper } from '../domain/CustomTypes';
+import { ValidationResultsWrapper } from '../domain/Referee';
 
 const tocSchema = object().shape({
   home: string()

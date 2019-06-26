@@ -8,7 +8,7 @@ import { MetadataSection } from '../canary-executor/MetadataSection';
 import { ThresholdsSection } from '../canary-executor/ThresholdsSection';
 import TestingTypeSection from '../canary-executor/TestingTypeSection';
 import { ScopesSection } from '../canary-executor/ScopesSection';
-import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
+import { CanaryScope } from '../../domain/Kayenta';
 
 interface Props {}
 

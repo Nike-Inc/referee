@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import { KvMap } from '../../domain/CustomTypes';
 import TitledSection from '../../layout/titledSection';
 import * as React from 'react';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { GroupWeights } from '../../domain/CanaryConfigTypes';
+import { GroupWeights } from '../../domain/Kayenta';
 import { Alert, Col, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { add } from '../../validation/configValidators';
 import TitledSection from '../../layout/titledSection';

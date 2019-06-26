@@ -2,13 +2,12 @@ import * as React from 'react';
 import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import TitledSection from '../../layout/titledSection';
-import { CanaryMetricConfig, KvPair, SignalFxCanaryMetricSetQueryConfig } from '../../domain/CanaryConfigTypes';
+import { CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../../domain/Kayenta';
 import './ConfigureMetricModal.scss';
 import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';
 import { boundMethod } from 'autobind-decorator';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
-import { KvMap } from '../../domain/CustomTypes';
 
 const initialState = {
   errors: {},

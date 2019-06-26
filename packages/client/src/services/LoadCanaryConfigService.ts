@@ -1,6 +1,6 @@
 import { stores } from '../stores';
 import axios from 'axios';
-import { CanaryConfig } from '../domain/CanaryConfigTypes';
+import { CanaryConfig } from '../domain/Kayenta';
 import log from '../util/LoggerFactory';
 import { connect, ConnectedComponent } from '../components/connectedComponent';
 import { RouterProps } from 'react-router';

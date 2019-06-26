@@ -8,21 +8,18 @@ import * as React from 'react';
 import log from '../../util/LoggerFactory';
 import { kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
-import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore';
 import './CanaryExecutorButtonSection.scss';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
-  resultsStore: CanaryExecutorResultsStore;
 }
 
 interface Props extends RouterProps {}
 
 @connect(
   'canaryExecutorStore',
-  'configEditorStore',
-  'resultsStore'
+  'configEditorStore'
 )
 @observer
 export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
@@ -40,9 +37,11 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
 
     try {
       const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
-      this.stores.resultsStore.clearResultsRequestComplete();
-      this.stores.resultsStore.setCanaryExecutionId(data.canaryExecutionId);
-      this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
+      this.stores.canaryExecutorStore.clearResultsRequestComplete();
+      this.stores.canaryExecutorStore.setCanaryExecutionId(data.canaryExecutionId);
+      this.props.history.push(
+        '/dev-tools/canary-executor/results/' + this.stores.canaryExecutorStore.canaryExecutionId
+      );
     } catch (e) {
       log.error('Failed to fetch response: ', e);
       throw e;

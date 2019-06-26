@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react';
-import { KvMap } from '../../domain/CustomTypes';
 import TitledSection from '../../layout/titledSection';
 import * as React from 'react';
 import ScopeItem from '../canary-executor/ScopeItem';
-import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
+import { CanaryScope } from '../../domain/Kayenta';
 import Row from 'react-bootstrap/Row';
 
 export const ScopesSection = observer(

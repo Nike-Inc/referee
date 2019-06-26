@@ -1,4 +1,4 @@
-import { CanaryExecutionRequest } from '../domain/CanaryExecutionRequestTypes';
+import { CanaryExecutionRequest } from '../domain/Kayenta';
 
 export default class CanaryExecutionFactory {
   static createNewCanaryExecutionRequest(): CanaryExecutionRequest {

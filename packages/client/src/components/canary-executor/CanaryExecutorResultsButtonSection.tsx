@@ -8,21 +8,18 @@ import * as React from 'react';
 import log from '../../util/LoggerFactory';
 import { fetchCanaryResultsService, kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
-import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore';
 import './CanaryExecutorResultsButtonSection.scss';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
-  resultsStore: CanaryExecutorResultsStore;
 }
 
 interface Props extends RouterProps {}
 
 @connect(
   'canaryExecutorStore',
-  'configEditorStore',
-  'resultsStore'
+  'configEditorStore'
 )
 @observer
 export default class CanaryExecutorResultsButtonSection extends ConnectedComponent<Props, Stores> {
@@ -45,11 +42,13 @@ export default class CanaryExecutorResultsButtonSection extends ConnectedCompone
 
     try {
       const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
-      this.stores.resultsStore.clearResultsRequestComplete();
-      this.stores.resultsStore.resetIsAccordionExpanded();
-      this.stores.resultsStore.setCanaryExecutionId(data.canaryExecutionId);
-      this.props.history.push('/dev-tools/canary-executor/results/' + this.stores.resultsStore.canaryExecutionId);
-      fetchCanaryResultsService.fetchCanaryResults(this.stores.resultsStore.canaryExecutionId);
+      this.stores.canaryExecutorStore.clearResultsRequestComplete();
+      this.stores.canaryExecutorStore.resetIsAccordionExpanded();
+      this.stores.canaryExecutorStore.setCanaryExecutionId(data.canaryExecutionId);
+      this.props.history.push(
+        '/dev-tools/canary-executor/results/' + this.stores.canaryExecutorStore.canaryExecutionId
+      );
+      fetchCanaryResultsService.pollForCanaryExecutionComplete(this.stores.canaryExecutorStore.canaryExecutionId);
     } catch (e) {
       log.error('Failed to fetch response: ', e);
       throw e;

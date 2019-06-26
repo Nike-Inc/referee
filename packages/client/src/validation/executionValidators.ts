@@ -1,6 +1,6 @@
-import { mixed, string, object, array, number } from 'yup';
-import { KvMap, ValidationResultsWrapper } from '../domain/CustomTypes';
-import { CanaryExecutionRequest } from '../domain/CanaryExecutionRequestTypes';
+import { string, object, number } from 'yup';
+import { CanaryExecutionRequest } from '../domain/Kayenta';
+import { ValidationResultsWrapper } from '../domain/Referee';
 
 const canaryScopeSchema = object().shape({
   scope: string()
