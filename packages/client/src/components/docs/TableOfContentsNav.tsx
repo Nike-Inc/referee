@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { PageEntry, TableOfContents, TableOfContentsEntry } from '../../domain/CustomTypes';
 import Optional from 'optional-js';
 import OptionalUtils from '../../util/OptionalUtils';
 import * as H from 'history';
 import capitalize from 'capitalize';
 import { docsService } from '../../services';
 import classNames from 'classnames';
+import { PageEntry, TableOfContents, TableOfContentsEntry } from '../../domain/Referee';
 
 import './TableOfContentsNav.scss';
 

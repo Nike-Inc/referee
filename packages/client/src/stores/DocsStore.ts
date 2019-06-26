@@ -1,5 +1,5 @@
-import { TableOfContents, KeyOrMap, KvMap } from '../domain/CustomTypes';
 import { action, observable } from 'mobx';
+import { TableOfContents } from '../domain/Referee';
 
 export default class DocsStore {
   @observable

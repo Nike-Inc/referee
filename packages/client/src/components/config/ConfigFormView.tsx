@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import './ConfigFormView.scss';
 import ConfigureMetricModel from './ConfigureMetricModal';
-import { CanaryMetricConfig } from '../../domain/CanaryConfigTypes';
+import { CanaryMetricConfig } from '../../domain/Kayenta';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { observer } from 'mobx-react';
@@ -11,7 +11,6 @@ import { boundMethod } from 'autobind-decorator';
 import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
 import { MetricsSection } from './MetricsSection';
-import { KvMap } from '../../domain/CustomTypes';
 import { RouterProps } from 'react-router';
 
 interface Props extends RouterProps {}

@@ -3,8 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import CanaryExecutorStore from '../../stores/CanaryExecutorStore';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
-import CanaryExecutorResultsStore from '../../stores/CanaryExecutorResultsStore';
-import CanaryExecutorFormView from '../canary-executor/CanaryExecutorFormView';
+import CanaryExecutorFormView from './CanaryExecutorFormView';
 import ConfigFormView from '../config/ConfigFormView';
 import { fetchCanaryResultsService } from '../../services';
 import { ClipLoader } from 'react-spinners';
@@ -27,7 +26,6 @@ import './CanaryExecutorResults.scss';
 interface Stores {
   configEditorStore: ConfigEditorStore;
   canaryExecutorStore: CanaryExecutorStore;
-  resultsStore: CanaryExecutorResultsStore;
 }
 
 interface ResultsPathParams {
@@ -42,22 +40,21 @@ const TERMINAL_SCORE = 0;
 
 @connect(
   'configEditorStore',
-  'canaryExecutorStore',
-  'resultsStore'
+  'canaryExecutorStore'
 )
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
   async componentDidMount(): Promise<void> {
-    fetchCanaryResultsService.fetchCanaryResults(this.props.match.params.canaryExecutionId);
-    this.stores.resultsStore.resetIsAccordionExpanded();
+    fetchCanaryResultsService.pollForCanaryExecutionComplete(this.props.match.params.canaryExecutionId);
+    this.stores.canaryExecutorStore.resetIsAccordionExpanded();
   }
 
   render(): React.ReactNode {
-    const { canaryExecutorStore, resultsStore } = this.stores;
+    const { canaryExecutorStore } = this.stores;
 
     return (
       <div className="canary-executor-results">
-        {!resultsStore.resultsRequestComplete ? (
+        {!canaryExecutorStore.resultsRequestComplete ? (
           <div>
             <h5>Loading</h5>
             <ClipLoader />
@@ -69,13 +66,13 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
               <div className="standalone-canary-analysis-summary">
                 <Summary
                   classification={
-                    resultsStore.canaryExecutionStatusResponse
-                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.classification
+                    canaryExecutorStore.canaryExecutionStatusResponse
+                      ? canaryExecutorStore.canaryExecutionStatusResponse.result.judgeResult.score.classification
                       : TERMINAL
                   }
                   score={
-                    resultsStore.canaryExecutionStatusResponse
-                      ? resultsStore.canaryExecutionStatusResponse.result.judgeResult.score.score
+                    canaryExecutorStore.canaryExecutionStatusResponse
+                      ? canaryExecutorStore.canaryExecutionStatusResponse.result.judgeResult.score.score
                       : TERMINAL_SCORE
                   }
                   testingType={canaryExecutorStore.testingType}
@@ -87,14 +84,14 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
             <Accordion
               allowZeroExpanded={true}
               onChange={() => {
-                this.stores.resultsStore.toggleIsAccordionExpanded();
+                canaryExecutorStore.toggleIsAccordionExpanded();
               }}
             >
               <AccordionItem>
                 <AccordionItemHeading>
                   <AccordionItemButton>
                     <div className="row-component">
-                      {this.stores.resultsStore.isAccordionExpanded ? (
+                      {canaryExecutorStore.isAccordionExpanded ? (
                         <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronDown} />
                       ) : (
                         <FontAwesomeIcon className="chevron" size="lg" color="white" icon={faChevronRight} />

@@ -1,6 +1,6 @@
 import uuid from 'uuid/v1';
 
-import { CanaryConfig } from '../domain/CanaryConfigTypes';
+import { CanaryConfig } from '../domain/Kayenta';
 
 export default class CanaryConfigFactory {
   static createNewCanaryConfig(): CanaryConfig {

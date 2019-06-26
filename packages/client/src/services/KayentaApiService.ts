@@ -1,8 +1,6 @@
 import axios from 'axios';
 import log from '../util/LoggerFactory';
-import KayentaCredential from '../domain/KayentaCredential';
-import { CanaryExecutionResponse } from '../domain/CanaryExecutionResponse';
-import { CanaryExecutionStatusResponse } from '../domain/CanaryExecutionStatusResponse';
+import { CanaryExecutionStatusResponse, CanaryExecutionResponse, KayentaCredential } from '../domain/Kayenta';
 import { stores } from '../stores';
 
 const kayentaClient = axios.create({
@@ -48,7 +46,7 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryRunStatusAndResults(canaryExecutionId: string): Promise<CanaryExecutionStatusResponse> {
+  async fetchCanaryExecutionStatusResponse(canaryExecutionId: string): Promise<CanaryExecutionStatusResponse> {
     try {
       const response = await kayentaClient.get('/canary/' + canaryExecutionId);
       return response.data;

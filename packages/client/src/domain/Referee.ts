@@ -1,11 +1,3 @@
-export interface KvMap<V> {
-  [key: string]: V;
-}
-
-export interface KeyOrMap<V> {
-  [key: string]: V | KvMap<V>;
-}
-
 export interface TableOfContents {
   home: string;
   table_of_contents: TableOfContentsEntry[];
@@ -24,4 +16,11 @@ export interface PageEntry {
 export interface ValidationResultsWrapper {
   errors: KvMap<string>;
   isValid: boolean;
+}
+
+export interface JudgedMetric {
+  name: string;
+  groupName: string;
+  metrics: any;
+  judgementsResult: any;
 }

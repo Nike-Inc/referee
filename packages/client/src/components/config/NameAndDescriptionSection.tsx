@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import TitledSection from '../../layout/titledSection';
 import { TextInputGroup } from '../../layout/TextInputGroup';
 import './NameAndDescriptionSection.scss';
-import { KvMap } from '../../domain/CustomTypes';
 
 export const NameAndDescriptionSection = observer(
   ({

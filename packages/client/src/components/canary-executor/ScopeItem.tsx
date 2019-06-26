@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react';
-import { KvMap } from '../../domain/CustomTypes';
 import * as React from 'react';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
-import { CanaryScope } from '../../domain/CanaryExecutionRequestTypes';
+import { CanaryScope } from '../../domain/Kayenta';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';

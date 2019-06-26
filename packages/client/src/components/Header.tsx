@@ -10,7 +10,7 @@ import { connect, ConnectedComponent } from './connectedComponent';
 import ConfigEditorStore from '../stores/ConfigEditorStore';
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
 import LoadCanaryConfigNavItem from './config/LoadCanaryConfigNavItem';
-import { CanaryConfig } from '../domain/CanaryConfigTypes';
+import { CanaryConfig } from '../domain/Kayenta';
 import { boundMethod } from 'autobind-decorator';
 import Optional from 'optional-js';
 import { loadCanaryConfigService, docsService } from '../services';

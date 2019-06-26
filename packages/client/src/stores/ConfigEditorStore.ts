@@ -1,8 +1,7 @@
 import { observable, action, computed } from 'mobx';
-import { CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/CanaryConfigTypes';
+import { CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/Kayenta';
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
 import log from '../util/LoggerFactory';
-import { KvMap } from '../domain/CustomTypes';
 import { validateCanaryConfig } from '../validation/configValidators';
 
 /**
