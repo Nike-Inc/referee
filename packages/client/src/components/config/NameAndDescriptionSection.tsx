@@ -34,10 +34,10 @@ export const NameAndDescriptionSection = observer(
             updateConfigName(e.target.value);
           }}
           onBlur={() => {
-            touch('name');
+            touch('metricGroupName');
           }}
-          touched={touched['name'] || hasTheCopyOrSaveButtonBeenClicked}
-          error={errors['name']}
+          touched={touched['metricGroupName'] || hasTheCopyOrSaveButtonBeenClicked}
+          error={errors['metricGroupName']}
         />
         <TextInputGroup
           name="config-description"

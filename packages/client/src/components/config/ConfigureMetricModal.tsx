@@ -359,10 +359,10 @@ export default class ConfigureMetricModal extends React.Component<
                 </FormGroup>
                 <InlineTextGroup
                   onBlur={() => {
-                    this.touch('name');
+                    this.touch('metricGroupName');
                   }}
-                  touched={this.state.touched.name}
-                  error={this.state.errors.name}
+                  touched={this.state.touched.metricGroupName}
+                  error={this.state.errors.metricGroupName}
                   id="name"
                   label="Name"
                   placeHolderText="Metric Name"

@@ -1,14 +1,18 @@
 import axios from 'axios';
 import log from '../util/LoggerFactory';
-import { CanaryExecutionStatusResponse, CanaryExecutionResponse, KayentaCredential } from '../domain/Kayenta';
-import { stores } from '../stores';
+import {
+  CanaryExecutionStatusResponse,
+  CanaryExecutionResponse,
+  KayentaCredential,
+  MetricSetPair,
+  CanaryAdhocExecutionRequest,
+  CanaryAnalysisExecutionStatusResponse
+} from '../domain/Kayenta';
 
 const kayentaClient = axios.create({
   baseURL: `${window.location.origin}/kayenta/`,
   timeout: 5000
 });
-
-const { canaryExecutorStore } = stores;
 
 export default class KayentaApiService {
   async fetchCredentials(): Promise<KayentaCredential[]> {
@@ -16,19 +20,19 @@ export default class KayentaApiService {
       const response = await kayentaClient.get('/credentials');
       return response.data;
     } catch (e) {
-      log.error('Failed to fetch account metadata from Kayenta +', e);
+      log.error('Failed to fetch account metadata from Kayenta', e);
       throw e;
     }
   }
 
-  async triggerCanary(json: any): Promise<CanaryExecutionResponse> {
-    // TODO add better validation here
-    const application: string = canaryExecutorStore.applicationName;
-    const metricsAccountName: string = canaryExecutorStore.metricsAccountName;
-    const storageAccountName: string = canaryExecutorStore.storageAccountName;
-
+  async initiateCanaryWithConfig(
+    canaryAdhocExecutionRequest: CanaryAdhocExecutionRequest,
+    application: string,
+    metricsAccountName: string,
+    storageAccountName: string
+  ): Promise<CanaryExecutionResponse> {
     try {
-      const response = await kayentaClient.post('/canary', json, {
+      const response = await kayentaClient.post('/canary', canaryAdhocExecutionRequest, {
         params: {
           application: application,
           metricsAccountName: metricsAccountName,
@@ -46,12 +50,44 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryExecutionStatusResponse(canaryExecutionId: string): Promise<CanaryExecutionStatusResponse> {
+  async fetchCanaryExecutionStatusResponse(executionId: string): Promise<CanaryExecutionStatusResponse> {
     try {
-      const response = await kayentaClient.get('/canary/' + canaryExecutionId);
+      const response = await kayentaClient.get('/canary/' + executionId);
       return response.data;
     } catch (e) {
-      log.error('Failed to fetch canary run status from Kayenta +', e);
+      log.error('Failed to fetch canary run status from Kayenta', e);
+      throw e;
+    }
+  }
+
+  async fetchCanaryAnalysisExecutionStatusResponse(
+    executionId: string
+  ): Promise<CanaryAnalysisExecutionStatusResponse> {
+    try {
+      const response = await kayentaClient.get('/standalone_canary_analysis/' + executionId);
+      return response.data;
+    } catch (e) {
+      log.error('Failed to fetch standalone canary analysis pipeline execution status from Kayenta', e);
+      throw e;
+    }
+  }
+
+  async fetchMetricSetPairList(metricSetPairListId: string): Promise<MetricSetPair[]> {
+    try {
+      const response = await kayentaClient.get(`/metricSetPairList/${metricSetPairListId}`);
+      return response.data;
+    } catch (e) {
+      log.error(`Failed to fetch metric set pair list of id: ${metricSetPairListId} from Kayenta`, e);
+      throw e;
+    }
+  }
+
+  async fetchCanaryConfig(configId: string) {
+    try {
+      const response = await kayentaClient.get(`/canaryConfig/${configId}`);
+      return response.data;
+    } catch (e) {
+      log.error(`Failed to fetch canary config with id: ${configId} from Kayenta`, e);
       throw e;
     }
   }

@@ -9,46 +9,38 @@ export interface KayentaCredential {
 }
 
 export interface CanaryExecutionStatusResponse {
-  application: string;
-  configurationAccountName: string;
-  storageAccountName: string;
-
+  application?: string;
+  parentPipelineExecutionId?: string;
+  pipelineId: string;
+  stageStatus: KvMap<string>;
   complete: boolean;
   status: string;
-  exception: {};
-  stageStatus: KvMap<string>;
-
-  buildTimeIso: string;
-  buildTimeMillis: number;
-  startTimeIso: string;
-  startTimeMillis: number;
-  endTimeIso: string;
-  endTimeMillis: number;
-
-  canaryConfigId: string;
-  config: CanaryConfig;
-  canaryExecutionRequest: CanaryExecutionRequest;
-
-  metricSetPairListId: string;
-  parentPipelineExecutionId: string;
-  pipelineId: string;
-  result: CanaryResult;
+  exception?: any;
+  result?: CanaryResult;
+  config?: CanaryConfig;
+  canaryConfigId?: string;
+  canaryExecutionRequest?: CanaryExecutionRequest;
+  metricSetPairListId?: string;
+  buildTimeIso?: string;
+  buildTimeMillis?: number;
+  startTimeIso?: string;
+  startTimeMillis?: number;
+  endTimeIso?: string;
+  endTimeMillis?: number;
+  configurationAccountName?: string;
+  storageAccountName?: string;
 }
 
 export interface CanaryResult {
-  canaryDuration: {
-    nano: number;
-    negative: boolean;
-    seconds: number;
-    units: {};
-    zero: boolean;
-  };
-  judgeResult: {
-    groupScores: CanaryJudgeGroupScore[];
-    judgeName: string;
-    results: CanaryAnalysisResult;
-    score: CanaryJudgeScore;
-  };
+  judgeResult?: CanaryJudgeResult;
+  canaryDuration?: string;
+}
+
+export interface CanaryJudgeResult {
+  judgeName: string;
+  results: CanaryAnalysisResult[];
+  groupScores: CanaryJudgeGroupScore[];
+  score: CanaryJudgeScore;
 }
 
 export interface CanaryJudgeGroupScore {
@@ -59,39 +51,54 @@ export interface CanaryJudgeGroupScore {
 }
 
 export interface CanaryAnalysisResult {
+  name: string;
+  tags: KvMap<string>;
+  id: string;
   classification: string;
   classificationReason: string;
-  id: string;
-  name: string;
-  critical: boolean;
   groups: [string];
-  controlMetadata: {};
-  experimentMetadata: {};
-  resultMetadata: {};
-  tags: KvMap<string>;
+  experimentMetadata: KvMap<any>;
+  controlMetadata: KvMap<any>;
+  resultMetadata: KvMap<any>;
+  critical: boolean;
 }
 
 export interface CanaryJudgeScore {
+  score: number;
   classification: string;
   classificationReason: string;
-  score: number;
 }
 
 export interface CanaryExecutionResponse {
   canaryExecutionId: string;
 }
 
+export interface CanaryAdhocExecutionRequest {
+  canaryConfig: CanaryConfig;
+  executionRequest: CanaryExecutionRequest;
+}
+
 export interface CanaryExecutionRequest {
-  scopes: {
-    default: {
-      controlScope: CanaryScope;
-      experimentScope: CanaryScope;
-    };
-  };
-  thresholds: {
-    marginal: number;
-    pass: number;
-  };
+  scopes: KvMap<CanaryScopePair>;
+  thresholds: CanaryClassifierThresholdsConfig;
+  metadata?: Metadata[];
+  siteLocal?: KvMap<any>;
+}
+
+export interface Metadata {
+  name: string;
+  value: string;
+  hidden: boolean;
+}
+
+export interface CanaryClassifierThresholdsConfig {
+  marginal: number;
+  pass: number;
+}
+
+export interface CanaryScopePair {
+  controlScope: CanaryScope;
+  experimentScope: CanaryScope;
 }
 
 export interface CanaryScope {
@@ -100,7 +107,7 @@ export interface CanaryScope {
   step: number;
   start: string;
   end: string;
-  extendedScopeParams: KvMap<string>;
+  extendedScopeParams?: KvMap<string>;
 }
 
 export interface CanaryConfig {
@@ -167,4 +174,115 @@ export interface SignalFxCanaryMetricSetQueryConfig extends CanaryMetricSetQuery
   metricName: string;
   aggregationMethod: string;
   queryPairs?: KvPair[];
+}
+
+export interface MetricSetPair {
+  name: string;
+  id: string;
+  tags: KvMap<string>;
+  values: MetricSetPairData;
+  scopes: MetricSetPairScopes;
+  attributes: MetricSetPairAttributes;
+}
+
+export interface MetricSetPairData {
+  control: number[];
+  experiment: number[];
+}
+
+export interface MetricSetPairAttributes {
+  control?: KvMap<string>;
+  experiment?: KvMap<string>;
+}
+
+export interface MetricSetPairScopes {
+  control: MetricSetScope;
+  experiment: MetricSetScope;
+}
+
+export interface MetricSetScope {
+  startTimeIso: string;
+  startTimeMillis: number;
+  stepMillis: number;
+}
+
+export interface CanaryAnalysisExecutionStatusResponse {
+  application: string;
+  user: string;
+  parentPipelineExecutionId?: string;
+  pipelineId: string;
+  stageStatus: StageMetadata[];
+  complete: boolean;
+  executionStatus: string;
+  status?: String;
+  exception?: any;
+  canaryAnalysisExecutionResult?: CanaryAnalysisExecutionResult;
+  canaryAnalysisExecutionRequest?: CanaryAnalysisExecutionRequest;
+  canaryConfig?: CanaryConfig;
+  canaryConfigId?: string;
+  buildTimeIso?: string;
+  buildTimeMillis?: number;
+  startTimeIso?: string;
+  startTimeMillis?: number;
+  endTimeIso?: string;
+  endTimeMillis?: number;
+}
+
+export interface StageMetadata {
+  type: string;
+  name: string;
+  status: string;
+}
+
+export interface CanaryAnalysisExecutionResult {
+  didPassThresholds: boolean;
+  hasWarnings: boolean;
+  canaryScoreMessage: string;
+  canaryScores: number[];
+  canaryExecutionResults: CanaryExecutionResult[];
+  buildTimeIso: string;
+  startTimeIso: string;
+  endTimeIso: string;
+}
+
+export interface CanaryExecutionResult {
+  executionId: string;
+  executionStatus: string;
+  exception?: any;
+  result: CanaryResult;
+  judgementStartTimeIso: string;
+  judgementStartTimeMillis: number;
+  judgementEndTimeIso: string;
+  judgementEndTimeMillis: number;
+  warnings: string[];
+  metricSetPairListId: string;
+  buildTimeIso?: string;
+  buildTimeMillis?: number;
+  startTimeIso?: string;
+  startTimeMillis?: number;
+  endTimeIso?: string;
+  endTimeMillis?: number;
+  configurationAccountName?: string;
+  storageAccountName?: string;
+}
+
+export interface CanaryAnalysisExecutionRequest {
+  scopes: CanaryAnalysisExecutionRequestScope;
+  thresholds: CanaryClassifierThresholdsConfig;
+  lifetimeDurationMins: number;
+  beginAfterMins: number;
+  lookbackMins: number;
+  analysisIntervalMins: number;
+  siteLocal: KvMap<any>;
+}
+
+export interface CanaryAnalysisExecutionRequestScope {
+  scopeName: string;
+  controlScope: string;
+  controlLocation: string;
+  experimentScope: string;
+  experimentLocation: string;
+  startTimeIso: string;
+  endTimeIso: string;
+  step: number;
 }

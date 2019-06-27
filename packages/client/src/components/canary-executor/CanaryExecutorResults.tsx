@@ -67,12 +67,12 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
                 <Summary
                   classification={
                     canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse.result.judgeResult.score.classification
+                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
                       : TERMINAL
                   }
                   score={
                     canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse.result.judgeResult.score.score
+                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
                       : TERMINAL_SCORE
                   }
                   testingType={canaryExecutorStore.testingType}
