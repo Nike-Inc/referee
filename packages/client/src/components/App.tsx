@@ -18,6 +18,7 @@ import './App.scss';
 import 'typeface-assistant/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import CanaryReportViewer from './reports/canary/CanaryReportViewer';
+import ScapeReportViewer from './reports/scape/ScapeReportViewer';
 
 interface AppProps {}
 
@@ -34,6 +35,7 @@ export default class App extends React.Component<AppProps> {
                 <Route exact={true} path="/" component={Landing} />
                 <Route path="/docs/:path(.*)" component={Docs} />
                 <Route path="/reports/canary/:executionId(.*)" component={CanaryReportViewer} />
+                <Route path="/reports/standalone_canary_analysis/:executionId(.*)" component={ScapeReportViewer} />
                 <Route path="/config/edit" component={ConfigEditor} />
                 <Route path="/dev-tools/canary-executor/setup" component={CanaryExecutor} />
                 <Route

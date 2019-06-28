@@ -17,10 +17,3 @@ export interface ValidationResultsWrapper {
   errors: KvMap<string>;
   isValid: boolean;
 }
-
-export interface JudgedMetric {
-  name: string;
-  groupName: string;
-  metrics: any;
-  judgementsResult: any;
-}

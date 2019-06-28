@@ -9,6 +9,7 @@ import log from '../../util/LoggerFactory';
 import { kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
 import './CanaryExecutorButtonSection.scss';
+import { CanaryAdhocExecutionRequest } from '../../domain/Kayenta';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
@@ -25,18 +26,23 @@ interface Props extends RouterProps {}
 export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
   @boundMethod
   private async handleRunButtonClick(): Promise<void> {
-    const canaryAdhocExecutionRequest: any = {};
-
     this.stores.canaryExecutorStore.markHasTheRunButtonBeenClickedFlagAsTrue();
     if (!this.stores.canaryExecutorStore.isExecutionRequestValid) {
       return;
     }
 
-    canaryAdhocExecutionRequest['canaryConfig'] = this.stores.configEditorStore.canaryConfigObject;
-    canaryAdhocExecutionRequest['executionRequest'] = this.stores.canaryExecutorStore.canaryExecutionRequestObject;
+    const canaryAdhocExecutionRequest: CanaryAdhocExecutionRequest = {
+      canaryConfig: this.stores.configEditorStore.canaryConfigObject,
+      executionRequest: this.stores.canaryExecutorStore.canaryExecutionRequestObject
+    };
 
     try {
-      const data = await kayentaApiService.triggerCanary(canaryAdhocExecutionRequest);
+      const data = await kayentaApiService.initiateCanaryWithConfig(
+        canaryAdhocExecutionRequest,
+        this.stores.canaryExecutorStore.applicationName,
+        this.stores.canaryExecutorStore.metricsAccountName,
+        this.stores.canaryExecutorStore.storageAccountName
+      );
       this.stores.canaryExecutorStore.clearResultsRequestComplete();
       this.stores.canaryExecutorStore.setCanaryExecutionId(data.canaryExecutionId);
       this.props.history.push(
