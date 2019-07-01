@@ -76,7 +76,7 @@ export const validateCanaryExecution = (
   }
 
   if (error) {
-    if (error.metricGroupName !== 'ValidationError') {
+    if (error.name !== 'ValidationError') {
       throw error;
     }
     const inner: [{ path: string; errors: string[] }] = error.inner;
