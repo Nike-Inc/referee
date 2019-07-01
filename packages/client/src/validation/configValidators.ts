@@ -129,7 +129,7 @@ export const validateCanaryMetricConfig = (
   }
 
   if (error) {
-    if (error.metricGroupName !== 'ValidationError') {
+    if (error.name !== 'ValidationError') {
       throw error;
     }
     const inner: [{ path: string; errors: string[] }] = error.inner;
@@ -173,7 +173,7 @@ export const validateCanaryConfig = (canaryConfig: CanaryConfig): ValidationResu
   }
 
   if (error) {
-    if (error.metricGroupName !== 'ValidationError') {
+    if (error.name !== 'ValidationError') {
       throw error;
     }
     const inner: [{ path: string; errors: string[] }] = error.inner;
