@@ -28,7 +28,9 @@
     "test": "yarn workspaces run test",
     "build": "yarn workspaces run build",
     "clean": "yarn workspaces run clean",
-    "prepare-artifacts": "export CI=true && export SKIP_PREFLIGHT_CHECK=true && yarn && yarn bootsrap && yarn clean && yarn test && yarn build"
+    "prepare-artifacts": "export CI=true && export SKIP_PREFLIGHT_CHECK=true && yarn && yarn bootsrap && yarn clean && yarn test && yarn build",
+    "start": "scripts/start.sh",
+    "kill": "killall -9 node"
   },
   "workspaces": [
     "packages/*"

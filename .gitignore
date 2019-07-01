@@ -102,3 +102,5 @@ dist
 .DS_Store
 packages/client/public/docs
 packages/client/public/templates
+server_dev.log
+client_dev.log
