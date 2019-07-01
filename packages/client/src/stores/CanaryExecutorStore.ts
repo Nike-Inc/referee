@@ -4,7 +4,7 @@ import {
   CanaryExecutionStatusResponse,
   CanaryScope,
   KayentaCredential
-} from '../domain/Kayenta';
+} from '../domain/kayenta';
 import CanaryExecutionFactory from '../util/CanaryExecutionFactory';
 import { validateCanaryExecution } from '../validation/executionValidators';
 

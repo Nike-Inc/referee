@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavDropdown } from 'react-bootstrap';
-import { CanaryConfig } from '../../domain/Kayenta';
+import { CanaryConfig } from '../../domain/kayenta';
 import { boundMethod } from 'autobind-decorator';
 import log from '../../util/LoggerFactory';
 

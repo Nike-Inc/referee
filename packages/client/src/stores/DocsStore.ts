@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { TableOfContents } from '../domain/Referee';
+import { TableOfContents } from '../domain/referee';
 
 export default class DocsStore {
   @observable

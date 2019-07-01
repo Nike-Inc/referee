@@ -9,7 +9,7 @@ import log from '../../util/LoggerFactory';
 import { fetchCanaryResultsService, kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
 import './CanaryExecutorResultsButtonSection.scss';
-import { CanaryAdhocExecutionRequest } from '../../domain/Kayenta';
+import { CanaryAdhocExecutionRequest } from '../../domain/kayenta';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;

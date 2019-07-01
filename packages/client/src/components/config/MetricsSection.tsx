@@ -5,7 +5,7 @@ import { Alert, Button } from 'react-bootstrap';
 import { RefObject } from 'react';
 import MetricSummaries from './MetricSummaries';
 import TitledSection from '../../layout/titledSection';
-import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { CanaryMetricConfig } from '../../domain/kayenta';
 import ConfigureMetricModel from './ConfigureMetricModal';
 
 import './MetricsSection.scss';

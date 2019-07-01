@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import './ConfigFormView.scss';
 import ConfigureMetricModel from './ConfigureMetricModal';
-import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { CanaryMetricConfig } from '../../domain/kayenta';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { observer } from 'mobx-react';

@@ -1,7 +1,7 @@
 import { stores } from '../stores';
 import { kayentaApiService } from './index';
 import { delay } from 'q';
-import { CanaryExecutionStatusResponse } from '../domain/Kayenta';
+import { CanaryExecutionStatusResponse } from '../domain/kayenta';
 
 const { configEditorStore, canaryExecutorStore } = stores;
 let response: CanaryExecutionStatusResponse | any = {};

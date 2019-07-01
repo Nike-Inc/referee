@@ -1,6 +1,6 @@
 import { string, object, number } from 'yup';
-import { CanaryExecutionRequest } from '../domain/Kayenta';
-import { ValidationResultsWrapper } from '../domain/Referee';
+import { CanaryExecutionRequest } from '../domain/kayenta';
+import { ValidationResultsWrapper } from '../domain/referee';
 
 const canaryScopeSchema = object().shape({
   scope: string()

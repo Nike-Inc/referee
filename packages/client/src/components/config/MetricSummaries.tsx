@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { CanaryMetricConfig } from '../../domain/kayenta';
 import { Button, Table } from 'react-bootstrap';
 
 import './MetricSummaries.scss';

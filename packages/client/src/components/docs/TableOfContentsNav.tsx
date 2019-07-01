@@ -6,7 +6,7 @@ import * as H from 'history';
 import capitalize from 'capitalize';
 import { docsService } from '../../services';
 import classNames from 'classnames';
-import { PageEntry, TableOfContents, TableOfContentsEntry } from '../../domain/Referee';
+import { PageEntry, TableOfContents, TableOfContentsEntry } from '../../domain/referee';
 
 import './TableOfContentsNav.scss';
 

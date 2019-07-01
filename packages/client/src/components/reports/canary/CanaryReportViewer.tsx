@@ -6,7 +6,7 @@ import {
   CanaryExecutionRequest,
   CanaryExecutionStatusResponse,
   CanaryResult
-} from '../../../domain/Kayenta';
+} from '../../../domain/kayenta';
 import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';

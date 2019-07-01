@@ -1,5 +1,5 @@
 import { string, object, array } from 'yup';
-import { ValidationResultsWrapper } from '../domain/Referee';
+import { ValidationResultsWrapper } from '../domain/referee';
 
 const tocSchema = object().shape({
   home: string()

@@ -4,7 +4,7 @@ import {
   CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
   CanaryConfig
-} from '../../../domain/Kayenta';
+} from '../../../domain/kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import CanaryRunResult from '../canary/CanaryRunResult';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CanaryAnalysisResult, CanaryMetricConfig, MetricSetPair } from '../../../domain/Kayenta';
+import { CanaryAnalysisResult, CanaryMetricConfig, MetricSetPair } from '../../../domain/kayenta';
 
 interface Props {
   metricName: string;

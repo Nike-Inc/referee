@@ -7,7 +7,7 @@ import {
   MetricSetPair,
   CanaryAdhocExecutionRequest,
   CanaryAnalysisExecutionStatusResponse
-} from '../domain/Kayenta';
+} from '../domain/kayenta';
 
 const kayentaClient = axios.create({
   baseURL: `${window.location.origin}/kayenta/`,

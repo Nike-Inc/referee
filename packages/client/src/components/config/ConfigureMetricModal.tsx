@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import TitledSection from '../../layout/titledSection';
-import { CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../../domain/Kayenta';
+import { CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../../domain/kayenta';
 import './ConfigureMetricModal.scss';
 import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';

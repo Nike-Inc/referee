@@ -1,4 +1,4 @@
-import { CanaryClassifierThresholdsConfig } from '../domain/Kayenta';
+import { CanaryClassifierThresholdsConfig } from '../domain/kayenta';
 
 export function getClassFromScore(
   score: number,

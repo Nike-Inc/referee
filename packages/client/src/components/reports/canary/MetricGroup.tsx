@@ -7,7 +7,7 @@ import {
   CanaryJudgeGroupScore,
   CanaryMetricConfig,
   MetricSetPair
-} from '../../../domain/Kayenta';
+} from '../../../domain/kayenta';
 import capitalize from 'capitalize';
 import { ofNullable } from '../../../util/OptionalUtils';
 import Metric from './Metric';

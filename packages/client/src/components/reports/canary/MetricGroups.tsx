@@ -5,7 +5,7 @@ import {
   CanaryConfig,
   CanaryJudgeGroupScore,
   MetricSetPair
-} from '../../../domain/Kayenta';
+} from '../../../domain/kayenta';
 import MetricGroup from './MetricGroup';
 
 interface Props {

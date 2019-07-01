@@ -1,6 +1,6 @@
 import { mixed, string, object, boolean, array, number } from 'yup';
-import { CanaryConfig, CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../domain/Kayenta';
-import { ValidationResultsWrapper } from '../domain/Referee';
+import { CanaryConfig, CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../domain/kayenta';
+import { ValidationResultsWrapper } from '../domain/referee';
 
 const canaryMetricConfigSchema = object().shape({
   scopeName: string()

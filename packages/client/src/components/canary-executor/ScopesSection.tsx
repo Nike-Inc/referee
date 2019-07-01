@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import TitledSection from '../../layout/titledSection';
 import * as React from 'react';
 import ScopeItem from '../canary-executor/ScopeItem';
-import { CanaryScope } from '../../domain/Kayenta';
+import { CanaryScope } from '../../domain/kayenta';
 import Row from 'react-bootstrap/Row';
 
 export const ScopesSection = observer(

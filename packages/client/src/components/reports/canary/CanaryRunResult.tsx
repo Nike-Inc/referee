@@ -7,7 +7,7 @@ import {
   CanaryJudgeGroupScore,
   CanaryResult,
   MetricSetPair
-} from '../../../domain/Kayenta';
+} from '../../../domain/kayenta';
 import { kayentaApiService } from '../../../services';
 import { ofNullable } from '../../../util/OptionalUtils';
 
