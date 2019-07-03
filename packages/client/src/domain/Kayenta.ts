@@ -170,12 +170,6 @@ export interface CanaryJudgeConfig {
   judgeConfigurations: KvMap<any>;
 }
 
-export interface SignalFxCanaryMetricSetQueryConfig extends CanaryMetricSetQueryConfig {
-  metricName: string;
-  aggregationMethod: string;
-  queryPairs?: KvPair[];
-}
-
 export interface MetricSetPair {
   name: string;
   id: string;

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import './ConfigFormView.scss';
-import ConfigureMetricModel from './ConfigureMetricModal';
-import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../../domain/Kayenta';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { observer } from 'mobx-react';
@@ -12,6 +11,8 @@ import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
 import { MetricsSection } from './MetricsSection';
 import { RouterProps } from 'react-router';
+import { metricSourceIntegrations } from '../../metric-sources';
+import { MetricModalProps } from './AbstractMetricModal';
 
 interface Props extends RouterProps {}
 interface Stores {
@@ -89,17 +90,19 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
 
   @boundMethod
   editMetric(metric: CanaryMetricConfig, groups: string[]): void {
-    this.stores.modalStore.push(
-      <ConfigureMetricModel
-        groups={groups}
-        existingMetric={metric}
-        cancel={this.stores.modalStore.pop}
-        submit={(a, b) => {
-          this.stores.configEditorStore.createOrUpdateMetric(a, b);
-          this.stores.modalStore.pop();
-        }}
-      />
-    );
+    const type = (metric.query as CanaryMetricSetQueryConfig).type;
+    const props: MetricModalProps = {
+      type: type,
+      groups: groups,
+      existingMetric: metric,
+      cancel: this.stores.modalStore.pop,
+      submit: (a: CanaryMetricConfig, b: CanaryMetricConfig | undefined) => {
+        this.stores.configEditorStore.createOrUpdateMetric(a, b);
+        this.stores.modalStore.pop();
+      }
+    };
+    const metricModal = metricSourceIntegrations[type].createMetricsModal(props);
+    this.stores.modalStore.push(metricModal);
   }
 
   @boundMethod
@@ -127,8 +130,14 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
     this.stores.configEditorStore.markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();
   }
 
+  @boundMethod
+  updateMetricSourceType(type: string): void {
+    this.stores.configEditorStore.updateMetricSourceType(type);
+  }
+
   render(): React.ReactNode {
     const {
+      metricSourceType,
       canaryConfigObject,
       syntheticGroups: groups,
       selectedGroup,
@@ -137,23 +146,24 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
       errors,
       touched,
       hasTheCopyOrSaveButtonBeenClicked,
-      isCanaryConfigValid
+      hasConfiguredMetrics
     } = this.stores.configEditorStore;
-
-    const { history } = this.props;
 
     return (
       <div id="canary-configuration-form-view">
         <Form>
           <NameAndDescriptionSection
+            metricSourceType={metricSourceType}
             name={canaryConfigObject.name}
             description={canaryConfigObject.description}
+            updateMetricSourceType={this.updateMetricSourceType}
             updateConfigName={this.updateConfigName}
             updateConfigDescription={this.updateConfigDescription}
             touch={this.touch}
             errors={errors}
             touched={touched}
             hasTheCopyOrSaveButtonBeenClicked={hasTheCopyOrSaveButtonBeenClicked}
+            hasConfiguredMetrics={hasConfiguredMetrics}
           />
           <MetricsSection
             groups={groups}
