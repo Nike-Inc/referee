@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import TitledSection from '../../layout/titledSection';
-import { CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../../domain/Kayenta';
-import './ConfigureMetricModal.scss';
+import { CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../../domain/Kayenta';
+import './AbstractMetricModal.scss';
 import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';
-import { boundMethod } from 'autobind-decorator';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
 
 const initialState = {
@@ -23,58 +22,51 @@ const initialState = {
     dimensions: false
   },
   isValid: true,
-  existingMetric: undefined,
-  metric: {
-    name: '',
-    query: {
-      type: 'signalfx',
-      metricName: '',
-      aggregationMethod: 'mean',
-      queryPairs: []
-    },
-    groups: [],
-    analysisConfigurations: {
-      canary: {
-        direction: 'either',
-        nanStrategy: 'remove'
-      }
-    },
-    scopeName: 'default'
-  }
+  existingMetric: undefined
 };
 
-interface ConfigureMetricModelProps {
+const initialMetricState = {
+  name: '',
+  groups: [],
+  analysisConfigurations: {
+    canary: {
+      direction: 'either',
+      nanStrategy: 'remove'
+    }
+  },
+  scopeName: 'default'
+};
+
+export interface MetricModalProps {
+  type: string;
   existingMetric?: CanaryMetricConfig;
   groups: string[];
   cancel: () => void;
   submit: (metric: CanaryMetricConfig, existingMetric: CanaryMetricConfig | undefined) => void;
 }
 
-interface ConfigureMetricModelState {
+export interface MetricModalState<T extends CanaryMetricSetQueryConfig> {
   errors: KvMap<string>;
   touched: KvMap<boolean>;
-  existingMetric?: CanaryMetricConfig<SignalFxCanaryMetricSetQueryConfig>;
+  existingMetric?: CanaryMetricConfig<T>;
   isValid: boolean;
-  metric: CanaryMetricConfig<SignalFxCanaryMetricSetQueryConfig>;
+  metric: CanaryMetricConfig<T>;
 }
 
-/**
- * HARD CODED TO WORK WITH SIGNAL FX, TODO Make generic to at least support New Relic Insights
- */
-export default class ConfigureMetricModal extends React.Component<
-  ConfigureMetricModelProps,
-  ConfigureMetricModelState
+export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> extends React.Component<
+  MetricModalProps,
+  MetricModalState<T>
 > {
-  constructor(props: ConfigureMetricModelProps) {
+  public constructor(props: MetricModalProps) {
     super(props);
 
     if (props.existingMetric) {
-      const vErrors = validateCanaryMetricConfig(props.existingMetric);
-      this.state = Object.assign({}, initialState, {
+      const validationErrors = validateCanaryMetricConfig(props.existingMetric, props.type);
+      this.state = Object.assign({}, this.getInitialState(), {
         existingMetric: props.existingMetric,
         metric: props.existingMetric,
-        isValid: vErrors.isValid,
-        errors: vErrors.errors,
+        isValid: validationErrors.isValid,
+        errors: validationErrors.errors,
         touched: {
           groups: true,
           name: true,
@@ -88,12 +80,14 @@ export default class ConfigureMetricModal extends React.Component<
         }
       });
     } else {
-      this.state = initialState;
+      this.state = this.getInitialState();
     }
   }
 
-  private validate(): void {
-    this.setState(validateCanaryMetricConfig(this.state.metric));
+  private getInitialState(): MetricModalState<T> {
+    return Object.assign({}, initialState, {
+      metric: Object.assign({}, initialMetricState, { query: this.getQueryInitialState() })
+    });
   }
 
   private handleMetricNameChange(value: string): void {
@@ -159,37 +153,11 @@ export default class ConfigureMetricModal extends React.Component<
     );
   }
 
-  private handleSignalFxMetricNameChange(value: string): void {
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            metricName: value
-          })
-        })
-      },
-      this.validate
-    );
-  }
-
   private handleScopeNameChange(value: string): void {
     this.setState(
       {
         metric: Object.assign({}, this.state.metric, {
           scopeName: value
-        })
-      },
-      this.validate
-    );
-  }
-
-  private handleAggregationMethodChange(value: string): void {
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            aggregationMethod: value
-          })
         })
       },
       this.validate
@@ -238,87 +206,7 @@ export default class ConfigureMetricModal extends React.Component<
     return 'normal';
   }
 
-  private handleAddNewDimension(): void {
-    const newQueryPairs = this.state.metric.query.queryPairs ? this.state.metric.query.queryPairs.slice() : [];
-    newQueryPairs.push({ key: '', value: '' });
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            queryPairs: newQueryPairs
-          })
-        })
-      },
-      this.validate
-    );
-  }
-
-  @boundMethod
-  private handleDimensionKeyChange(index: number, value: string): void {
-    if (this.state.metric.query.queryPairs === undefined) {
-      return;
-    }
-    const newQueryPairs = [
-      ...this.state.metric.query.queryPairs.slice(0, index),
-      Object.assign({}, this.state.metric.query.queryPairs[index], { key: value }),
-      ...this.state.metric.query.queryPairs.slice(index + 1)
-    ];
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            queryPairs: newQueryPairs
-          })
-        })
-      },
-      this.validate
-    );
-  }
-
-  @boundMethod
-  private handleDimensionValueChange(index: number, value: string): void {
-    if (this.state.metric.query.queryPairs === undefined) {
-      return;
-    }
-    const newQueryPairs = [
-      ...this.state.metric.query.queryPairs.slice(0, index),
-      Object.assign({}, this.state.metric.query.queryPairs[index], { value }),
-      ...this.state.metric.query.queryPairs.slice(index + 1)
-    ];
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            queryPairs: newQueryPairs
-          })
-        })
-      },
-      this.validate
-    );
-  }
-
-  @boundMethod
-  private handleDimensionDelete(index: number): void {
-    if (this.state.metric.query.queryPairs === undefined) {
-      return;
-    }
-    const newQueryPairs = [
-      ...this.state.metric.query.queryPairs.slice(0, index),
-      ...this.state.metric.query.queryPairs.slice(index + 1)
-    ];
-    this.setState(
-      {
-        metric: Object.assign({}, this.state.metric, {
-          query: Object.assign({}, this.state.metric.query, {
-            queryPairs: newQueryPairs
-          })
-        })
-      },
-      this.validate
-    );
-  }
-
-  private touch(id: string): void {
+  protected touch(id: string): void {
     const touched: KvMap<boolean> = {};
     touched[id] = true;
     this.setState({
@@ -326,6 +214,14 @@ export default class ConfigureMetricModal extends React.Component<
     });
     this.validate();
   }
+
+  protected validate(): void {
+    this.setState(validateCanaryMetricConfig(this.state.metric, this.props.type));
+  }
+
+  abstract getQueryInitialState(): T;
+
+  abstract getMetricSourceSpecificJsx(): JSX.Element;
 
   render(): React.ReactNode {
     return (
@@ -359,10 +255,10 @@ export default class ConfigureMetricModal extends React.Component<
                 </FormGroup>
                 <InlineTextGroup
                   onBlur={() => {
-                    this.touch('metricGroupName');
+                    this.touch('name');
                   }}
-                  touched={this.state.touched.metricGroupName}
-                  error={this.state.errors.metricGroupName}
+                  touched={this.state.touched.name}
+                  error={this.state.errors.name}
                   id="name"
                   label="Name"
                   placeHolderText="Metric Name"
@@ -511,80 +407,8 @@ export default class ConfigureMetricModal extends React.Component<
                   disabled={false}
                 />
 
-                <InlineTextGroup
-                  onBlur={() => {
-                    this.touch('metricName');
-                  }}
-                  touched={this.state.touched.metricName}
-                  error={this.state.errors['query.metricName']}
-                  id="signalfx-metric"
-                  label="SignalFx Metric"
-                  value={this.state.metric.query.metricName}
-                  onChange={e => this.handleSignalFxMetricNameChange(e.target.value)}
-                />
-                <FormGroup
-                  id="aggregation-method"
-                  label="Aggregation Method"
-                  touched={this.state.touched.aggregationMethod}
-                  error={this.state.errors['query.aggregationMethod']}
-                >
-                  <Form.Control
-                    as="select"
-                    value={this.state.metric.query.aggregationMethod}
-                    onChange={(e: any) => {
-                      this.handleAggregationMethodChange(e.target.value);
-                    }}
-                  >
-                    {[
-                      'bottom',
-                      'count',
-                      'max',
-                      'mean',
-                      'mean_plus_stddev',
-                      'median',
-                      'min',
-                      'random',
-                      'sample_stddev',
-                      'sample_variance',
-                      'size',
-                      'stddev',
-                      'sum',
-                      'top',
-                      'variance'
-                    ].map(method => (
-                      <option key={method}>{method}</option>
-                    ))}
-                  </Form.Control>
-                </FormGroup>
-                <FormGroup
-                  id="kv-pairs"
-                  label="Dimensions"
-                  touched={this.state.touched.dimensions}
-                  error={this.state.errors['dimensions']}
-                >
-                  {this.state.metric.query &&
-                    this.state.metric.query.queryPairs &&
-                    this.state.metric.query.queryPairs.map((kvPair, i) => (
-                      <KeyValuePair
-                        key={i}
-                        index={i}
-                        kvPair={kvPair}
-                        onKeyChange={this.handleDimensionKeyChange}
-                        onValueChange={this.handleDimensionValueChange}
-                        handleDelete={this.handleDimensionDelete}
-                      />
-                    ))}
-                  <Button
-                    onClick={() => {
-                      this.handleAddNewDimension();
-                    }}
-                    size="sm"
-                    id="add-dimension-btn"
-                    variant="outline-dark"
-                  >
-                    Add Dimension
-                  </Button>
-                </FormGroup>
+                {/* Inject the metric source specific JSX here */}
+                {this.getMetricSourceSpecificJsx()}
               </Form>
             </TitledSection>
           </Modal.Body>
@@ -600,7 +424,7 @@ export default class ConfigureMetricModal extends React.Component<
             </Button>
             <Button
               onClick={() => {
-                const valErrors = validateCanaryMetricConfig(this.state.metric);
+                const valErrors = validateCanaryMetricConfig(this.state.metric, this.props.type);
                 if (!valErrors.isValid) {
                   this.setState(valErrors);
                   this.setState({
@@ -632,45 +456,3 @@ export default class ConfigureMetricModal extends React.Component<
     );
   }
 }
-
-const KeyValuePair = ({
-  handleDelete,
-  index,
-  onKeyChange,
-  onValueChange,
-  kvPair
-}: {
-  handleDelete: (i: number) => void;
-  index: number;
-  onKeyChange: (i: number, v: any) => void;
-  onValueChange: (i: number, v: any) => void;
-  kvPair: KvPair;
-}): JSX.Element => {
-  return (
-    <InputGroup>
-      <InputGroup.Prepend>
-        <InputGroup.Text>Key: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          onKeyChange(index, e.target.value);
-        }}
-        value={kvPair.key}
-      />
-      <InputGroup.Prepend>
-        <InputGroup.Text>Value: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          onValueChange(index, e.target.value);
-        }}
-        value={kvPair.value}
-      />
-      <InputGroup.Append>
-        <Button variant="outline-danger" onMouseDown={() => handleDelete(index)}>
-          Delete
-        </Button>
-      </InputGroup.Append>
-    </InputGroup>
-  );
-};

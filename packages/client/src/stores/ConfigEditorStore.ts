@@ -3,11 +3,16 @@ import { CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/Kayent
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
 import log from '../util/LoggerFactory';
 import { validateCanaryConfig } from '../validation/configValidators';
+import { metricSourceTypes } from '../metric-sources';
+import { safeGet } from '../util/OptionalUtils';
 
 /**
  * Mobx store for the configuration editor component
  */
 export default class ConfigEditorStore {
+  @observable
+  metricSourceType: string = metricSourceTypes[0];
+
   @observable
   canaryConfigObject: CanaryConfig = CanaryConfigFactory.createNewCanaryConfig();
 
@@ -66,6 +71,16 @@ export default class ConfigEditorStore {
   @computed
   get isCanaryConfigValid(): boolean {
     return validateCanaryConfig(this.canaryConfigObject).isValid;
+  }
+
+  @computed
+  get hasConfiguredMetrics(): boolean {
+    return safeGet(() => this.canaryConfigObject.metrics.length).orElse(0) > 0
+  }
+
+  @action.bound
+  updateMetricSourceType(type: string): void {
+    this.metricSourceType = type;
   }
 
   @action.bound

@@ -1,73 +1,51 @@
-import { mixed, string, object, boolean, array, number } from 'yup';
-import { CanaryConfig, CanaryMetricConfig, SignalFxCanaryMetricSetQueryConfig } from '../domain/Kayenta';
+import { mixed, string, object, boolean, array, number, ObjectSchema, Schema, ValidationError } from 'yup';
+import { CanaryConfig, CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../domain/Kayenta';
 import { ValidationResultsWrapper } from '../domain/Referee';
+import { metricSourceIntegrations, metricSourceTypes } from '../metric-sources';
+import { ofNullable, safeGet } from '../util/OptionalUtils';
 
-const canaryMetricConfigSchema = object().shape({
-  scopeName: string()
-    .trim()
-    .required(),
-  name: string()
-    .trim()
-    .required(),
-  query: object().shape({
-    type: mixed()
-      .oneOf(['signalfx'])
-      .required(),
-    metricName: string()
+const getCanaryMetricConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>): ObjectSchema => {
+  return object().shape({
+    scopeName: string()
       .trim()
       .required(),
-    aggregationMethod: mixed()
-      .oneOf([
-        'bottom',
-        'count',
-        'max',
-        'mean',
-        'mean_plus_stddev',
-        'median',
-        'min',
-        'random',
-        'sample_stddev',
-        'sample_variance',
-        'size',
-        'stddev',
-        'sum',
-        'top',
-        'variance'
-      ])
+    name: string()
+      .trim()
       .required(),
-    queryPairs: array().of(
-      object().shape({
-        key: string()
-          .trim()
-          .required(),
-        value: string()
-          .trim()
+    query: object().shape(
+      Object.assign(
+        {},
+        {
+          type: mixed()
+            .oneOf(metricSourceTypes)
+            .required()
+        },
+        metricQueryObjectSchema
+      )
+    ),
+    groups: array()
+      .of(
+        string()
+          .min(1)
+          .required()
+      )
+      .required(),
+    analysisConfigurations: object()
+      .shape({
+        canary: object()
+          .shape({
+            direction: mixed()
+              .oneOf(['increase', 'decrease', 'either'])
+              .required(),
+            nanStrategy: mixed().oneOf(['remove', 'replace']),
+            critical: boolean(),
+            mustHaveData: boolean()
+          })
           .required()
       })
-    )
-  }),
-  groups: array()
-    .of(
-      string()
-        .min(1)
-        .required()
-    )
-    .required(),
-  analysisConfigurations: object()
-    .shape({
-      canary: object()
-        .shape({
-          direction: mixed()
-            .oneOf(['increase', 'decrease', 'either'])
-            .required(),
-          nanStrategy: mixed().oneOf(['remove', 'replace']),
-          critical: boolean(),
-          mustHaveData: boolean()
-        })
-        .required()
-    })
-    .required()
-});
+      .required()
+  });
+};
 
 export const add = (a: number, b: number): number => a + b;
 
@@ -98,32 +76,36 @@ const classifierSchema = object()
 
 const judgeSchema = object().required();
 
-const canaryConfigSchema = object().shape({
-  applications: array()
-    .of(string().required())
-    .min(1),
-  id: string(),
-  createdTimestamp: number(),
-  updatedTimestamp: number(),
-  createdTimestampIso: string(),
-  updatedTimestampIso: string(),
-  name: string().required(),
-  description: string().required(),
-  configVersion: string(),
-  metrics: array()
-    .of(canaryMetricConfigSchema)
-    .required('metrics is a required property and must contain at least one valid metric configuration'),
-  classifier: classifierSchema,
-  judge: judgeSchema
-});
+const getCanaryConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>): ObjectSchema => {
+  return object().shape({
+    applications: array()
+      .of(string().required())
+      .min(1),
+    id: string(),
+    createdTimestamp: number(),
+    updatedTimestamp: number(),
+    createdTimestampIso: string(),
+    updatedTimestampIso: string(),
+    name: string().required(),
+    description: string().required(),
+    configVersion: string(),
+    metrics: array()
+      .of(getCanaryMetricConfigSchema(metricQueryObjectSchema))
+      .required('metrics is a required property and must contain at least one valid metric configuration'),
+    classifier: classifierSchema,
+    judge: judgeSchema
+  });
+};
 
 export const validateCanaryMetricConfig = (
-  metric: CanaryMetricConfig<SignalFxCanaryMetricSetQueryConfig>
+  metric: CanaryMetricConfig<CanaryMetricSetQueryConfig>,
+  type: string
 ): ValidationResultsWrapper => {
-  let error;
+  let error: ValidationError | undefined;
   const errors: KvMap<string> = {};
   try {
-    canaryMetricConfigSchema.validateSync(metric, { abortEarly: false, strict: true });
+    const querySchema = metricSourceIntegrations[type].canaryMetricSetQueryConfigSchema;
+    getCanaryMetricConfigSchema(querySchema).validateSync(metric, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;
   }
@@ -132,17 +114,12 @@ export const validateCanaryMetricConfig = (
     if (error.name !== 'ValidationError') {
       throw error;
     }
-    const inner: [{ path: string; errors: string[] }] = error.inner;
+    const inner: ValidationError[] = error.inner;
     if (inner) {
       inner.forEach(validationError => {
-        if (/query.queryPairs.*?/.test(validationError.errors.join(', '))) {
-          errors['dimensions'] = validationError.errors.join(', ');
-        }
-
-        if (/query.queryPairs.*?required/.test(validationError.errors.join(', '))) {
-          errors['dimensions'] = 'All key value pairs must be non-empty.';
-        }
-
+        ofNullable(metricSourceIntegrations[type].schemaValidationErrorMapper).ifPresent(validationErrorMapper => {
+          validationErrorMapper(errors, validationError);
+        });
         if (
           ['analysisConfigurations.canary.critical', 'analysisConfigurations.canary.mustHaveData'].includes(
             validationError.path
@@ -163,11 +140,19 @@ export const validateCanaryMetricConfig = (
   };
 };
 
+/**
+ * @param canaryConfig
+ */
 export const validateCanaryConfig = (canaryConfig: CanaryConfig): ValidationResultsWrapper => {
   let error;
   const errors: KvMap<string> = {};
   try {
-    canaryConfigSchema.validateSync(canaryConfig, { abortEarly: false, strict: true });
+    const querySchema = safeGet<KvMap<Schema<any>>>(() => {
+      // Attempt to grab the type from the first metric.
+      const type = canaryConfig.metrics[0].query.type;
+      return metricSourceIntegrations[type].canaryMetricSetQueryConfigSchema;
+    }).orElse({});
+    getCanaryConfigSchema(querySchema).validateSync(canaryConfig, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;
   }
@@ -176,7 +161,7 @@ export const validateCanaryConfig = (canaryConfig: CanaryConfig): ValidationResu
     if (error.name !== 'ValidationError') {
       throw error;
     }
-    const inner: [{ path: string; errors: string[] }] = error.inner;
+    const inner: ValidationError[] = error.inner;
     if (inner) {
       inner.forEach(validationError => {
         errors[validationError.path] = validationError.errors.join(', ');

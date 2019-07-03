@@ -1,7 +1,7 @@
 import Optional from 'optional-js';
 
 /**
- * Allows for fetching nested properties in an object that may normally through NPE's.
+ * Allows for fetching nested properties in an object that may normally throw a NPE.
  *
  * @param supplier A function that should resolve the desired value.
  * @return an optional of the supplied type that maybe contains the value that the provider was supposed to resolve.

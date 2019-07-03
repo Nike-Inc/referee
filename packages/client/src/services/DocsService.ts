@@ -55,18 +55,22 @@ marked.setOptions({
 export default class DocsService {
   async fetchAndUpdateToc(): Promise<void> {
     if (docsStore.tableOfContents == null) {
-      const response = await axios.get(`${process.env.PUBLIC_URL}/docs/table-of-contents.yaml`);
-      const tocData: any = yaml.safeLoad(response.data);
-      const validationResults = validateToc(tocData);
+      try {
+        const response = await axios.get(`${process.env.PUBLIC_URL}/docs/table-of-contents.yaml`);
+        const tocData: any = yaml.safeLoad(response.data);
+        const validationResults = validateToc(tocData);
 
-      // TODO wire up error component rather than crash entire site.
-      if (!validationResults.isValid) {
-        throw new Error(
-          `docs/table-of-contents.yaml was not valid errors: ${JSON.stringify(validationResults.errors)}`
-        );
+        // TODO wire up error component rather than crash entire site.
+        if (!validationResults.isValid) {
+          throw new Error(
+            `docs/table-of-contents.yaml was not valid errors: ${JSON.stringify(validationResults.errors)}`
+          );
+        }
+
+        docsStore.updateToc(tocData);
+      } catch (e) {
+        log.error('Failed to load table of contents for docs, dont worry, docs are probably not enabled');
       }
-
-      docsStore.updateToc(tocData);
     }
   }
 

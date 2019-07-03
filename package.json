@@ -17,7 +17,7 @@
     "typescript": "3.3.4000"
   },
   "scripts": {
-    "bootsrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
     "client-start": "yarn workspace client start",
     "client-build": "yarn workspace client build",
     "server-start": "yarn workspace server start",
