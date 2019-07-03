@@ -1,6 +1,6 @@
 import { Alert, Col, Form, FormGroup, FormLabel, Row } from 'react-bootstrap';
 import * as React from 'react';
-import Select from "react-select";
+import Select from 'react-select';
 
 export const SelectInputGroup = ({
   options,
@@ -23,7 +23,7 @@ export const SelectInputGroup = ({
   touched: boolean;
   error: undefined | string;
   disabled?: boolean;
-  disabledMessage?: string
+  disabledMessage?: string;
 }): JSX.Element => {
   return (
     <FormGroup as={'div'} controlId={`${name}`}>
@@ -37,7 +37,7 @@ export const SelectInputGroup = ({
             lable={label}
             onBlur={onBlur}
             isDisabled={disabled}
-            value={({ value: value, label: value })}
+            value={{ value: value, label: value }}
             options={options.map(o => ({ value: o, label: o }))}
             onChange={(selection: any) => {
               onChange(selection.value);

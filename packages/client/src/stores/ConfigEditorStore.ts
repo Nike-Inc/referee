@@ -75,7 +75,7 @@ export default class ConfigEditorStore {
 
   @computed
   get hasConfiguredMetrics(): boolean {
-    return safeGet(() => this.canaryConfigObject.metrics.length).orElse(0) > 0
+    return safeGet(() => this.canaryConfigObject.metrics.length).orElse(0) > 0;
   }
 
   @action.bound

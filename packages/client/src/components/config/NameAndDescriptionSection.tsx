@@ -30,7 +30,7 @@ export const NameAndDescriptionSection = observer(
     touched: KvMap<boolean>;
     errors: KvMap<string>;
     hasTheCopyOrSaveButtonBeenClicked: boolean;
-    hasConfiguredMetrics: boolean
+    hasConfiguredMetrics: boolean;
   }): JSX.Element => {
     return (
       <TitledSection title="Metadata" additionalClassname="name-and-description">
