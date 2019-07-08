@@ -3,7 +3,7 @@ import { CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/Kayent
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
 import log from '../util/LoggerFactory';
 import { validateCanaryConfig } from '../validation/configValidators';
-import { metricSourceTypes } from '../metric-sources';
+import { metricSourceTypes } from '../metricSources';
 import { safeGet } from '../util/OptionalUtils';
 
 /**

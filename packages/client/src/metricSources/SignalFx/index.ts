@@ -6,7 +6,7 @@ import { array, mixed, object, string, ValidationError } from 'yup';
 import { MetricSourceIntegration } from '../MetricSourceIntegration';
 import { MetricSetPairAttributes } from '../../domain/Kayenta';
 
-export const METRIC_TYPE: string = 'signalfx';
+export const SIGNAL_FX_SERVICE_TYPE: string = 'signalfx';
 
 export const SUPPORTED_AGGREGATION_METHODS = [
   'bottom',
@@ -58,17 +58,18 @@ const validationErrorMapper = (errors: KvMap<string>, validationError: Validatio
   }
 };
 
+// https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
 const signalFxQueryMapper = (attributes: MetricSetPairAttributes): { control: string; experiment: string } => {
   return {
-    control: attributes!.control!.signalFlowProgram,
-    experiment: attributes!.experiment!.signalFlowProgram
+    control: attributes!.control!['signal-flow-program'],
+    experiment: attributes!.experiment!['signal-flow-program']
   };
 };
 
 const signalFxMetricModalFactory = (props: MetricModalProps) => React.createElement(SignalFxMetricModal, props);
 
 const SignalFx: MetricSourceIntegration<SignalFxCanaryMetricSetQueryConfig> = {
-  type: METRIC_TYPE,
+  type: SIGNAL_FX_SERVICE_TYPE,
   createMetricsModal: signalFxMetricModalFactory,
   canaryMetricSetQueryConfigSchema: signalFxQuerySchema,
   schemaValidationErrorMapper: validationErrorMapper,

@@ -17,7 +17,7 @@ import { loadCanaryConfigService, docsService } from '../services';
 import DocsStore from '../stores/DocsStore';
 import { observer } from 'mobx-react';
 import { safeGet } from '../util/OptionalUtils';
-import { metricSourceTypes } from '../metric-sources';
+import { metricSourceTypes } from '../metricSources';
 
 interface Props extends RouterProps {}
 interface Stores {

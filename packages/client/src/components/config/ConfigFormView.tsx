@@ -11,7 +11,7 @@ import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
 import { MetricsSection } from './MetricsSection';
 import { RouterProps } from 'react-router';
-import { metricSourceIntegrations } from '../../metric-sources';
+import { metricSourceIntegrations } from '../../metricSources';
 import { MetricModalProps } from './AbstractMetricModal';
 
 interface Props extends RouterProps {}
@@ -185,6 +185,7 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
             createOrUpdateMetric={this.createOrUpdateMetric}
             errors={getMetricErrors(errors)}
             touched={touched['metrics'] || hasTheCopyOrSaveButtonBeenClicked}
+            metricSourceType={metricSourceType}
           />
           <ScoringSection
             computedGroupWeights={computedGroupWeights}

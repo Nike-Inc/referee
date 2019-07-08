@@ -11,7 +11,8 @@ export const InlineTextGroup = ({
   disabled = false,
   onChange = () => {},
   touched = false,
-  error = undefined
+  error = undefined,
+  subText
 }: {
   id: string;
   label: string;
@@ -21,7 +22,8 @@ export const InlineTextGroup = ({
   onBlur?: () => void;
   onChange?: (value: any) => void;
   touched?: boolean;
-  error?: undefined | string;
+  error?: string | undefined;
+  subText?: string | undefined
 }): JSX.Element => {
   return (
     <FormGroup id={id} label={label} touched={touched} error={error}>
@@ -36,6 +38,7 @@ export const InlineTextGroup = ({
         placeholder={placeHolderText}
         onChange={onChange}
       />
+      <Form.Text className="text-muted">{subText}</Form.Text>
     </FormGroup>
   );
 };

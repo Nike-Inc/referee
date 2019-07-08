@@ -6,10 +6,9 @@ import { RefObject } from 'react';
 import MetricSummaries from './MetricSummaries';
 import TitledSection from '../../layout/titledSection';
 import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { metricSourceIntegrations } from '../../metricSources';
 
 import './MetricsSection.scss';
-import SignalFxMetricModal from '../../metric-sources/signal-fx/SignalFxMetricModal';
-import SignalFx from '../../metric-sources/signal-fx';
 
 export const MetricsSection = observer(
   ({
@@ -31,7 +30,8 @@ export const MetricsSection = observer(
     popModal,
     createOrUpdateMetric,
     touched,
-    errors
+    errors,
+    metricSourceType
   }: {
     groups: string[];
     selectedGroup: string;
@@ -52,6 +52,7 @@ export const MetricsSection = observer(
     createOrUpdateMetric: (newMetric: CanaryMetricConfig, existingMetric: CanaryMetricConfig | undefined) => void;
     touched: boolean;
     errors: string[];
+    metricSourceType: string;
   }): JSX.Element => {
     return (
       <TitledSection title="Metrics" additionalClassname="form-metrics-container">
@@ -82,15 +83,15 @@ export const MetricsSection = observer(
                 <Button
                   onClick={() => {
                     pushModal(
-                      <SignalFxMetricModal
-                        type={SignalFx.type}
-                        groups={groups}
-                        cancel={popModal}
-                        submit={(a, b) => {
+                      metricSourceIntegrations[metricSourceType].createMetricsModal({
+                        type: metricSourceType,
+                        groups: groups,
+                        cancel: popModal,
+                        submit: (a, b) => {
                           createOrUpdateMetric(a, b);
                           popModal();
-                        }}
-                      />
+                        }
+                      })
                     );
                   }}
                   size="sm"

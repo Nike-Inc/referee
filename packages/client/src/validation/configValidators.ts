@@ -1,7 +1,7 @@
 import { mixed, string, object, boolean, array, number, ObjectSchema, Schema, ValidationError } from 'yup';
 import { CanaryConfig, CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../domain/Kayenta';
 import { ValidationResultsWrapper } from '../domain/Referee';
-import { metricSourceIntegrations, metricSourceTypes } from '../metric-sources';
+import { metricSourceIntegrations, metricSourceTypes } from '../metricSources';
 import { ofNullable, safeGet } from '../util/OptionalUtils';
 
 const getCanaryMetricConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>): ObjectSchema => {

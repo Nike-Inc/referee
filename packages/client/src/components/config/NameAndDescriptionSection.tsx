@@ -4,7 +4,7 @@ import TitledSection from '../../layout/titledSection';
 import { TextInputGroup } from '../../layout/TextInputGroup';
 import './NameAndDescriptionSection.scss';
 import { SelectInputGroup } from '../../layout/SelectInputGroup';
-import { metricSourceTypes } from '../../metric-sources';
+import { metricSourceTypes } from '../../metricSources';
 
 export const NameAndDescriptionSection = observer(
   ({

@@ -7,6 +7,7 @@ import './AbstractMetricModal.scss';
 import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
+import { boundMethod } from 'autobind-decorator';
 
 const initialState = {
   errors: {},
@@ -206,6 +207,21 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     return 'normal';
   }
 
+  @boundMethod
+  protected updateQueryObject(key: string, value: any) {
+    console.log(key, value);
+    this.setState(
+      {
+        metric: Object.assign({}, this.state.metric, {
+          query: Object.assign({}, this.state.metric.query, {
+            [key]: value
+          })
+        })
+      },
+      this.validate
+    );
+  }
+
   protected touch(id: string): void {
     const touched: KvMap<boolean> = {};
     touched[id] = true;
@@ -261,7 +277,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   error={this.state.errors.name}
                   id="name"
                   label="Name"
-                  placeHolderText="Metric Name"
+                  placeHolderText="A human readable string to describe the metric for the results"
                   value={this.state.metric.name}
                   onChange={e => {
                     this.handleMetricNameChange(e.target.value);
@@ -405,6 +421,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   value={this.state.metric.scopeName}
                   onChange={e => this.handleScopeNameChange(e.target.value)}
                   disabled={false}
+                  subText="You almost always want to leave this as 'default'"
                 />
 
                 {/* Inject the metric source specific JSX here */}
