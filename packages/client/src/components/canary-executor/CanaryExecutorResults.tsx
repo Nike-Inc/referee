@@ -65,23 +65,21 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
             <TitledSection title="Canary Results" />
             <div className="canary-results-metadata">
               <div className="widget">
-                <div className="standalone-canary-analysis-summary">
-                  <Summary
-                    classification={
-                      canaryExecutorStore.canaryExecutionStatusResponse
-                        ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
-                        : TERMINAL
-                    }
-                    score={
-                      canaryExecutorStore.canaryExecutionStatusResponse
-                        ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
-                        : TERMINAL_SCORE
-                    }
-                    testingType={canaryExecutorStore.testingType}
-                    marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
-                    pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
-                  />
-                </div>
+                <Summary
+                  classification={
+                    canaryExecutorStore.canaryExecutionStatusResponse
+                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
+                      : TERMINAL
+                  }
+                  score={
+                    canaryExecutorStore.canaryExecutionStatusResponse
+                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
+                      : TERMINAL_SCORE
+                  }
+                  testingType={canaryExecutorStore.testingType}
+                  marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
+                  pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
+                />
               </div>
               <div className="btn-wrapper">
                 <Button

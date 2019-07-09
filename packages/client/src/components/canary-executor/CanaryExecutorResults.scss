@@ -33,84 +33,74 @@
     .widget {
       display: flex;
       justify-content: center;
+      flex-grow: 1;
 
-      .standalone-canary-analysis-summary {
+      .summary-container {
         display: flex;
-        flex-grow: 1;
         justify-content: center;
-        margin-bottom: 10px;
+        width: 80%;
+        flex-direction: column;
+        padding: 15px;
 
-        .summary-container {
+        .metadata-container {
           display: flex;
-          justify-content: center;
-          width: 80%;
+          flex-direction: row;
+          flex-flow: wrap;
+          justify-content: space-between;
 
-          flex-direction: column;
-          padding: 15px;
-          position: relative;
-          top: 50%;
-          transform: translateY(-50%);
-
-          .metadata-container {
+          .result-container {
             display: flex;
-            flex-direction: row;
-            flex-flow: wrap;
-            justify-content: space-between;
+            flex-direction: column;
+            margin-bottom: 15px;
 
-            .result-container {
+            .result-value-container {
               display: flex;
-              flex-direction: column;
-              margin-bottom: 15px;
+              flex-direction: row;
 
-              .result-value-container {
-                display: flex;
-                flex-direction: row;
-
-                .result-value {
-                  font-size: 30px;
-                }
-              }
-
-              .result-label {
-                margin-left: 1px;
-                font-size: 15px;
-                text-transform: uppercase;
-                color: gray;
+              .result-value {
+                font-size: 30px;
               }
             }
 
-            .score-container {
-              display: flex;
-              flex-direction: column;
-              margin-bottom: 15px;
+            .result-label {
+              margin-left: 1px;
+              font-size: 15px;
+              text-transform: uppercase;
+              color: gray;
+            }
+          }
 
-              .score-value {
-                font-size: 30px;
-              }
+          .score-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
 
-              .score-label {
-                margin-left: 1px;
-                font-size: 15px;
-                text-transform: uppercase;
-                color: gray;
-              }
+            .score-value {
+              font-size: 30px;
             }
 
-            .mode-container {
-              display: flex;
-              flex-direction: column;
-              margin-bottom: 15px;
+            .score-label {
+              margin-left: 1px;
+              font-size: 15px;
+              text-transform: uppercase;
+              color: gray;
+            }
+          }
 
-              .mode-value {
-                font-size: 30px;
-              }
+          .mode-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
 
-              .mode-label {
-                margin-left: 1px;
-                font-size: 15px;
-                text-transform: uppercase;
-                color: gray;
-              }
+            .mode-value {
+              font-size: 30px;
+            }
+
+            .mode-label {
+              margin-left: 1px;
+              font-size: 15px;
+              text-transform: uppercase;
+              color: gray;
             }
           }
         }

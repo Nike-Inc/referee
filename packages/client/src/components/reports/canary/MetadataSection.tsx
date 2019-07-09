@@ -139,6 +139,9 @@ export default class MetadataSection extends React.Component<Props> {
           </div>
         </div>
 
+        <div className="message-wrapper">
+          <div className="message">{result.judgeResult!.score.classificationReason}</div>
+        </div>
         <div className="meter-container">
           <Meter
             classification={result.judgeResult!.score.classification}
@@ -146,9 +149,6 @@ export default class MetadataSection extends React.Component<Props> {
             marginal={thresholds.marginal}
             pass={thresholds.pass}
           />
-        </div>
-        <div className="message-wrapper">
-          <div className="message">{result.judgeResult!.score.classificationReason}</div>
         </div>
       </div>
     );

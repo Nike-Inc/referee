@@ -12,8 +12,7 @@
     justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-left: 60px;
-    margin-right: 60px;
+    margin: 0px 60px 40px 60px;
 
     .metadata-column {
       display: flex;
@@ -84,7 +83,7 @@
   }
 
   .meter-container {
-    margin: 50px 60px 70px 60px;
+    margin: 40px 60px 40px 60px;
   }
 
   .message-wrapper {
