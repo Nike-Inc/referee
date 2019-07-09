@@ -32,9 +32,9 @@ export default class MetricGroup extends React.Component<Props> {
     return (
       <div>
         <div>
-          <div>Name: {metricGroupName}</div>
-          <div>Score: {humanReadableScore}</div>
-          <div>Label: {scoreLabel}</div>
+          {/*<div>Name: {metricGroupName}</div>*/}
+          {/*<div>Score: {humanReadableScore}</div>*/}
+          {/*<div>Label: {scoreLabel}</div>*/}
         </div>
         <div className="group-metrics">
           {this.props.idListByMetricGroupNameMap[this.props.metricGroupName].map(id => {

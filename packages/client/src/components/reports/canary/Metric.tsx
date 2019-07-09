@@ -15,12 +15,12 @@ export default class Metric extends React.Component<Props> {
     // TODO below is just a stub showing that the data is available
     return (
       <div>
-        <div>Name: {metricName}</div>
-        <div>{canaryAnalysisResult.classification}</div>
-        <div>{canaryAnalysisResult.classificationReason}</div>
-        <div>{JSON.stringify(canaryMetricConfig.query)}</div>
-        <div>Number of control data points: {metricSetPair.values.control.length}</div>
-        <div>Number of experiment data points: {metricSetPair.values.experiment.length}</div>
+        {/*<div>Name: {metricName}</div>*/}
+        {/*<div>{canaryAnalysisResult.classification}</div>*/}
+        {/*<div>{canaryAnalysisResult.classificationReason}</div>*/}
+        {/*<div>{JSON.stringify(canaryMetricConfig.query)}</div>*/}
+        {/*<div>Number of control data points: {metricSetPair.values.control.length}</div>*/}
+        {/*<div>Number of experiment data points: {metricSetPair.values.experiment.length}</div>*/}
       </div>
     );
   }

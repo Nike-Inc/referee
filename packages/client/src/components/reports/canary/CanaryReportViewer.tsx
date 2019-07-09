@@ -12,6 +12,8 @@ import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import CanaryRunResult from './CanaryRunResult';
 import log from '../../../util/LoggerFactory';
+import { boundMethod } from 'autobind-decorator';
+import ConfigEditorStore from '../../../stores/ConfigEditorStore';
 
 interface PathParams {
   executionId: string;
@@ -21,6 +23,7 @@ interface Props extends RouteComponentProps<PathParams> {}
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
+  configEditorStore: ConfigEditorStore;
 }
 
 interface State {
@@ -32,10 +35,18 @@ interface State {
  * The smart top level component for viewing a report of the /canary results.
  */
 @connect('canaryExecutorStore')
+@connect('configEditorStore')
 export default class CanaryReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Props, context: any) {
     super(props, context);
     this.state = {};
+  }
+
+  @boundMethod
+  handleGoToConfigButtonClick(config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest): void {
+    this.stores.configEditorStore.setCanaryConfigObject(config);
+    this.stores.canaryExecutorStore.setCanaryExecutionRequestObject(canaryExecutionRequestObject);
+    this.props.history.push('/config/edit');
   }
 
   async componentDidMount(): Promise<void> {
@@ -75,10 +86,13 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
           // It now safe to assume, to the best of my knowledge, that result, metricSetPairListId will now not be null
           return (
             <CanaryRunResult
+              application={canaryExecutionStatusResponse.application as string}
               result={canaryExecutionStatusResponse.result as CanaryResult}
               metricSetPairListId={canaryExecutionStatusResponse.metricSetPairListId as string}
-              config={this.state.config as CanaryConfig}
+              canaryConfig={this.state.config as CanaryConfig}
+              executionRequest={canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest}
               thresholds={(canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds}
+              handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
           );
         } else if (!canaryExecutionStatusResponse.complete) {

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import {
+  CanaryAnalysisExecutionRequest,
   CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig
+  CanaryConfig,
+  CanaryExecutionRequest
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
@@ -58,14 +60,7 @@ export default class ScapeReportViewer extends React.Component<Props, State> {
               {(executionStatusResponse!
                 .canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult).canaryExecutionResults.map(
                 canaryRun => {
-                  return (
-                    <CanaryRunResult
-                      result={canaryRun.result}
-                      metricSetPairListId={canaryRun.metricSetPairListId as string}
-                      config={canaryConfig as CanaryConfig}
-                      thresholds={executionStatusResponse!.canaryAnalysisExecutionRequest!.thresholds}
-                    />
-                  );
+                  return <div></div>;
                 }
               )}
             </div>

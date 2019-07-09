@@ -2,10 +2,16 @@
 
 $black: #111111;
 $white: #ffffff;
+$success: #48bd1f;
+$error: #fe0000;
 
 $dark-background-color: #222222;
 $dark-bg-font-color: #F7F7F7;
 $off-white: #f2f2f2;
+
+$pass-color: $success;
+$marginal-color: yellow;
+$fail-color: $error;
 
 .btn-outline-warning {
   font-weight: bold!important;
@@ -65,3 +71,16 @@ $off-white: #f2f2f2;
   margin-right: auto;
   width: 50%;
 }
+
+.fail {
+  background: $fail-color;
+}
+
+.marginal {
+  background: $marginal-color;
+}
+
+.pass {
+  background: $pass-color;
+}
+

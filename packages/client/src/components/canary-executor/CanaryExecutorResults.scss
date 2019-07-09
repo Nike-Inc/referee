@@ -25,140 +25,101 @@
     border-top: 1px solid lightgray;
   }
 
-  .widget {
-
+  .canary-results-metadata {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 10px;
 
-    .standalone-canary-analysis-summary {
-
+    .widget {
       display: flex;
-      flex-grow: 1;
       justify-content: center;
-      margin-bottom: 10px;
 
-      .summary-container {
+      .standalone-canary-analysis-summary {
         display: flex;
+        flex-grow: 1;
         justify-content: center;
-        width: 80%;
+        margin-bottom: 10px;
 
-        flex-direction: column;
-        padding: 15px;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-
-        .metadata-container {
+        .summary-container {
           display: flex;
-          flex-direction: row;
-          flex-flow: wrap;
-          justify-content: space-between;
+          justify-content: center;
+          width: 80%;
 
-          .result-container {
+          flex-direction: column;
+          padding: 15px;
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+
+          .metadata-container {
             display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
+            flex-direction: row;
+            flex-flow: wrap;
+            justify-content: space-between;
 
-            .result-value-container {
+            .result-container {
               display: flex;
-              flex-direction: row;
+              flex-direction: column;
+              margin-bottom: 15px;
 
-              .result-value {
-                font-size: 30px;
+              .result-value-container {
+                display: flex;
+                flex-direction: row;
+
+                .result-value {
+                  font-size: 30px;
+                }
+              }
+
+              .result-label {
+                margin-left: 1px;
+                font-size: 15px;
+                text-transform: uppercase;
+                color: gray;
               }
             }
 
-            .result-label {
-              margin-left: 1px;
-              font-size: 15px;
-              text-transform: uppercase;
-              color: gray;
-            }
-          }
+            .score-container {
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 15px;
 
-          .score-container {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
+              .score-value {
+                font-size: 30px;
+              }
 
-            .score-value {
-              font-size: 30px;
-            }
-
-            .score-label {
-              margin-left: 1px;
-              font-size: 15px;
-              text-transform: uppercase;
-              color: gray;
-            }
-          }
-
-          .mode-container {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-
-            .mode-value {
-              font-size: 30px;
+              .score-label {
+                margin-left: 1px;
+                font-size: 15px;
+                text-transform: uppercase;
+                color: gray;
+              }
             }
 
-            .mode-label {
-              margin-left: 1px;
-              font-size: 15px;
-              text-transform: uppercase;
-              color: gray;
+            .mode-container {
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 15px;
+
+              .mode-value {
+                font-size: 30px;
+              }
+
+              .mode-label {
+                margin-left: 1px;
+                font-size: 15px;
+                text-transform: uppercase;
+                color: gray;
+              }
             }
-          }
-        }
-
-        .meter-wrapper {
-          display: flex;
-          position: relative;
-          margin-top: 10px;
-          margin-bottom: 25px;
-          border: 1px solid gray;
-          border-radius: 20px;
-          height: 40px;
-
-          .meter {
-            position: relative;
-            display: flex;
-            border-radius: 15px;
-            margin: 5px;
-          }
-
-          .marginal-line {
-            position: absolute;
-            background-color: gray;
-            width: 1px;
-            height: 65px;
-            z-index: -1;
-          }
-
-          .pass-line {
-            position: absolute;
-            background-color: gray;
-            width: 1px;
-            height: 65px;
-            z-index: -1;
-          }
-
-          .threshold-label {
-            position: relative;
-            color: gray;
-            top: 40px;
-            left: -25px;
-            font-size: 20px;
-          }
-
-          .pass {
-            background-color: #48bd1f;
-          }
-          .fail {
-            background-color: #fe0000;
           }
         }
       }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

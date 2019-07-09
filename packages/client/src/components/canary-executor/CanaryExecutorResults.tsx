@@ -19,9 +19,11 @@ import {
   AccordionItemPanel
 } from 'react-accessible-accordion';
 
-import CanaryExecutorResultsButtonSection from './CanaryExecutorResultsButtonSection';
+import CanaryExecutorResultsRunAgainButton from './CanaryExecutorResultsRunAgainButton';
 import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import './CanaryExecutorResults.scss';
+import { Button } from 'react-bootstrap';
+import { Meter } from '../shared/Meter';
 
 interface Stores {
   configEditorStore: ConfigEditorStore;
@@ -34,7 +36,6 @@ interface ResultsPathParams {
 
 interface Props extends RouteComponentProps<ResultsPathParams> {}
 
-const DEFAULT_CANARY_SCORE_DISPLAY = '1';
 const TERMINAL = 'Terminal';
 const TERMINAL_SCORE = 0;
 
@@ -62,23 +63,35 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
         ) : (
           <div>
             <TitledSection title="Canary Results" />
-            <div className="widget">
-              <div className="standalone-canary-analysis-summary">
-                <Summary
-                  classification={
-                    canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
-                      : TERMINAL
-                  }
-                  score={
-                    canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
-                      : TERMINAL_SCORE
-                  }
-                  testingType={canaryExecutorStore.testingType}
-                  marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
-                  pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
-                />
+            <div className="canary-results-metadata">
+              <div className="widget">
+                <div className="standalone-canary-analysis-summary">
+                  <Summary
+                    classification={
+                      canaryExecutorStore.canaryExecutionStatusResponse
+                        ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
+                        : TERMINAL
+                    }
+                    score={
+                      canaryExecutorStore.canaryExecutionStatusResponse
+                        ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
+                        : TERMINAL_SCORE
+                    }
+                    testingType={canaryExecutorStore.testingType}
+                    marginal={canaryExecutorStore.canaryExecutionRequestObject.thresholds.marginal}
+                    pass={canaryExecutorStore.canaryExecutionRequestObject.thresholds.pass}
+                  />
+                </div>
+              </div>
+              <div className="btn-wrapper">
+                <Button
+                  onClick={() => {
+                    this.props.history.push('/reports/canary/' + this.stores.canaryExecutorStore.canaryExecutionId);
+                  }}
+                  variant="dark"
+                >
+                  View Report
+                </Button>
               </div>
             </div>
             <Accordion
@@ -105,7 +118,7 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
                 <AccordionItemPanel>
                   <ConfigFormView history={this.props.history} />
                   <CanaryExecutorFormView />
-                  <CanaryExecutorResultsButtonSection history={this.props.history} />
+                  <CanaryExecutorResultsRunAgainButton history={this.props.history} />
                 </AccordionItemPanel>
               </AccordionItem>
             </Accordion>
@@ -129,22 +142,6 @@ const Summary = ({
   marginal: number;
   pass: number;
 }): JSX.Element => {
-  let meterStyle = {
-    width: `${DEFAULT_CANARY_SCORE_DISPLAY}%`
-  };
-  if (score > 0) {
-    meterStyle = {
-      width: `${score}%`
-    };
-  }
-
-  const marginalLineStyle = {
-    left: `${marginal}%`
-  };
-  const passLineStyle = {
-    left: `${pass}%`
-  };
-
   return (
     <div className="summary-container">
       <div className="metadata-container">
@@ -165,14 +162,8 @@ const Summary = ({
           <div className="mode-value headline-md-brand">{testingType === 'AA' ? 'A-A' : 'A-B'}</div>
         </div>
       </div>
-      <div className="meter-wrapper">
-        <div className={['meter', classification === 'Pass' ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
-        <div className="marginal-line" style={marginalLineStyle}>
-          <div className="threshold-label headline-md-base">{marginal}</div>
-        </div>
-        <div className="pass-line" style={passLineStyle}>
-          <div className="threshold-label headline-md-base">{pass}</div>
-        </div>
+      <div className="meter-container">
+        <Meter classification={classification} score={score} marginal={marginal} pass={pass} />
       </div>
     </div>
   );
