@@ -4,21 +4,28 @@ import {
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
   CanaryConfig,
+  CanaryExecutionRequest,
   CanaryJudgeGroupScore,
   CanaryResult,
   MetricSetPair
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { ofNullable } from '../../../util/OptionalUtils';
+import MetadataSection from './MetadataSection';
 
 interface Props {
+  application?: string;
   result: CanaryResult;
   metricSetPairListId: string;
-  config: CanaryConfig;
+  canaryConfig: CanaryConfig;
+  executionRequest: CanaryExecutionRequest;
   thresholds: CanaryClassifierThresholdsConfig;
+  warnings?: string[];
+  handleGoToConfigButtonClick: (config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest) => void;
 }
 
 interface State {
+  application: string;
   hasLoadedMetricSetPairList: boolean;
   metricSetPairsByIdMap: KvMap<MetricSetPair>;
   canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult>;
@@ -30,6 +37,7 @@ export default class CanaryRunResult extends React.Component<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
 
+    const application = ofNullable(this.props.application).orElse('ad-hoc');
     const judgeResult = ofNullable(this.props.result.judgeResult).orElseThrow(
       () => new Error('Expected there to be judgement results on the Canary Result object')
     );
@@ -54,6 +62,7 @@ export default class CanaryRunResult extends React.Component<Props, State> {
     judgeResult.groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
 
     this.state = {
+      application,
       hasLoadedMetricSetPairList: false,
       metricSetPairsByIdMap: {},
       canaryAnalysisResultByIdMap,
@@ -82,17 +91,26 @@ export default class CanaryRunResult extends React.Component<Props, State> {
     }
 
     const {
+      application,
       metricSetPairsByIdMap,
       canaryAnalysisResultByIdMap,
       idListByMetricGroupNameMap,
       groupScoreByMetricGroupNameMap
     } = this.state;
-    const { config, thresholds } = this.props;
+    const { result, canaryConfig, executionRequest, thresholds, handleGoToConfigButtonClick } = this.props;
 
     return (
       <div className="report-container">
+        <MetadataSection
+          application={application}
+          result={result}
+          canaryConfig={canaryConfig}
+          executionRequest={executionRequest}
+          thresholds={thresholds}
+          handleGoToConfigButtonClick={handleGoToConfigButtonClick}
+        />
         <MetricGroups
-          config={config}
+          config={canaryConfig}
           metricSetPairsByIdMap={metricSetPairsByIdMap}
           canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
           idListByMetricGroupNameMap={idListByMetricGroupNameMap}

@@ -8,7 +8,7 @@ import * as React from 'react';
 import log from '../../util/LoggerFactory';
 import { fetchCanaryResultsService, kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
-import './CanaryExecutorResultsButtonSection.scss';
+import './CanaryExecutorResultsRunAgainButton.scss';
 import { CanaryAdhocExecutionRequest } from '../../domain/Kayenta';
 
 interface Stores {
@@ -23,7 +23,7 @@ interface Props extends RouterProps {}
   'configEditorStore'
 )
 @observer
-export default class CanaryExecutorResultsButtonSection extends ConnectedComponent<Props, Stores> {
+export default class CanaryExecutorResultsRunAgainButton extends ConnectedComponent<Props, Stores> {
   @boundMethod
   private async handleRunButtonClick(): Promise<void> {
     this.stores.configEditorStore.markHasTheCopyOrSaveButtonBeenClickedFlagAsTrue();

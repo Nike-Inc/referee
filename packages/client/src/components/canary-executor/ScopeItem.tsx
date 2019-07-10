@@ -53,6 +53,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
 
   render(): React.ReactNode {
     const { scopeType, scope, disabled, touch, touched, errors, hasTheRunButtonBeenClicked } = this.props;
+    const localTimeZone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
 
     return (
       <div id="scope-item">
@@ -108,7 +109,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         />
         {!disabled && (
           <div id="scope-row">
-            <FormLabel id="scope-item-label">Start Time</FormLabel>
+            <FormLabel id="scope-item-label">Start Time ({localTimeZone})</FormLabel>
             <div className="scope-time-picker-container">
               <Flatpickr
                 id="scope-time-picker"
@@ -126,7 +127,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         )}
         <InlineTextGroup
           id={scopeType + '-start'}
-          label="Start Time ISO"
+          label="Start Time (ISO)"
           value={scope.start}
           disabled={disabled}
           placeHolderText="start time stamp"
@@ -141,7 +142,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         />
         {!disabled && (
           <div id="scope-row">
-            <FormLabel id="scope-item-label">End Time</FormLabel>
+            <FormLabel id="scope-item-label">End Time ({localTimeZone})</FormLabel>
             <div className="scope-time-picker-container">
               <Flatpickr
                 id="scope-time-picker"
@@ -159,7 +160,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         )}
         <InlineTextGroup
           id={scopeType + '-end'}
-          label="End Time ISO"
+          label="End Time (ISO)"
           value={scope.end}
           disabled={disabled}
           placeHolderText="end time stamp"

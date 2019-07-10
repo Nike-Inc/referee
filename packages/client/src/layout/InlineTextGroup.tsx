@@ -23,7 +23,7 @@ export const InlineTextGroup = ({
   onChange?: (value: any) => void;
   touched?: boolean;
   error?: string | undefined;
-  subText?: string | undefined
+  subText?: string | undefined;
 }): JSX.Element => {
   return (
     <FormGroup id={id} label={label} touched={touched} error={error}>

@@ -1,0 +1,47 @@
+@import '../../styles/shared';
+
+.meter-wrapper {
+  display: flex;
+  position: relative;
+  border: 1px solid gray;
+  border-radius: 20px;
+  height: 40px;
+  margin-bottom: 30px;
+
+  .meter {
+    position: relative;
+    display: flex;
+    border-radius: 15px;
+    margin: 5px;
+  }
+
+  .marginal-line {
+    position: absolute;
+    background-color: gray;
+    width: 1px;
+    height: 65px;
+  }
+
+  .pass-line {
+    position: absolute;
+    background-color: gray;
+    width: 1px;
+    height: 65px;
+  }
+
+  .threshold-label {
+    position: relative;
+    color: gray;
+    top: 40px;
+    left: -25px;
+    font-size: 20px;
+  }
+
+  .pass {
+    background-color: #48bd1f;
+  }
+  .fail {
+    background-color: #fe0000;
+  }
+}
+

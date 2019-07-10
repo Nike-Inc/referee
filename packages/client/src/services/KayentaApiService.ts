@@ -34,7 +34,7 @@ export default class KayentaApiService {
     try {
       const response = await kayentaClient.post('/canary', canaryAdhocExecutionRequest, {
         params: {
-          application: application,
+          application: application.trim() === '' ? undefined : application.trim(),
           metricsAccountName: metricsAccountName,
           storageAccountName: storageAccountName
         },

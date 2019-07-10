@@ -25,28 +25,22 @@
     border-top: 1px solid lightgray;
   }
 
-  .widget {
-
+  .canary-results-metadata {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 10px;
 
-    .standalone-canary-analysis-summary {
-
+    .widget {
       display: flex;
-      flex-grow: 1;
       justify-content: center;
-      margin-bottom: 10px;
+      flex-grow: 1;
 
       .summary-container {
         display: flex;
         justify-content: center;
         width: 80%;
-
         flex-direction: column;
         padding: 15px;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
 
         .metadata-container {
           display: flex;
@@ -110,55 +104,12 @@
             }
           }
         }
-
-        .meter-wrapper {
-          display: flex;
-          position: relative;
-          margin-top: 10px;
-          margin-bottom: 25px;
-          border: 1px solid gray;
-          border-radius: 20px;
-          height: 40px;
-
-          .meter {
-            position: relative;
-            display: flex;
-            border-radius: 15px;
-            margin: 5px;
-          }
-
-          .marginal-line {
-            position: absolute;
-            background-color: gray;
-            width: 1px;
-            height: 65px;
-            z-index: -1;
-          }
-
-          .pass-line {
-            position: absolute;
-            background-color: gray;
-            width: 1px;
-            height: 65px;
-            z-index: -1;
-          }
-
-          .threshold-label {
-            position: relative;
-            color: gray;
-            top: 40px;
-            left: -25px;
-            font-size: 20px;
-          }
-
-          .pass {
-            background-color: #48bd1f;
-          }
-          .fail {
-            background-color: #fe0000;
-          }
-        }
       }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

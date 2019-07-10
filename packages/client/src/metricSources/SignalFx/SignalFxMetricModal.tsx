@@ -94,7 +94,9 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
               <option key={method}>{method}</option>
             ))}
           </Form.Control>
-          <Form.Text className="text-muted">The aggregation method to reduce multiple time series from multiple instances</Form.Text>
+          <Form.Text className="text-muted">
+            The aggregation method to reduce multiple time series from multiple instances
+          </Form.Text>
         </FormGroup>
         <FormGroup
           id="kv-pairs"
