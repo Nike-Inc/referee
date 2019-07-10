@@ -12,7 +12,7 @@ export const Meter = observer(
     marginal,
     pass
   }: {
-    classification: string;
+    classification: boolean;
     score: number;
     marginal: number;
     pass: number;
@@ -35,7 +35,7 @@ export const Meter = observer(
 
     return (
       <div className="meter-wrapper">
-        <div className={['meter', classification === 'Pass' ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
+        <div className={['meter', classification ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
         <div className="marginal-line" style={marginalLineStyle}>
           <div className="threshold-label headline-md-base">{marginal}</div>
         </div>

@@ -11,7 +11,7 @@ import {
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { ofNullable } from '../../../util/OptionalUtils';
-import MetadataSection from './MetadataSection';
+import CanaryMetadataSection from './CanaryMetadataSection';
 
 interface Props {
   application?: string;
@@ -101,7 +101,7 @@ export default class CanaryRunResult extends React.Component<Props, State> {
 
     return (
       <div className="report-container">
-        <MetadataSection
+        <CanaryMetadataSection
           application={application}
           result={result}
           canaryConfig={canaryConfig}

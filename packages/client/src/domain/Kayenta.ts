@@ -261,7 +261,7 @@ export interface CanaryExecutionResult {
 }
 
 export interface CanaryAnalysisExecutionRequest {
-  scopes: CanaryAnalysisExecutionRequestScope;
+  scopes: CanaryAnalysisExecutionRequestScope[];
   thresholds: CanaryClassifierThresholdsConfig;
   lifetimeDurationMins: number;
   beginAfterMins: number;

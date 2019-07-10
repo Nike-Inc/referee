@@ -5,7 +5,7 @@ import {
   CanaryExecutionRequest,
   CanaryResult
 } from '../../../domain/Kayenta';
-import './MetadataSection.scss';
+import './CanaryMetadataSection.scss';
 import { Button } from 'react-bootstrap';
 import { Meter } from '../../shared/Meter';
 
@@ -18,7 +18,7 @@ interface Props {
   handleGoToConfigButtonClick: (config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest) => void;
 }
 
-export default class MetadataSection extends React.Component<Props> {
+export default class CanaryMetadataSection extends React.Component<Props> {
   render(): React.ReactNode {
     const { application, result, canaryConfig, executionRequest, thresholds, handleGoToConfigButtonClick } = this.props;
 
@@ -144,7 +144,7 @@ export default class MetadataSection extends React.Component<Props> {
         </div>
         <div className="meter-container">
           <Meter
-            classification={result.judgeResult!.score.classification}
+            classification={result.judgeResult!.score.classification === 'Pass'}
             score={result.judgeResult!.score.score}
             marginal={thresholds.marginal}
             pass={thresholds.pass}

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import {
-  CanaryAnalysisExecutionRequest,
-  CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig,
-  CanaryExecutionRequest
+  CanaryConfig
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
-import CanaryRunResult from '../canary/CanaryRunResult';
+import ScapeExecutionsResult from './ScapeExecutionsResult';
+import {boundMethod} from "autobind-decorator";
+import CanaryExecutorStore from "../../../stores/CanaryExecutorStore";
+import ConfigEditorStore from "../../../stores/ConfigEditorStore";
+import {connect, ConnectedComponent} from "../../connectedComponent";
 
 interface PathParams {
   executionId: string;
@@ -17,12 +18,19 @@ interface PathParams {
 
 interface Props extends RouteComponentProps<PathParams> {}
 
+interface Stores {
+  canaryExecutorStore: CanaryExecutorStore;
+  configEditorStore: ConfigEditorStore;
+}
+
 interface State {
   executionStatusResponse?: CanaryAnalysisExecutionStatusResponse;
   canaryConfig?: CanaryConfig;
 }
 
-export default class ScapeReportViewer extends React.Component<Props, State> {
+@connect('canaryExecutorStore')
+@connect('configEditorStore')
+export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {};
@@ -47,6 +55,12 @@ export default class ScapeReportViewer extends React.Component<Props, State> {
     });
   }
 
+  @boundMethod
+  handleGoToConfigButtonClick(config: CanaryConfig): void {
+    this.stores.configEditorStore.setCanaryConfigObject(config);
+    this.props.history.push('/config/edit');
+  }
+
   render(): React.ReactNode {
     const { executionStatusResponse, canaryConfig } = this.state;
 
@@ -54,16 +68,12 @@ export default class ScapeReportViewer extends React.Component<Props, State> {
       ofNullable(executionStatusResponse),
       executionStatusResponse => {
         if (executionStatusResponse.complete) {
-          // It now safe to assume, to the best of my knowledge, that result, metricSetPairListId will now not be null
           return (
-            <div>
-              {(executionStatusResponse!
-                .canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult).canaryExecutionResults.map(
-                canaryRun => {
-                  return <div></div>;
-                }
-              )}
-            </div>
+            <ScapeExecutionsResult
+              executionStatusResponse={executionStatusResponse as CanaryAnalysisExecutionStatusResponse}
+              canaryConfig={canaryConfig as CanaryConfig}
+              handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
+            />
           );
         } else if (!executionStatusResponse.complete) {
           return <div></div>;

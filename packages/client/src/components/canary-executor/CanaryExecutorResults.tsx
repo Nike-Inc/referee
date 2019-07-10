@@ -161,7 +161,7 @@ const Summary = ({
         </div>
       </div>
       <div className="meter-container">
-        <Meter classification={classification} score={score} marginal={marginal} pass={pass} />
+        <Meter classification={classification === 'Pass'} score={score} marginal={marginal} pass={pass} />
       </div>
     </div>
   );

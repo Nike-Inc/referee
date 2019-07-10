@@ -1,0 +1,97 @@
+@import '../../../styles/shared.scss';
+
+.metadata-section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  .metadata-columns {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0px 60px 40px 60px;
+
+    .metadata-column {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0;
+      margin: 0px 20px 0px 20px;
+
+      .metadata-column-content {
+        display: flex;
+        flex-direction: column;
+
+        .column-title-wrapper {
+          display: flex;
+          padding-bottom: 5px;
+
+          .column-title {
+            @extend .heading-font;
+            font-size: 18px;
+          }
+        }
+
+        .kv-wrapper {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          .key {
+            @extend .content-font;
+            font-weight: 600;
+            text-align: left;
+            padding-right: 20px;
+            flex-basis: 33%;
+          }
+
+          .value {
+            @extend .content-font;
+          }
+        }
+        @media screen and (max-width: 1250px) {
+          .kv-wrapper {
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+        }
+      }
+      .btn-wrapper {
+        padding-top: 10px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .metadata-columns {
+      flex-direction: column;
+
+      .metadata-column {
+        margin-bottom: 20px;
+      }
+    }
+    .metadata-columns > .metadata-column ~ .metadata-column {
+      margin-left: 10px;
+    }
+  }
+
+  .meter-container {
+    margin: 40px 60px 40px 60px;
+  }
+
+  .message-wrapper {
+    display: flex;
+    justify-content: center;
+    background: $off-white;
+
+    .message {
+      padding: 5px;
+      display: flex;
+      font-size: 18px;
+      text-align: center;
+      @extend .heading-font;
+    }
+  }
+}
