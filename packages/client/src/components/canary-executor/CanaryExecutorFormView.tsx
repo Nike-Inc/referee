@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { boundMethod } from 'autobind-decorator';
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
-import { MetadataSection } from '../canary-executor/MetadataSection';
+import { MetadataSection } from './MetadataSection';
 import { ThresholdsSection } from '../canary-executor/ThresholdsSection';
 import TestingTypeSection from '../canary-executor/TestingTypeSection';
 import { ScopesSection } from '../canary-executor/ScopesSection';

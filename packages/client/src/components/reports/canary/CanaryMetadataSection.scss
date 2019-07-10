@@ -9,7 +9,6 @@
   .metadata-columns {
     display: flex;
     flex-grow: 1;
-    justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
     margin: 0px 60px 40px 60px;
@@ -17,9 +16,8 @@
     .metadata-column {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      flex-grow: 1;
-      max-width: 450px;
+      flex: 1 1 0;
+      margin: 0px 20px 0px 20px;
 
       .metadata-column-content {
         display: flex;
@@ -38,6 +36,7 @@
         .kv-wrapper {
           display: flex;
           flex-direction: row;
+          justify-content: space-between;
           flex-wrap: wrap;
 
           .key {
@@ -45,12 +44,11 @@
             font-weight: 600;
             text-align: left;
             padding-right: 20px;
-            flex-basis: 50%;
+            flex-basis: 33%;
           }
 
           .value {
             @extend .content-font;
-            text-align: left;
           }
         }
         @media screen and (max-width: 1250px) {
@@ -63,10 +61,6 @@
         padding-top: 10px;
       }
     }
-
-  }
-  .metadata-columns > .metadata-column ~ .metadata-column {
-    margin-left: 20px;
   }
 
   @media screen and (max-width: 700px) {
@@ -78,7 +72,7 @@
       }
     }
     .metadata-columns > .metadata-column ~ .metadata-column {
-      margin-left: 0px;
+      margin-left: 10px;
     }
   }
 

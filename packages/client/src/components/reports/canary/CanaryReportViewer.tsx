@@ -42,13 +42,6 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
     this.state = {};
   }
 
-  @boundMethod
-  handleGoToConfigButtonClick(config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest): void {
-    this.stores.configEditorStore.setCanaryConfigObject(config);
-    this.stores.canaryExecutorStore.setCanaryExecutionRequestObject(canaryExecutionRequestObject);
-    this.props.history.push('/config/edit');
-  }
-
   async componentDidMount(): Promise<void> {
     let canaryExecutionStatusResponse: CanaryExecutionStatusResponse | undefined = undefined;
     if (this.stores.canaryExecutorStore.canaryExecutionStatusResponse) {
@@ -76,6 +69,13 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
       canaryExecutionStatusResponse,
       config
     });
+  }
+
+  @boundMethod
+  handleGoToConfigButtonClick(config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest): void {
+    this.stores.configEditorStore.setCanaryConfigObject(config);
+    this.stores.canaryExecutorStore.setCanaryExecutionRequestObject(canaryExecutionRequestObject);
+    this.props.history.push('/config/edit');
   }
 
   render(): React.ReactNode {
