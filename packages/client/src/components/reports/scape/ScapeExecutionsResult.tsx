@@ -4,7 +4,7 @@ import {
   CanaryAnalysisExecutionRequestScope,
   CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig,
+  CanaryConfig
 } from '../../../domain/Kayenta';
 import { ofNullable, safeGet } from '../../../util/OptionalUtils';
 import ScapeMetadataSection from './ScapeMetadataSection';
@@ -44,13 +44,7 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
   }
 
   render(): React.ReactNode {
-
-    const {
-      application,
-      user,
-      result,
-      scope
-    } = this.state;
+    const { application, user, result, scope } = this.state;
 
     const { executionStatusResponse, canaryConfig, handleGoToConfigButtonClick } = this.props;
 

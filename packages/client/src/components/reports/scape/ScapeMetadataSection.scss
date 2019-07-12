@@ -93,5 +93,8 @@
       text-align: center;
       @extend .heading-font;
     }
+    .message:empty {
+      display: none;
+    }
   }
 }

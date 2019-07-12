@@ -23,7 +23,6 @@ const MILLISECOND_CONVERSION = 1000;
 const SEC_TO_MIN_CONVERSION = 60;
 
 export default class ScapeMetadataSection extends React.Component<Props> {
-
   private calculateLifetime(): number {
     if (this.props.scope.endTimeIso) {
       const startDate = new Date(this.props.scope.startTimeIso);
@@ -36,15 +35,7 @@ export default class ScapeMetadataSection extends React.Component<Props> {
   }
 
   render(): React.ReactNode {
-    const {
-      application,
-      user,
-      result,
-      request,
-      scope,
-      canaryConfig,
-      handleGoToConfigButtonClick
-    } = this.props;
+    const { application, user, result, request, scope, canaryConfig, handleGoToConfigButtonClick } = this.props;
 
     const localTimeZone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
     const last = result.canaryScores.length - 1;
