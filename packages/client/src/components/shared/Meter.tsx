@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import classNames from 'classnames';
 import './Meter.scss';
 import { observer } from 'mobx-react';
 
@@ -35,7 +35,13 @@ export const Meter = observer(
 
     return (
       <div className="meter-wrapper">
-        <div className={['meter', classification ? 'pass' : 'fail'].join(' ')} style={meterStyle} />
+        <div
+          className={classNames('meter', {
+            pass: classification,
+            fail: !classification
+          })}
+          style={meterStyle}
+        />
         <div className="marginal-line" style={marginalLineStyle}>
           <div className="threshold-label headline-md-base">{marginal}</div>
         </div>

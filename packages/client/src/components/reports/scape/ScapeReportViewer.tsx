@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import {
-  CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig
-} from '../../../domain/Kayenta';
+import { CanaryAnalysisExecutionStatusResponse, CanaryConfig } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import ScapeExecutionsResult from './ScapeExecutionsResult';
-import {boundMethod} from "autobind-decorator";
-import CanaryExecutorStore from "../../../stores/CanaryExecutorStore";
-import ConfigEditorStore from "../../../stores/ConfigEditorStore";
-import {connect, ConnectedComponent} from "../../connectedComponent";
+import { boundMethod } from 'autobind-decorator';
+import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
+import ConfigEditorStore from '../../../stores/ConfigEditorStore';
+import { connect, ConnectedComponent } from '../../connectedComponent';
 
 interface PathParams {
   executionId: string;
