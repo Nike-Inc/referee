@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { CanaryAnalysisResult, CanaryMetricConfig, MetricSetPair } from '../../../domain/Kayenta';
-
 import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import './Metric.scss';
 
 interface Props {
@@ -26,14 +26,9 @@ export default class Metric extends React.Component<Props> {
             </div>
           )}
           <div
-            className={[
-              'dot',
-              canaryAnalysisResult.classification === 'Pass'
-                ? 'pass'
-                : canaryAnalysisResult.classification === 'Nodata'
-                ? 'no-data'
-                : 'fail'
-            ].join(' ')}
+            className={classNames('dot', {
+              [canaryAnalysisResult.classification.toLowerCase()]: true
+            })}
           ></div>
         </div>
       </div>

@@ -4,7 +4,7 @@ $black: #111111;
 $white: #ffffff;
 $success: #48bd1f;
 $error: #fe0000;
-$no-data: #bbb;
+$nodata: #bbb;
 
 $dark-background-color: #222222;
 $dark-bg-font-color: #F7F7F7;
@@ -91,6 +91,6 @@ $fail-color: $error;
   background: $pass-color;
 }
 
-.no-data {
-  background: $no-data;
+.nodata {
+  background: $nodata;
 }

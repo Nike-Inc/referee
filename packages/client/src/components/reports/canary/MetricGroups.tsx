@@ -129,7 +129,7 @@ export default class MetricGroups extends React.Component<Props, State> {
               <div className="metrics-key">Fail</div>
             </div>
             <div className="metrics-key-item">
-              <div className="metrics-key-symbol dot no-data"></div>
+              <div className="metrics-key-symbol dot nodata"></div>
               <div className="metrics-key">No Data</div>
             </div>
             <div className="metrics-key-item">

@@ -12,6 +12,7 @@ import capitalize from 'capitalize';
 import { ofNullable } from '../../../util/OptionalUtils';
 import Metric from './Metric';
 import './MetricGroup.scss';
+import classNames from 'classnames';
 
 interface Props {
   metricGroupName: string;
@@ -35,11 +36,11 @@ export default class MetricGroup extends React.Component<Props> {
         <div className="group-metrics-title-container">
           <div className="group-metrics-name"> {metricGroupName}</div>
           <div
-            className={[
+            className={classNames(
               'group-score-tab',
               'headline-md-brand',
               ScoreClassUtils.getGroupClassFromScore(groupScore, thresholds)
-            ].join(' ')}
+            )}
           >
             <div className="score-wrapper headline-md-marketing">
               <div className="score">{humanReadableScore}</div>
