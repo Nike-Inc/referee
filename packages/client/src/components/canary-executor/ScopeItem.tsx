@@ -5,8 +5,10 @@ import { CanaryScope } from '../../domain/Kayenta';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
-import { FormLabel } from 'react-bootstrap';
+import { Button, Form, FormLabel } from 'react-bootstrap';
 import { boundMethod } from 'autobind-decorator';
+import { FormGroup } from '../../layout/FormGroup';
+import KeyValuePair from '../../layout/KeyValuePair';
 
 interface ScopeProps {
   scopeType: string;
@@ -17,6 +19,11 @@ interface ScopeProps {
   touched: KvMap<boolean>;
   errors: KvMap<string>;
   hasTheRunButtonBeenClicked: boolean;
+  handleAddNewExtendedScopeParam: (type: string) => void;
+  handleExtendedScopeParamKeyChange: (index: number, value: string, type: string) => void;
+  handleExtendedScopeParamValueChange: (index: number, value: string, type: string) => void;
+  handleExtendedScopeParamDelete: (index: number, type: string) => void;
+  extendedScopeParameters: KvPair[];
 }
 
 @observer
@@ -51,8 +58,37 @@ export default class ScopeItem extends React.Component<ScopeProps> {
     this.props.updateCanaryScope(scope, this.props.scopeType);
   }
 
+  @boundMethod
+  private handleAddNewExtendedScopeParam(): void {
+    this.props.handleAddNewExtendedScopeParam(this.props.scopeType);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamKeyChange(index: number, value: string): void {
+    this.props.handleExtendedScopeParamKeyChange(index, value, this.props.scopeType);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamValueChange(index: number, value: string): void {
+    this.props.handleExtendedScopeParamValueChange(index, value, this.props.scopeType);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamDelete(index: number): void {
+    this.props.handleExtendedScopeParamDelete(index, this.props.scopeType);
+  }
+
   render(): React.ReactNode {
-    const { scopeType, scope, disabled, touch, touched, errors, hasTheRunButtonBeenClicked } = this.props;
+    const {
+      scopeType,
+      scope,
+      disabled,
+      touch,
+      touched,
+      errors,
+      hasTheRunButtonBeenClicked,
+      extendedScopeParameters
+    } = this.props;
     const localTimeZone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
 
     return (
@@ -63,7 +99,8 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Scope"
           value={scope.scope}
           disabled={disabled}
-          placeHolderText="stack name or server group"
+          placeHolderText="The unique identifier for your deployed server group"
+          subText="See https://www.spinnaker.io/concepts/#server-group"
           onChange={e => {
             this.handleNameChange(e.target.value, scope);
           }}
@@ -76,9 +113,10 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         <InlineTextGroup
           id={scopeType + '-location'}
           label="Location"
+          placeHolderText="The location of your deployed service."
+          subText="ex: the AWS Region us-west-2"
           value={scope.location}
           disabled={disabled}
-          placeHolderText="AWS region"
           onChange={e => {
             this.handleLocationChange(e.target.value, scope);
           }}
@@ -91,6 +129,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         <InlineTextGroup
           id={scopeType + '-step'}
           label="Step (s)"
+          subText="Frequency of data point requests to the metrics source when querying for metrics. Defaults to 60, meaning a data point will be requested every 60 seconds from the metrics source."
           value={scope.step.toString()}
           disabled={disabled}
           onChange={e => {
@@ -173,7 +212,44 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           touched={touched[scopeType + '-end'] || hasTheRunButtonBeenClicked}
           error={errors['scopes.default.' + scopeType + 'Scope.end']}
         />
-        {!disabled && <div></div>}
+        {!disabled && (
+          <FormGroup
+            id={`${scopeType}-extended-scope-params`}
+            label="Extended Scope Parameters"
+            touched={touched[`${scopeType}-extended-scope-params`] || hasTheRunButtonBeenClicked}
+            error={errors[`${scopeType}-extended-scope-params`]}
+          >
+            {extendedScopeParameters.length > 0 && (
+              <div className="esp-kv-pairs">
+                {extendedScopeParameters.map((kvPair, i) => {
+                  return (
+                    <KeyValuePair
+                      key={i}
+                      index={i}
+                      kvPair={kvPair}
+                      onKeyChange={this.handleExtendedScopeParamKeyChange}
+                      onValueChange={this.handleExtendedScopeParamValueChange}
+                      handleDelete={this.handleExtendedScopeParamDelete}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            <Button
+              onClick={() => {
+                this.handleAddNewExtendedScopeParam();
+              }}
+              size="sm"
+              className="add-esp-btn"
+              variant="outline-dark"
+            >
+              Add New Parameter
+            </Button>
+            <Form.Text className="text-muted">
+              Add additional scope parameters if the metric source supports it
+            </Form.Text>
+          </FormGroup>
+        )}
       </div>
     );
   }

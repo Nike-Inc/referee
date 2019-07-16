@@ -3,7 +3,7 @@ import * as React from 'react';
 import { kayentaApiService } from '../../services/';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
-import CanaryExecutorFormView from '../canary-executor/CanaryExecutorFormView';
+import CanaryExecutorFormView from './CanaryExecutorFormView';
 import CanaryExecutorButtonSection from './CanaryExecutorButtonSection';
 import { RouterProps } from 'react-router';
 import CanaryExecutorStore from '../../stores/CanaryExecutorStore';

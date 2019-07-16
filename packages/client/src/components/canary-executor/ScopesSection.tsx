@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import TitledSection from '../../layout/titledSection';
 import * as React from 'react';
-import ScopeItem from '../canary-executor/ScopeItem';
+import ScopeItem from './ScopeItem';
 import { CanaryScope } from '../../domain/Kayenta';
 import Row from 'react-bootstrap/Row';
 
@@ -14,7 +14,13 @@ export const ScopesSection = observer(
     touch,
     touched,
     errors,
-    hasTheRunButtonBeenClicked
+    hasTheRunButtonBeenClicked,
+    handleAddNewExtendedScopeParam,
+    handleExtendedScopeParamKeyChange,
+    handleExtendedScopeParamValueChange,
+    handleExtendedScopeParamDelete,
+    controlExtendedScopes,
+    experimentExtendedScopes
   }: {
     controlScope: CanaryScope;
     experimentScope: CanaryScope;
@@ -24,6 +30,12 @@ export const ScopesSection = observer(
     touched: KvMap<boolean>;
     errors: KvMap<string>;
     hasTheRunButtonBeenClicked: boolean;
+    handleAddNewExtendedScopeParam: (type: string) => void;
+    handleExtendedScopeParamKeyChange: (index: number, value: string, type: string) => void;
+    handleExtendedScopeParamValueChange: (index: number, value: string, type: string) => void;
+    handleExtendedScopeParamDelete: (index: number, type: string) => void;
+    controlExtendedScopes: KvPair[];
+    experimentExtendedScopes: KvPair[];
   }): JSX.Element => {
     return (
       <TitledSection title="Scopes" additionalClassname="scopes">
@@ -36,6 +48,11 @@ export const ScopesSection = observer(
             errors={errors}
             touched={touched}
             hasTheRunButtonBeenClicked={hasTheRunButtonBeenClicked}
+            handleAddNewExtendedScopeParam={handleAddNewExtendedScopeParam}
+            handleExtendedScopeParamKeyChange={handleExtendedScopeParamKeyChange}
+            handleExtendedScopeParamValueChange={handleExtendedScopeParamValueChange}
+            handleExtendedScopeParamDelete={handleExtendedScopeParamDelete}
+            extendedScopeParameters={controlExtendedScopes}
           />
           <ScopeItem
             scopeType="experiment"
@@ -46,6 +63,11 @@ export const ScopesSection = observer(
             errors={errors}
             touched={touched}
             hasTheRunButtonBeenClicked={hasTheRunButtonBeenClicked}
+            handleAddNewExtendedScopeParam={handleAddNewExtendedScopeParam}
+            handleExtendedScopeParamKeyChange={handleExtendedScopeParamKeyChange}
+            handleExtendedScopeParamValueChange={handleExtendedScopeParamValueChange}
+            handleExtendedScopeParamDelete={handleExtendedScopeParamDelete}
+            extendedScopeParameters={experimentExtendedScopes}
           />
         </Row>
       </TitledSection>

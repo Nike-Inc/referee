@@ -73,7 +73,7 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
   private handleDocumentationClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     // Hijack link clicks so that we can make them go through the hash router history object thing.
     // We might be able to remove this logic when we go to the browser router.
-    OptionalUtils.safeGet(() => OptionalUtils.trimToNull((event.target as any).href).get()).ifPresent(url => {
+    OptionalUtils.safeGet(() => OptionalUtils.trimToEmpty((event.target as any).href).get()).ifPresent(url => {
       if (
         !url.startsWith(window.location.origin) ||
         OptionalUtils.safeGet(() => (event.target as any)!.target).orElse('') === '_blank' // no need to manipulate links that are opening in a new tab

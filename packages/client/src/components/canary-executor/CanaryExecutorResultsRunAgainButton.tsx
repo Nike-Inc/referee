@@ -54,7 +54,7 @@ export default class CanaryExecutorResultsRunAgainButton extends ConnectedCompon
       this.props.history.push(
         '/dev-tools/canary-executor/results/' + this.stores.canaryExecutorStore.canaryExecutionId
       );
-      fetchCanaryResultsService.pollForCanaryExecutionComplete(this.stores.canaryExecutorStore.canaryExecutionId);
+      await fetchCanaryResultsService.pollForCanaryExecutionComplete(this.stores.canaryExecutorStore.canaryExecutionId);
     } catch (e) {
       log.error('Failed to fetch response: ', e);
       throw e;

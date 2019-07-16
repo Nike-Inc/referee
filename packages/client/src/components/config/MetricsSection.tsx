@@ -103,7 +103,12 @@ export const MetricsSection = observer(
             </div>
           </div>
         </div>
-        {touched && errors.map(error => <Alert variant="danger">{error}</Alert>)}
+        {touched &&
+          errors.map(error => (
+            <Alert key={error} variant="danger">
+              {error}
+            </Alert>
+          ))}
       </TitledSection>
     );
   }
