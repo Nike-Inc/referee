@@ -12,6 +12,9 @@ import {
 import { kayentaApiService } from '../../../services';
 import { ofNullable } from '../../../util/OptionalUtils';
 import CanaryMetadataSection from './CanaryMetadataSection';
+import CanaryMetricsOverview from './CanaryMetricsOverview';
+import './CanaryRunResult.scss';
+import TitledSection from '../../../layout/titledSection';
 
 interface Props {
   application?: string;
@@ -31,6 +34,13 @@ interface State {
   canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult>;
   idListByMetricGroupNameMap: KvMap<string[]>;
   groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore>;
+  classificationCountMap: Map<string, number>;
+}
+
+enum classifications {
+  FAIL = 'Fail',
+  NODATA = 'Nodata',
+  PASS = 'Pass'
 }
 
 export default class CanaryRunResult extends React.Component<Props, State> {
@@ -58,6 +68,17 @@ export default class CanaryRunResult extends React.Component<Props, State> {
       });
     });
 
+    const classificationCountMap = new Map();
+    classificationCountMap.set(classifications.FAIL, 0);
+    classificationCountMap.set(classifications.NODATA, 0);
+    classificationCountMap.set(classifications.PASS, 0);
+
+    Object.entries(canaryAnalysisResultByIdMap).map(id => {
+      let current = classificationCountMap.get(id[1].classification);
+      current++;
+      classificationCountMap.set(id[1].classification, current);
+    });
+
     const groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore> = {};
     judgeResult.groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
 
@@ -67,7 +88,8 @@ export default class CanaryRunResult extends React.Component<Props, State> {
       metricSetPairsByIdMap: {},
       canaryAnalysisResultByIdMap,
       idListByMetricGroupNameMap,
-      groupScoreByMetricGroupNameMap
+      groupScoreByMetricGroupNameMap,
+      classificationCountMap
     };
   }
 
@@ -95,28 +117,38 @@ export default class CanaryRunResult extends React.Component<Props, State> {
       metricSetPairsByIdMap,
       canaryAnalysisResultByIdMap,
       idListByMetricGroupNameMap,
-      groupScoreByMetricGroupNameMap
+      groupScoreByMetricGroupNameMap,
+      classificationCountMap
     } = this.state;
     const { result, canaryConfig, executionRequest, thresholds, handleGoToConfigButtonClick } = this.props;
 
     return (
       <div className="report-container">
-        <CanaryMetadataSection
-          application={application}
-          result={result}
-          canaryConfig={canaryConfig}
-          executionRequest={executionRequest}
-          thresholds={thresholds}
-          handleGoToConfigButtonClick={handleGoToConfigButtonClick}
-        />
-        <MetricGroups
-          config={canaryConfig}
-          metricSetPairsByIdMap={metricSetPairsByIdMap}
-          canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
-          idListByMetricGroupNameMap={idListByMetricGroupNameMap}
-          groupScoreByMetricGroupNameMap={groupScoreByMetricGroupNameMap}
-          thresholds={thresholds}
-        />
+        <div className="metadata-container">
+          <TitledSection title="Canary Report" />
+          <CanaryMetadataSection
+            application={application}
+            canaryConfig={canaryConfig}
+            executionRequest={executionRequest}
+            handleGoToConfigButtonClick={handleGoToConfigButtonClick}
+          />
+        </div>
+        <div className="metrics-overview-container">
+          <MetricGroups
+            config={canaryConfig}
+            metricSetPairsByIdMap={metricSetPairsByIdMap}
+            canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
+            idListByMetricGroupNameMap={idListByMetricGroupNameMap}
+            groupScoreByMetricGroupNameMap={groupScoreByMetricGroupNameMap}
+            thresholds={thresholds}
+            classificationCountMap={classificationCountMap}
+          />
+          <CanaryMetricsOverview
+            result={result}
+            thresholds={thresholds}
+            classificationCountMap={classificationCountMap}
+          />
+        </div>
       </div>
     );
   }

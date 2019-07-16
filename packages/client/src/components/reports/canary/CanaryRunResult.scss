@@ -1,0 +1,18 @@
+@import '../../../styles/shared.scss';
+
+.report-container {
+  display: flex;
+  flex-direction: column;
+
+  .metadata-container {
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+  }
+
+    .metrics-overview-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin: 0px 0px 30px 0px;
+    }
+}

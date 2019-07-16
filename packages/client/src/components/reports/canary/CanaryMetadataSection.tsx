@@ -1,26 +1,18 @@
 import * as React from 'react';
-import {
-  CanaryClassifierThresholdsConfig,
-  CanaryConfig,
-  CanaryExecutionRequest,
-  CanaryResult
-} from '../../../domain/Kayenta';
+import { CanaryConfig, CanaryExecutionRequest } from '../../../domain/Kayenta';
 import './CanaryMetadataSection.scss';
 import { Button } from 'react-bootstrap';
-import { Meter } from '../../shared/Meter';
 
 interface Props {
   application: string;
-  result: CanaryResult;
   canaryConfig: CanaryConfig;
   executionRequest: CanaryExecutionRequest;
-  thresholds: CanaryClassifierThresholdsConfig;
   handleGoToConfigButtonClick: (config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest) => void;
 }
 
 export default class CanaryMetadataSection extends React.Component<Props> {
   render(): React.ReactNode {
-    const { application, result, canaryConfig, executionRequest, thresholds, handleGoToConfigButtonClick } = this.props;
+    const { application, canaryConfig, executionRequest, handleGoToConfigButtonClick } = this.props;
 
     const localTimeZone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
 
@@ -137,18 +129,6 @@ export default class CanaryMetadataSection extends React.Component<Props> {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="message-wrapper">
-          <div className="message">{result.judgeResult!.score.classificationReason}</div>
-        </div>
-        <div className="meter-container">
-          <Meter
-            classification={result.judgeResult!.score.classification === 'Pass'}
-            score={result.judgeResult!.score.score}
-            marginal={thresholds.marginal}
-            pass={thresholds.pass}
-          />
         </div>
       </div>
     );
