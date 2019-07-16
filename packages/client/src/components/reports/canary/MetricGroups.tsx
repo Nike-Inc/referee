@@ -19,12 +19,12 @@ interface Props {
   idListByMetricGroupNameMap: KvMap<string[]>;
   groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore>;
   thresholds: CanaryClassifierThresholdsConfig;
+  classificationCountMap: Map<string, number>;
 }
 
 interface State {
   metricGroupNamesDescByWeight: string[];
   filterMap: Map<string, boolean>;
-  classificationCountMap: Map<string, number>;
 }
 
 enum filters {
@@ -46,21 +46,9 @@ export default class MetricGroups extends React.Component<Props, State> {
     filterMap.set(filters.NODATA, true);
     filterMap.set(filters.PASS, false);
 
-    const classificationCountMap = new Map();
-    classificationCountMap.set(filters.FAIL, 0);
-    classificationCountMap.set(filters.NODATA, 0);
-    classificationCountMap.set(filters.PASS, 0);
-
-    Object.entries(this.props.canaryAnalysisResultByIdMap).map(id => {
-      let current = classificationCountMap.get(id[1].classification);
-      current++;
-      classificationCountMap.set(id[1].classification, current);
-    });
-
     this.state = {
       metricGroupNamesDescByWeight,
-      filterMap,
-      classificationCountMap
+      filterMap
     };
   }
 
@@ -76,7 +64,8 @@ export default class MetricGroups extends React.Component<Props, State> {
       canaryAnalysisResultByIdMap,
       idListByMetricGroupNameMap,
       groupScoreByMetricGroupNameMap,
-      thresholds
+      thresholds,
+      classificationCountMap
     } = this.props;
     return (
       <div className="metrics-container-wrapper">
@@ -85,7 +74,7 @@ export default class MetricGroups extends React.Component<Props, State> {
           <div className="metrics-filters-container">
             <div className="metrics-filter btn">
               <Checkbox
-                label={`Fail (${this.state.classificationCountMap.get(filters.FAIL)})`}
+                label={`Fail (${classificationCountMap.get(filters.FAIL)})`}
                 isSelected={!!this.state.filterMap.get(filters.FAIL)}
                 onCheckboxChange={e => this.handleCheckboxChange(filters.FAIL)}
                 key={filters.FAIL}
@@ -93,7 +82,7 @@ export default class MetricGroups extends React.Component<Props, State> {
             </div>
             <div className="metrics-filter btn">
               <Checkbox
-                label={`No Data (${this.state.classificationCountMap.get(filters.NODATA)})`}
+                label={`No Data (${classificationCountMap.get(filters.NODATA)})`}
                 isSelected={!!this.state.filterMap.get(filters.NODATA)}
                 onCheckboxChange={e => this.handleCheckboxChange(filters.NODATA)}
                 key={filters.NODATA}
@@ -101,7 +90,7 @@ export default class MetricGroups extends React.Component<Props, State> {
             </div>
             <div className="metrics-filter btn">
               <Checkbox
-                label={`Pass (${this.state.classificationCountMap.get(filters.PASS)})`}
+                label={`Pass (${classificationCountMap.get(filters.PASS)})`}
                 isSelected={!!this.state.filterMap.get(filters.PASS)}
                 onCheckboxChange={e => this.handleCheckboxChange(filters.PASS)}
                 key={filters.PASS}

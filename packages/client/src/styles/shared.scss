@@ -83,6 +83,14 @@ $fail-color: $error;
   background: $fail-color;
 }
 
+.fail-text {
+  color: $fail-color;
+}
+
+.fail-border {
+  border-left: 5px solid $fail-color;
+}
+
 .marginal {
   background: $marginal-color;
 }
@@ -91,6 +99,20 @@ $fail-color: $error;
   background: $pass-color;
 }
 
+.pass-text {
+  color: $pass-color;
+}
+
+.pass-border {
+  border-left: 5px solid $pass-color;
+}
+
 .nodata {
   background: $nodata;
 }
+
+.nodata-text {
+  color: $nodata;
+}
+
+

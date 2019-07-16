@@ -1,0 +1,60 @@
+@import '../../../styles/shared.scss';
+
+.canary-metrics-overview-wrapper {
+  display: flex;
+  flex-grow: 1;
+  margin: 20px 40px 20px 40px;
+
+  .canary-metrics-overview {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .canary-metrics-results-message-wrapper {
+      display: flex;
+      margin: 10px 0px 20px 0px;
+
+      .canary-metrics-results-message {
+        flex-grow: 1;
+        padding: 15px;
+        line-height: 15px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+        .canary-metrics-results-text {
+          text-align: center;
+          font-weight: 600;
+          padding: 10px 0px 10px 0px;
+        }
+
+        .canary-metrics-meter-container {
+          padding: 10px;
+        }
+      }
+    }
+
+    .canary-metrics-results-cards {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      flex-grow: 1;
+      margin: 10px;
+    }
+
+    .canary-metrics-results-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 150px;
+      width: 150px;
+      margin: 10px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      text-align: center;
+      @extend .heading-font;
+
+      .card-classification-count {
+        font-size: 50px;
+      }
+    }
+  }
+}
