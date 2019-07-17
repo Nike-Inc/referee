@@ -2,10 +2,11 @@ import * as React from 'react';
 import { AbstractMetricModal } from '../../components/config/AbstractMetricModal';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
 import { FormGroup } from '../../layout/FormGroup';
-import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { boundMethod } from 'autobind-decorator';
 import SignalFxCanaryMetricSetQueryConfig from './SignalFxCanaryMetricSetQueryConfig';
 import { SIGNAL_FX_SERVICE_TYPE, SUPPORTED_AGGREGATION_METHODS } from './index';
+import KeyValuePair from '../../layout/KeyValuePair';
 
 export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCanaryMetricSetQueryConfig> {
   getQueryInitialState(): SignalFxCanaryMetricSetQueryConfig {
@@ -132,45 +133,3 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
     );
   }
 }
-
-const KeyValuePair = ({
-  handleDelete,
-  index,
-  onKeyChange,
-  onValueChange,
-  kvPair
-}: {
-  handleDelete: (i: number) => void;
-  index: number;
-  onKeyChange: (i: number, v: any) => void;
-  onValueChange: (i: number, v: any) => void;
-  kvPair: KvPair;
-}): JSX.Element => {
-  return (
-    <InputGroup>
-      <InputGroup.Prepend>
-        <InputGroup.Text>Key: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          onKeyChange(index, e.target.value);
-        }}
-        value={kvPair.key}
-      />
-      <InputGroup.Prepend>
-        <InputGroup.Text>Value: </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        onChange={(e: any) => {
-          onValueChange(index, e.target.value);
-        }}
-        value={kvPair.value}
-      />
-      <InputGroup.Append>
-        <Button variant="outline-danger" onMouseDown={() => handleDelete(index)}>
-          Delete
-        </Button>
-      </InputGroup.Append>
-    </InputGroup>
-  );
-};

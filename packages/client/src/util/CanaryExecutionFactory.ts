@@ -8,7 +8,7 @@ export default class CanaryExecutionFactory {
           controlScope: {
             scope: '',
             location: '',
-            step: 0,
+            step: 60,
             start: '',
             end: '',
             extendedScopeParams: {}
@@ -16,7 +16,7 @@ export default class CanaryExecutionFactory {
           experimentScope: {
             scope: '',
             location: '',
-            step: 0,
+            step: 60,
             start: '',
             end: '',
             extendedScopeParams: {}

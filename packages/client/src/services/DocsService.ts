@@ -8,7 +8,6 @@ import path from 'path-browserify';
 import Optional from 'optional-js';
 import hljs from 'highlight.js';
 import marked from 'marked';
-import { observer } from 'mobx-react';
 
 const { docsStore } = stores;
 
@@ -75,7 +74,7 @@ export default class DocsService {
   }
 
   fetchAndUpdateDocContent(path: string): void {
-    const resolvedPath = OptionalUtils.trimToNull(path).orElse(
+    const resolvedPath = OptionalUtils.trimToEmpty(path).orElse(
       OptionalUtils.safeGet(() => docsStore.tableOfContents!.home).orElse('index')
     );
 

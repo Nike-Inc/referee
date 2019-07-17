@@ -5,10 +5,11 @@ import { boundMethod } from 'autobind-decorator';
 import * as React from 'react';
 import { Form } from 'react-bootstrap';
 import { MetadataSection } from './MetadataSection';
-import { ThresholdsSection } from '../canary-executor/ThresholdsSection';
-import TestingTypeSection from '../canary-executor/TestingTypeSection';
-import { ScopesSection } from '../canary-executor/ScopesSection';
+import { ThresholdsSection } from './ThresholdsSection';
+import TestingTypeSection from './TestingTypeSection';
+import { ScopesSection } from './ScopesSection';
 import { CanaryScope } from '../../domain/Kayenta';
+import { toJS } from 'mobx';
 
 interface Props {}
 
@@ -64,6 +65,26 @@ export default class CanaryExecutorFormView extends ConnectedComponent<Props, St
     this.stores.canaryExecutorStore.markHasTheRunButtonBeenClickedFlagAsTrue();
   }
 
+  @boundMethod
+  private handleAddNewExtendedScopeParam(type: string): void {
+    this.stores.canaryExecutorStore.addNewExtendedScopeParam(type);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamKeyChange(index: number, value: string, type: string): void {
+    this.stores.canaryExecutorStore.updateExtendedScopeParamKey(type, index, value);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamValueChange(index: number, value: string, type: string): void {
+    this.stores.canaryExecutorStore.updateExtendedScopeParamValue(type, index, value);
+  }
+
+  @boundMethod
+  private handleExtendedScopeParamDelete(index: number, type: string): void {
+    this.stores.canaryExecutorStore.deleteExtendedScopeParam(type, index);
+  }
+
   render(): React.ReactNode {
     const {
       canaryExecutionRequestObject,
@@ -71,6 +92,9 @@ export default class CanaryExecutorFormView extends ConnectedComponent<Props, St
       touched,
       hasTheRunButtonBeenClicked
     } = this.stores.canaryExecutorStore;
+
+    const controlExtendedScopes = toJS(this.stores.canaryExecutorStore.controlExtendedScopes);
+    const experimentExtendedScopes = toJS(this.stores.canaryExecutorStore.experimentExtendedScopes);
 
     return (
       <div>
@@ -113,6 +137,12 @@ export default class CanaryExecutorFormView extends ConnectedComponent<Props, St
               errors={errors}
               touched={touched}
               hasTheRunButtonBeenClicked={hasTheRunButtonBeenClicked}
+              handleAddNewExtendedScopeParam={this.handleAddNewExtendedScopeParam}
+              handleExtendedScopeParamKeyChange={this.handleExtendedScopeParamKeyChange}
+              handleExtendedScopeParamValueChange={this.handleExtendedScopeParamValueChange}
+              handleExtendedScopeParamDelete={this.handleExtendedScopeParamDelete}
+              controlExtendedScopes={controlExtendedScopes}
+              experimentExtendedScopes={experimentExtendedScopes}
             />
           </Form>
         </div>

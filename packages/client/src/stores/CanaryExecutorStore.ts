@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import {
   CanaryExecutionRequest,
   CanaryExecutionStatusResponse,
@@ -6,7 +6,9 @@ import {
   KayentaCredential
 } from '../domain/Kayenta';
 import CanaryExecutionFactory from '../util/CanaryExecutionFactory';
-import { validateCanaryExecution } from '../validation/executionValidators';
+import { validateCanaryExecution, validateExtendedScopeParams } from '../validation/executionValidators';
+import { ofNullable, trimToEmpty } from '../util/OptionalUtils';
+import log from '../util/LoggerFactory';
 
 const METRICS_STORE = 'METRICS_STORE';
 const OBJECT_STORE = 'OBJECT_STORE';
@@ -25,7 +27,13 @@ export default class CanaryExecutorStore {
   storageAccountName = '';
 
   @observable
-  canaryExecutionRequestObject: CanaryExecutionRequest = CanaryExecutionFactory.createNewCanaryExecutionRequest();
+  private internalCanaryExecutionRequestObject: CanaryExecutionRequest = CanaryExecutionFactory.createNewCanaryExecutionRequest();
+
+  @observable
+  controlExtendedScopes: KvPair[] = [];
+
+  @observable
+  experimentExtendedScopes: KvPair[] = [];
 
   @observable
   touched: KvMap<boolean> = {};
@@ -51,14 +59,68 @@ export default class CanaryExecutorStore {
   @observable
   isAccordionExpanded = false;
 
+  getExtendedScopeParams(type: string) {
+    return type === 'control' ? this.controlExtendedScopes : this.experimentExtendedScopes;
+  }
+
+  private replaceExtendedScopeParams(type: string, params: KvPair[]) {
+    if (type === 'control') {
+      this.controlExtendedScopes = observable.array(params);
+    } else {
+      this.experimentExtendedScopes = observable.array(params);
+    }
+  }
+
   @computed
   get errors(): KvMap<string> {
-    return validateCanaryExecution(this.canaryExecutionRequestObject).errors;
+    const canaryExecutionRequestObjectErrors = validateCanaryExecution(this.internalCanaryExecutionRequestObject)
+      .errors;
+    const controlESErrors = validateExtendedScopeParams('control', this.controlExtendedScopes).errors;
+    const experimentESErrors = validateExtendedScopeParams('experiment', this.experimentExtendedScopes).errors;
+    return Object.assign({}, canaryExecutionRequestObjectErrors, controlESErrors, experimentESErrors);
   }
 
   @computed
   get isExecutionRequestValid(): boolean {
-    return validateCanaryExecution(this.canaryExecutionRequestObject).isValid;
+    let isValid = true;
+
+    if (!validateCanaryExecution(this.internalCanaryExecutionRequestObject).isValid) {
+      isValid = false;
+    }
+
+    if (
+      !(
+        validateExtendedScopeParams('control', this.controlExtendedScopes).isValid &&
+        validateExtendedScopeParams('experiment', this.experimentExtendedScopes).isValid
+      )
+    ) {
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  @computed
+  get canaryExecutionRequestObject(): CanaryExecutionRequest {
+    const mutableRequestCopy = toJS(this.internalCanaryExecutionRequestObject);
+    // reduce array of key value pairs to a js dict object
+    mutableRequestCopy.scopes.default.controlScope.extendedScopeParams = this.controlExtendedScopes.reduce(
+      (extendedScopeParams, kvPair) => {
+        extendedScopeParams[kvPair.key] = kvPair.value;
+        return extendedScopeParams;
+      },
+      {} as KvMap<string>
+    );
+    // reduce array of key value pairs to a js dict object
+    mutableRequestCopy.scopes.default.experimentScope.extendedScopeParams = this.experimentExtendedScopes.reduce(
+      (extendedScopeParams, kvPair) => {
+        extendedScopeParams[kvPair.key] = kvPair.value;
+        log.info(extendedScopeParams);
+        return extendedScopeParams;
+      },
+      {} as KvMap<string>
+    );
+    return mutableRequestCopy;
   }
 
   @computed
@@ -88,13 +150,40 @@ export default class CanaryExecutorStore {
   }
 
   @action.bound
+  addNewExtendedScopeParam(scopeType: string): void {
+    this.getExtendedScopeParams(scopeType).push({ key: '', value: '' });
+  }
+
+  @action.bound
+  updateExtendedScopeParamKey(scopeType: string, index: number, value: string): void {
+    this.getExtendedScopeParams(scopeType)[index].key = value;
+  }
+
+  @action.bound
+  updateExtendedScopeParamValue(scopeType: string, index: number, value: string): void {
+    this.getExtendedScopeParams(scopeType)[index].value = value;
+  }
+
+  @action.bound
+  deleteExtendedScopeParam(scopeType: string, index: number): void {
+    this.replaceExtendedScopeParams(scopeType, [
+      ...this.getExtendedScopeParams(scopeType).slice(0, index),
+      ...this.getExtendedScopeParams(scopeType).slice(index + 1)
+    ]);
+  }
+
+  @action.bound
   setKayentaCredentials(credentialsData: KayentaCredential[]): void {
     this.credentialsData = credentialsData;
+    // Set the storage account name to the first cred that is an object store, if the storage account name has not already been set.
+    this.storageAccountName = trimToEmpty(this.storageAccountName)
+      .or(() => ofNullable(credentialsData.find(c => c.supportedTypes.includes(OBJECT_STORE))).map<string>(c => c.name))
+      .orElse('');
   }
 
   @action.bound
   setCanaryExecutionRequestObject(value: CanaryExecutionRequest): void {
-    this.canaryExecutionRequestObject = value;
+    this.internalCanaryExecutionRequestObject = value;
   }
 
   @action.bound
@@ -114,23 +203,23 @@ export default class CanaryExecutorStore {
 
   @action.bound
   updateMarginalThreshold(value: number): void {
-    this.canaryExecutionRequestObject.thresholds.marginal = value;
+    this.internalCanaryExecutionRequestObject.thresholds.marginal = value;
   }
 
   @action.bound
   updatePassThreshold(value: number): void {
-    this.canaryExecutionRequestObject.thresholds.pass = value;
+    this.internalCanaryExecutionRequestObject.thresholds.pass = value;
   }
 
   @action.bound
   updateCanaryScope(newScope: CanaryScope, type: string) {
     if (type === 'control') {
-      this.canaryExecutionRequestObject.scopes.default.controlScope = newScope;
+      this.internalCanaryExecutionRequestObject.scopes.default.controlScope = newScope;
       if (this.testingType === 'AA') {
-        this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
+        this.internalCanaryExecutionRequestObject.scopes.default.experimentScope = newScope;
       }
     } else if (type === 'experiment') {
-      this.canaryExecutionRequestObject.scopes.default.experimentScope = newScope;
+      this.internalCanaryExecutionRequestObject.scopes.default.experimentScope = newScope;
     }
   }
 

@@ -77,7 +77,7 @@
     "eject": "react-scripts eject",
     "format": "prettier --write --single-quote --print-width=120 --tab-width=2 'src/**/*.{ts,tsx,js,jsx}'",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "check-build": "yarn lint && yarn test",
+    "check-build": "export CI=true && export SKIP_PREFLIGHT_CHECK=true && yarn lint && yarn test",
     "clean": "rm -fr ./build",
     "deploy": "yarn clean && yarn build && touch build/.nojekyll && gh-pages -d build -t",
     "s3": "yarn clean && yarn build && aws s3 sync ./build s3://${REFEREE_BUCKET}/"

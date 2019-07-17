@@ -40,7 +40,7 @@ export function mapIfPresentOrElse<T>(
   }
 }
 
-export function trimToNull(value: string): Optional<string> {
+export function trimToEmpty(value: string): Optional<string> {
   const trimmed = value.trim();
   if (trimmed === '') {
     return Optional.empty();
@@ -54,5 +54,5 @@ export default {
   safeGet,
   safeGetAsync,
   mapIfPresentOrElse,
-  trimToNull
+  trimToEmpty
 };
