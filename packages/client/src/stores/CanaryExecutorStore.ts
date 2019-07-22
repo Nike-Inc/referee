@@ -48,9 +48,6 @@ export default class CanaryExecutorStore {
   canaryExecutionId = '';
 
   @observable
-  canaryExecutionStatusResponse?: CanaryExecutionStatusResponse;
-
-  @observable
   resultsRequestComplete = false;
 
   @observable
@@ -266,10 +263,5 @@ export default class CanaryExecutorStore {
   @action.bound
   updateStageStatus(value: any): void {
     this.stageStatus = value;
-  }
-
-  @action.bound
-  updateCanaryExecutionStatusResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse): void {
-    this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
   }
 }

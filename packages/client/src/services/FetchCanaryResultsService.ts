@@ -3,7 +3,7 @@ import { kayentaApiService } from './index';
 import { delay } from 'q';
 import { CanaryExecutionStatusResponse } from '../domain/Kayenta';
 
-const { configEditorStore, canaryExecutorStore } = stores;
+const { configEditorStore, canaryExecutorStore, reportStore } = stores;
 let response: CanaryExecutionStatusResponse | any = {};
 const SUCCESS = 'succeeded';
 
@@ -22,7 +22,7 @@ export default class FetchCanaryResultsService {
     } while (!response.complete);
 
     if (response.status === SUCCESS) {
-      canaryExecutorStore.updateCanaryExecutionStatusResponse(response);
+      reportStore.updateFromCanaryResponse(response);
       configEditorStore.setCanaryConfigObject(response.config);
       canaryExecutorStore.setCanaryExecutionRequestObject(response.canaryExecutionRequest);
     }

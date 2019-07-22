@@ -6,7 +6,8 @@ import {
   KayentaCredential,
   MetricSetPair,
   CanaryAdhocExecutionRequest,
-  CanaryAnalysisExecutionStatusResponse
+  CanaryAnalysisExecutionStatusResponse,
+  CanaryConfig
 } from '../domain/Kayenta';
 
 const kayentaClient = axios.create({
@@ -82,7 +83,7 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryConfig(configId: string) {
+  async fetchCanaryConfig(configId: string): Promise<CanaryConfig> {
     try {
       const response = await kayentaClient.get(`/canaryConfig/${configId}`);
       return response.data;
