@@ -115,6 +115,7 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
               }
               metricSetPairsByIdMap={reportStore.metricSetPairsByIdMap as KvMap<MetricSetPair>}
               classificationCountMap={reportStore.classificationCountMap as Map<string, number>}
+              metricGroupNamesDescByWeight={configEditorStore.metricGroupNamesDescByWeight as string[]}
               executionRequest={canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />

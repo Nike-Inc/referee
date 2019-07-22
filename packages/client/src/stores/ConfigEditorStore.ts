@@ -64,6 +64,17 @@ export default class ConfigEditorStore {
   }
 
   @computed
+  get metricGroupNamesDescByWeight(): string[] {
+    const groupWeights = this.canaryConfigObject.classifier.groupWeights;
+
+    const metricGroupNamesDescByWeight = Object.keys(groupWeights).sort((a, b) => {
+      return groupWeights[b] - groupWeights[a];
+    });
+
+    return metricGroupNamesDescByWeight;
+  }
+
+  @computed
   get errors(): KvMap<string> {
     return validateCanaryConfig(this.canaryConfigObject).errors;
   }

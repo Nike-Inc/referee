@@ -1,5 +1,4 @@
 import * as React from 'react';
-import MetricGroups from './MetricGroups';
 import {
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
@@ -11,6 +10,7 @@ import {
 } from '../../../domain/Kayenta';
 import CanaryMetadataSection from './CanaryMetadataSection';
 import CanaryMetricsOverview from './CanaryMetricsOverview';
+import MetricsNavPanel from '../../shared/MetricsNavPanel';
 import './CanaryRunResult.scss';
 import TitledSection from '../../../layout/titledSection';
 import { observer } from 'mobx-react';
@@ -26,6 +26,7 @@ export const CanaryRunResult = observer(
     groupScoreByMetricGroupNameMap,
     metricSetPairsByIdMap,
     classificationCountMap,
+    metricGroupNamesDescByWeight,
     executionRequest,
     handleGoToConfigButtonClick
   }: {
@@ -38,6 +39,7 @@ export const CanaryRunResult = observer(
     groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore>;
     metricSetPairsByIdMap: KvMap<MetricSetPair>;
     classificationCountMap: Map<string, number>;
+    metricGroupNamesDescByWeight: string[];
     executionRequest: CanaryExecutionRequest;
     handleGoToConfigButtonClick: (config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest) => void;
   }): JSX.Element => {
@@ -53,12 +55,13 @@ export const CanaryRunResult = observer(
           />
         </div>
         <div className="metrics-overview-container">
-          <MetricGroups
+          <MetricsNavPanel
             config={canaryConfig}
             metricSetPairsByIdMap={metricSetPairsByIdMap}
             canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
             idListByMetricGroupNameMap={idListByMetricGroupNameMap}
             groupScoreByMetricGroupNameMap={groupScoreByMetricGroupNameMap}
+            metricGroupNamesDescByWeight={metricGroupNamesDescByWeight}
             thresholds={thresholds}
             classificationCountMap={classificationCountMap}
           />
