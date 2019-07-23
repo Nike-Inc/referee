@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import CanaryExecutorStore from '../../stores/CanaryExecutorStore';
-import { connect, ConnectedComponent } from '../connectedComponent';
+import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
+import { connect, ConnectedComponent } from '../../connectedComponent';
 import { observer } from 'mobx-react';
-import CanaryExecutorFormView from './CanaryExecutorFormView';
-import ConfigFormView from '../config/ConfigFormView';
-import { fetchCanaryResultsService } from '../../services';
+import CanaryExecutorFormView from '../../canary-executor/CanaryExecutorFormView';
+import ConfigFormView from '../../config/ConfigFormView';
+import { fetchCanaryResultsService } from '../../../services/index';
 import { ClipLoader } from 'react-spinners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import TitledSection from '../../layout/titledSection';
+import TitledSection from '../../../layout/titledSection';
 import {
   Accordion,
   AccordionItem,
@@ -19,15 +19,15 @@ import {
   AccordionItemPanel
 } from 'react-accessible-accordion';
 
-import CanaryExecutorResultsRunAgainButton from './CanaryExecutorResultsRunAgainButton';
-import ConfigEditorStore from '../../stores/ConfigEditorStore';
+import CanaryExecutorResultsRunAgainButton from '../../canary-executor/CanaryExecutorResultsRunAgainButton';
 import './CanaryExecutorResults.scss';
 import { Button } from 'react-bootstrap';
-import { Meter } from '../shared/Meter';
+import { Meter } from '../../shared/Meter';
+import ReportStore from '../../../stores/ReportStore';
 
 interface Stores {
-  configEditorStore: ConfigEditorStore;
   canaryExecutorStore: CanaryExecutorStore;
+  reportStore: ReportStore;
 }
 
 interface ResultsPathParams {
@@ -40,8 +40,8 @@ const TERMINAL = 'Terminal';
 const TERMINAL_SCORE = 0;
 
 @connect(
-  'configEditorStore',
-  'canaryExecutorStore'
+  'canaryExecutorStore',
+  'reportStore'
 )
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
@@ -51,7 +51,7 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
   }
 
   render(): React.ReactNode {
-    const { canaryExecutorStore } = this.stores;
+    const { canaryExecutorStore, reportStore } = this.stores;
 
     return (
       <div className="canary-executor-results">
@@ -67,13 +67,13 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
               <div className="widget">
                 <Summary
                   classification={
-                    canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
+                    reportStore.canaryExecutionStatusResponse
+                      ? reportStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
                       : TERMINAL
                   }
                   score={
-                    canaryExecutorStore.canaryExecutionStatusResponse
-                      ? canaryExecutorStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
+                    reportStore.canaryExecutionStatusResponse
+                      ? reportStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
                       : TERMINAL_SCORE
                   }
                   testingType={canaryExecutorStore.testingType}

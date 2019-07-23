@@ -11,7 +11,7 @@ import Landing from './Landing';
 import ModalViewer from './ModalViewer';
 import ConfigEditor from './config/ConfigEditor';
 import CanaryExecutor from './canary-executor/CanaryExecutor';
-import CanaryExecutorResults from './canary-executor/CanaryExecutorResults';
+import CanaryExecutorResults from './reports/canary/CanaryExecutorResults';
 import Docs from './docs/Docs';
 
 import './App.scss';
