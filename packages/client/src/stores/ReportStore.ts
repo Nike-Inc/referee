@@ -38,6 +38,12 @@ export default class ReportStore {
   @observable
   canaryExecutionStatusResponse: CanaryExecutionStatusResponse | undefined;
 
+  @observable
+  selectedMetric: string = '';
+
+  @observable
+  displayMetricOverview: boolean = true;
+
   @action.bound
   updateFromCanaryResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse) {
     this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
@@ -111,5 +117,16 @@ export default class ReportStore {
   @action.bound
   setMetricSetPairList(metricSetPairList: MetricSetPair[]) {
     this.metricSetPairList = metricSetPairList;
+  }
+
+  @action.bound
+  handleOverviewSelection() {
+    this.displayMetricOverview = true;
+  }
+
+  @action.bound
+  handleMetricSelection(id: string) {
+    this.selectedMetric = id;
+    this.displayMetricOverview = false;
   }
 }

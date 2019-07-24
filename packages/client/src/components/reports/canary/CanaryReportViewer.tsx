@@ -19,6 +19,7 @@ import log from '../../../util/LoggerFactory';
 import { boundMethod } from 'autobind-decorator';
 import ConfigEditorStore from '../../../stores/ConfigEditorStore';
 import ReportStore from '../../../stores/ReportStore';
+import { observer } from 'mobx-react';
 
 interface PathParams {
   executionId: string;
@@ -44,6 +45,7 @@ interface State {
   'canaryExecutorStore',
   'reportStore'
 )
+@observer
 export default class CanaryReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Props, context: any) {
     super(props, context);
@@ -105,9 +107,11 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
           return (
             <CanaryRunResult
               application={reportStore.application as string}
+              metricSourceType={configEditorStore.metricSourceType as string}
               result={reportStore.result as CanaryResult}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
+              selectedMetric={reportStore.selectedMetric as string}
               canaryAnalysisResultByIdMap={reportStore.canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
               idListByMetricGroupNameMap={reportStore.idListByMetricGroupNameMap as KvMap<string[]>}
               groupScoreByMetricGroupNameMap={
@@ -117,6 +121,9 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
               classificationCountMap={reportStore.classificationCountMap as Map<string, number>}
               metricGroupNamesDescByWeight={configEditorStore.metricGroupNamesDescByWeight as string[]}
               executionRequest={canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest}
+              displayMetricOverview={reportStore.displayMetricOverview as boolean}
+              handleOverviewSelection={reportStore.handleOverviewSelection}
+              handleMetricSelection={reportStore.handleMetricSelection}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
           );
