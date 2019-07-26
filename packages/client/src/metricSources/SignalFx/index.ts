@@ -59,10 +59,13 @@ const validationErrorMapper = (errors: KvMap<string>, validationError: Validatio
 };
 
 // https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
-const signalFxQueryMapper = (attributes: MetricSetPairAttributes): { control: string; experiment: string } => {
+const signalFxQueryMapper = (
+  attributes: MetricSetPairAttributes
+): { control: string; experiment: string; displayLanguage?: string } => {
   return {
     control: attributes!.control!['signal-flow-program'],
-    experiment: attributes!.experiment!['signal-flow-program']
+    experiment: attributes!.experiment!['signal-flow-program'],
+    displayLanguage: 'python'
   };
 };
 

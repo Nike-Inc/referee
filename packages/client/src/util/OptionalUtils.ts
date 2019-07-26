@@ -40,6 +40,12 @@ export function mapIfPresentOrElse<T>(
   }
 }
 
+export function mapIfPresent<T>(optional: Optional<T>, presentAction: (value: T) => any): any {
+  if (optional.isPresent()) {
+    return presentAction(optional.get());
+  }
+}
+
 export function trimToEmpty(value: string): Optional<string> {
   const trimmed = value.trim();
   if (trimmed === '') {
@@ -51,8 +57,9 @@ export function trimToEmpty(value: string): Optional<string> {
 export const ofNullable = Optional.ofNullable;
 
 export default {
+  mapIfPresent,
+  mapIfPresentOrElse,
   safeGet,
   safeGetAsync,
-  mapIfPresentOrElse,
   trimToEmpty
 };

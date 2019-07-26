@@ -1,15 +1,14 @@
 import * as React from 'react';
-import {observer} from 'mobx-react';
+import { observer } from 'mobx-react';
 import './IndividualMetricView.scss';
-import {Line} from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import NumberFormat from 'react-number-format';
-import {
-  CanaryAnalysisResult,
-  MetricSetPair,
-  MetricSetPairAttributes
-} from '../../domain/Kayenta';
+import { CanaryAnalysisResult, MetricSetPair } from '../../domain/Kayenta';
 import humanFormat from 'human-format';
-import {metricSourceIntegrations} from '../../metricSources';
+import { metricSourceIntegrations } from '../../metricSources';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import Optional from 'optional-js';
+import { mapIfPresent, ofNullable } from '../../util/OptionalUtils';
 
 interface IndividualMetricViewProps {
   selectedMetric: string;
@@ -23,14 +22,10 @@ const ROUNDING_POSITION: number = 4;
 @observer
 export default class IndividualMetricView extends React.Component<IndividualMetricViewProps> {
   render(): React.ReactNode {
-    const {selectedMetric, metricSourceType, canaryAnalysisResultByIdMap, metricSetPairsByIdMap} = this.props;
+    const { selectedMetric, metricSourceType, canaryAnalysisResultByIdMap, metricSetPairsByIdMap } = this.props;
     const baselineData = metricSetPairsByIdMap[selectedMetric].values.control;
     const canaryData = metricSetPairsByIdMap[selectedMetric].values.experiment;
-    const {startTimeMillis, stepMillis} = metricSetPairsByIdMap[selectedMetric].scopes.control;
-
-    const queryMapper: (
-      attributes: MetricSetPairAttributes
-    ) => { control: string; experiment: string } = metricSourceIntegrations[metricSourceType].queryMapper!;
+    const { startTimeMillis, stepMillis } = metricSetPairsByIdMap[selectedMetric].scopes.control;
 
     const timeLabels = [];
     const test = [];
@@ -44,14 +39,14 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       datasets: [
         {
           label: 'Canary',
-          backgroundColor: 'rgb(255,239,0, 0.6)',
+          backgroundColor: 'rgb(255,225,0)',
           borderColor: 'rgb(161,161,161, 0.2)',
           data: canaryData.slice()
         },
         {
           label: 'Baseline',
-          backgroundColor: 'rgb(161, 161, 161)',
-          borderColor: 'rgb(161, 161, 161, 1.2)',
+          backgroundColor: 'rgb(211, 211, 211)',
+          borderColor: 'rgb(211, 211, 211)',
           data: baselineData.slice()
         }
       ]
@@ -229,20 +224,32 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
               </div>
             </div>
           </div>
-          <div className="queries-card">
-            <div className="query-section">
-              <div className="query-section-title">Baseline Query</div>
-              <div className="query-section-content">
-                {queryMapper(metricSetPairsByIdMap[selectedMetric].attributes).control}
+          {mapIfPresent(Optional.ofNullable(metricSourceIntegrations[metricSourceType].queryMapper), queryMapper => {
+            const { control, experiment, displayLanguage } = queryMapper(
+              metricSetPairsByIdMap[selectedMetric].attributes
+            );
+            const lang = Optional.ofNullable(displayLanguage).orElse('none');
+            return (
+              <div className="queries-card">
+                <div className="query-section">
+                  <div className="query-section-title">Baseline Query</div>
+                  <div className="query-section-content">
+                    <SyntaxHighlighter language={lang} wrapLines={true}>
+                      {control}
+                    </SyntaxHighlighter>
+                  </div>
+                </div>
+                <div className="query-section">
+                  <div className="query-section-title">Canary Query</div>
+                  <div className="query-section-content">
+                    <SyntaxHighlighter language={lang} wrapLines={true}>
+                      {experiment}
+                    </SyntaxHighlighter>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="query-section">
-              <div className="query-section-title">Canary Query</div>
-              <div className="query-section-content">
-                {queryMapper(metricSetPairsByIdMap[selectedMetric].attributes).experiment}
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     );

@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   margin: 20px;
+  overflow: auto;
 
   .graph-card {
     margin: 10px;
@@ -30,7 +31,7 @@
 
   .cards-row {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     .data-table-card {
       display: flex;
@@ -79,10 +80,15 @@
     .queries-card {
       display: flex;
       flex-direction: column;
+      flex-wrap: wrap;
       margin: 10px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      overflow: auto;
 
       .query-section {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
         padding: 10px;
 
         .query-section-title {
@@ -91,6 +97,11 @@
 
         .query-section-content {
           @extend .content-font;
+
+          pre {
+            background: none !important;
+            white-space: pre-wrap;
+          }
         }
       }
     }
