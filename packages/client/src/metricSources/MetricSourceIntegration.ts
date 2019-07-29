@@ -43,5 +43,7 @@ export interface MetricSourceIntegration<T extends CanaryMetricSetQueryConfig> {
    *
    * @param attributes The attributes from the metric.
    */
-  queryMapper?: (attributes: MetricSetPairAttributes) => { control: string; experiment: string };
+  queryMapper?: (
+    attributes: MetricSetPairAttributes
+  ) => { control: string; experiment: string; displayLanguage?: string };
 }

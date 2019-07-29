@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import ScoreClassUtils from '../../util/ScoreClassUtils';
 import { ofNullable } from '../../util/OptionalUtils';
 import { boundMethod } from 'autobind-decorator';
+import { Button } from 'react-bootstrap';
 
 interface Props {
   config: CanaryConfig;
@@ -25,6 +26,8 @@ interface Props {
   metricGroupNamesDescByWeight: string[];
   thresholds: CanaryClassifierThresholdsConfig;
   classificationCountMap: Map<string, number>;
+  handleOverviewSelection: () => void;
+  handleMetricSelection: (id: string) => void;
 }
 
 interface State {
@@ -66,13 +69,25 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
       groupScoreByMetricGroupNameMap,
       classificationCountMap,
       metricGroupNamesDescByWeight,
-      thresholds
+      thresholds,
+      handleOverviewSelection,
+      handleMetricSelection
     } = this.props;
 
     return (
       <div className="metrics-container-wrapper">
         <div className="metrics-container">
-          <div className="metrics-container-title">Metrics</div>
+          <div>
+            <Button
+              className="btn-block"
+              onClick={() => {
+                handleOverviewSelection();
+              }}
+              variant="outline-secondary"
+            >
+              Overview
+            </Button>
+          </div>
           <CheckboxRow
             classificationCountMap={classificationCountMap}
             filterMap={this.state.filterMap}
@@ -117,10 +132,12 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                         return (
                           <Metric
                             key={id}
+                            id={id}
                             metricName={metricName}
                             canaryAnalysisResult={canaryAnalysisResult}
                             metricSetPair={metricSetPair}
                             canaryMetricConfig={canaryMetricConfig}
+                            handleMetricSelection={handleMetricSelection}
                           />
                         );
                       })}
@@ -201,18 +218,28 @@ const Key = (): JSX.Element => {
 };
 
 const Metric = ({
+  id,
   metricName,
   canaryAnalysisResult,
   metricSetPair,
-  canaryMetricConfig
+  canaryMetricConfig,
+  handleMetricSelection
 }: {
+  id: string;
   metricName: string;
   canaryAnalysisResult: CanaryAnalysisResult;
   metricSetPair: MetricSetPair;
   canaryMetricConfig: CanaryMetricConfig;
+  handleMetricSelection: (id: string) => void;
 }): JSX.Element => {
   return (
-    <div className="metric-container">
+    <Button
+      className="metric-container btn-block"
+      onClick={() => {
+        handleMetricSelection(id);
+      }}
+      variant="outline-secondary"
+    >
       <div className="metric-name">{metricName}</div>
       <div className="metric-symbols">
         {canaryMetricConfig.analysisConfigurations.canary.critical && (
@@ -226,6 +253,6 @@ const Metric = ({
           })}
         ></div>
       </div>
-    </div>
+    </Button>
   );
 };

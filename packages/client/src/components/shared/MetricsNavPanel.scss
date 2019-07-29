@@ -8,7 +8,7 @@
   .metrics-container {
     display: flex;
     flex-direction: column;
-    min-width: 300px;
+    min-width: 350px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
     .metrics-container-title {
@@ -109,6 +109,7 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            flex-grow: 1;
 
             .metric-symbols {
               display: flex;

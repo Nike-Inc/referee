@@ -37,8 +37,6 @@ export default class Header extends ConnectedComponent<Props, Stores> {
 
   @boundMethod
   private loadCanaryFromJsonObject(config: CanaryConfig): void {
-    const type = safeGet(() => config.metrics[0].query.type).orElse(metricSourceTypes[0]);
-    this.stores.configEditorStore.updateMetricSourceType(type);
     this.stores.configEditorStore.setCanaryConfigObject(config);
     this.props.history.push('/config/edit');
   }

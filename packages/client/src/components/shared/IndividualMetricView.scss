@@ -1,0 +1,114 @@
+@import '../../styles/shared.scss';
+
+.individual-metric-view {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  overflow: auto;
+
+  .graph-card {
+    margin: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .metric-graph-title {
+      padding-top: 20px;
+      text-align: center;
+      @extend .heading-font;
+      font-size: 25px;
+    }
+
+    .metric-graph-data {
+      padding: 0px 20px 0px 20px;
+      width: 100%;
+      min-height: 450px;
+      max-height: 1000px;
+      position: relative;
+    }
+  }
+
+  .cards-row {
+    display: flex;
+    flex-direction: column;
+
+    .data-table-card {
+      display: flex;
+      flex-direction: row;
+      align-self: flex-start;
+      margin: 10px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+      .data-table {
+        display: flex;
+        flex-direction: row;
+        padding: 30px;
+
+        .data-table-column {
+          display: flex;
+          flex-direction: column;
+          align-content: flex-end;
+
+          .data-table-column-title {
+            @extend .heading-font;
+            width: 100px;
+            height: 30px;
+            text-align: right;
+            align-self: flex-end;
+          }
+
+          input {
+            border: none;
+            padding: 0px;
+          }
+
+          .data-table-row-title {
+            @extend .heading-font;
+            border-bottom: 1px solid lightgray;
+          }
+
+          .data-table-row-item {
+            @extend .content-font;
+            text-align: right;
+            border-bottom: 1px solid lightgray;
+          }
+        }
+      }
+    }
+
+    .queries-card {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      margin: 10px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      overflow: auto;
+
+      .query-section {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding: 10px;
+
+        .query-section-title {
+          @extend .heading-font;
+        }
+
+        .query-section-content {
+          @extend .content-font;
+
+          pre {
+            background: none !important;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .cards-row {
+      flex-direction: column;
+    }
+  }
+}
