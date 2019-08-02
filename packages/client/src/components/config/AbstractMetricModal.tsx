@@ -259,8 +259,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                     onBlur={() => {
                       this.touch('groups');
                     }}
-                    placeholder="Select an existing group or type to create a new group."
-                    noOptionsMessage={() => 'No existing groups, start typing to create a new group.'}
+                    placeholder="Select an existing group or type to create a new group"
+                    noOptionsMessage={() => 'No existing groups, start typing to create a new group'}
                     isMulti={true}
                     value={this.state.metric.groups.map(g => ({ value: g, label: g }))}
                     onChange={v => {
@@ -277,7 +277,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   error={this.state.errors.name}
                   id="name"
                   label="Name"
-                  placeHolderText="A human readable string to describe the metric for the results"
+                  placeHolderText="Human readable string to describe the metric for the results"
                   value={this.state.metric.name}
                   onChange={e => {
                     this.handleMetricNameChange(e.target.value);
@@ -323,7 +323,10 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   />
 
                   <Form.Text className="text-muted">
-                    The direction of the statistical change in that triggers the metric to fail.
+                    Which direction of statistical change triggers the metric to fail. Use Increase for things like
+                    error counts, memory usage, etc, where a decrease is not a failure. Use Decrease for things like
+                    success counts, etc, where a larger number is not a failure. Use Either when any type of change from
+                    the baseline is a failure.
                   </Form.Text>
                 </FormGroup>
 
@@ -344,7 +347,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                     id="criticality"
                   />
                   <Form.Text className="text-muted">
-                    Removes the metric from the metric group when it has no data and the NaN strategy is 'Remove'.
+                    Use to remove the metric from the metric group if it has no data so it will not be used for group
+                    score calculation.
                   </Form.Text>
 
                   <Form.Check
@@ -358,8 +362,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                     id="criticality"
                   />
                   <Form.Text className="text-muted">
-                    Fails the entire canary when this metric fails. Also fails the entire canary if there are no data
-                    points for this metric. Unlocks extra advanced controls.
+                    Use to fail the entire canary if this metric fails or has no data (recommended for important metrics
+                    that signal service outages or severe problems).
                   </Form.Text>
 
                   <Form.Check
@@ -372,9 +376,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                     type="radio"
                     id="criticality"
                   />
-                  <Form.Text className="text-muted">
-                    Fails the individual metric if data is missing and the NaN strategy is 'Remove'.
-                  </Form.Text>
+                  <Form.Text className="text-muted">Use to fail a metric if data is missing.</Form.Text>
                 </FormGroup>
 
                 <FormGroup
@@ -406,7 +408,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   />
 
                   <Form.Text className="text-muted">
-                    What to do when the the metric store, doesn't return data for a given interval of time.
+                    How to handle NaN values which can occur if the metric does not return data for a particular time
+                    interval. NaN Strategy must be Remove for Criticality options to work as expected.
                   </Form.Text>
                 </FormGroup>
 
@@ -421,7 +424,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   value={this.state.metric.scopeName}
                   onChange={e => this.handleScopeNameChange(e.target.value)}
                   disabled={false}
-                  subText="You almost always want to leave this as 'default'"
+                  subText="default is the only accepted value here."
                 />
 
                 {/* Inject the metric source specific JSX here */}

@@ -32,7 +32,7 @@
     "path-browserify": "^1.0.0",
     "react": "^16.8.5",
     "react-accessible-accordion": "^3.0.0",
-    "react-bootstrap": "^1.0.0-beta.6",
+    "react-bootstrap": "^1.0.0-beta.10",
     "react-chartjs-2": "^2.7.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.5",
@@ -43,7 +43,6 @@
     "react-select": "^2.4.2",
     "react-spinners": "^0.5.4",
     "react-syntax-highlighter": "^11.0.2",
-    "react-tooltip": "^3.10.0",
     "typeface-assistant": "^0.0.54",
     "uuid": "^3.3.2",
     "yup": "^0.27.0"
@@ -65,7 +64,6 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/react-select": "^2.0.15",
     "@types/react-syntax-highlighter": "^10.2.1",
-    "@types/react-tooltip": "^3.9.2",
     "@types/uuid": "^3.4.4",
     "@types/yup": "^0.26.12",
     "node-sass": "^4.12.0"

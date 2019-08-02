@@ -4,6 +4,7 @@ import { InputGroup } from 'react-bootstrap';
 import { Button, FormControl } from 'react-bootstrap';
 import handleKeys from '../../util/keyPressInputHelper';
 import { RefObject } from 'react';
+import { Popover } from '../../layout/Popover';
 
 export const GroupTabsSection = ({
   groups,
@@ -115,6 +116,12 @@ export const GroupTabsSection = ({
           Add Group
         </Button>
       </div>
+      <Popover
+        header="Groups"
+        text="Metric groups are used to logically organize metrics in order to weight the importance of different groups.
+        A canary config can include any number of metric groups, but we recommend starting with Errors, Latency, and Saturation."
+        color="black"
+      />
     </div>
   );
 };

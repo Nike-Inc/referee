@@ -5,10 +5,11 @@ import { CanaryScope } from '../../domain/Kayenta';
 import Flatpickr from 'react-flatpickr';
 import './ScopeItem.scss';
 import 'flatpickr/dist/themes/airbnb.css';
-import { Button, Form, FormLabel } from 'react-bootstrap';
+import { Button, FormLabel } from 'react-bootstrap';
 import { boundMethod } from 'autobind-decorator';
 import { FormGroup } from '../../layout/FormGroup';
 import KeyValuePair from '../../layout/KeyValuePair';
+import { Popover } from '../../layout/Popover';
 
 interface ScopeProps {
   scopeType: string;
@@ -97,10 +98,19 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         <InlineTextGroup
           id={scopeType + '-scope-name'}
           label="Scope"
+          tooltipText={
+            <div>
+              <p>
+                The unique identifier for your deployed server group. <br />
+                From Spinnaker docs on server groups: "The base resource, the Server Group, identifies the deployable
+                artifact (VM image, Docker image, source location) and basic configuration settings such as number of
+                instances, autoscaling policies, metadata, etc. When deployed, a Server Group is a collection of
+                instances of the running software (VM instances, Kubernetes pods)."
+              </p>
+            </div>
+          }
           value={scope.scope}
           disabled={disabled}
-          placeHolderText="The unique identifier for your deployed server group"
-          subText="See https://www.spinnaker.io/concepts/#server-group"
           onChange={e => {
             this.handleNameChange(e.target.value, scope);
           }}
@@ -113,8 +123,8 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         <InlineTextGroup
           id={scopeType + '-location'}
           label="Location"
-          placeHolderText="The location of your deployed service."
-          subText="ex: the AWS Region us-west-2"
+          placeHolderText="ex: us-east-1 (AWS region)"
+          tooltipText="Location of your deployed service."
           value={scope.location}
           disabled={disabled}
           onChange={e => {
@@ -129,7 +139,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
         <InlineTextGroup
           id={scopeType + '-step'}
           label="Step (s)"
-          subText="Frequency of data point requests to the metrics source when querying for metrics. Defaults to 60, meaning a data point will be requested every 60 seconds from the metrics source."
+          tooltipText="Frequency of data point requests to the metrics source when querying for metrics. Defaults to 60, meaning a data point will be requested every 60 seconds from the metrics source."
           value={scope.step.toString()}
           disabled={disabled}
           onChange={e => {
@@ -235,19 +245,19 @@ export default class ScopeItem extends React.Component<ScopeProps> {
                 })}
               </div>
             )}
-            <Button
-              onClick={() => {
-                this.handleAddNewExtendedScopeParam();
-              }}
-              size="sm"
-              className="add-esp-btn"
-              variant="outline-dark"
-            >
-              Add New Parameter
-            </Button>
-            <Form.Text className="text-muted">
-              Add additional scope parameters if the metric source supports it
-            </Form.Text>
+            <div className="btn-container">
+              <Button
+                onClick={() => {
+                  this.handleAddNewExtendedScopeParam();
+                }}
+                size="sm"
+                className="add-esp-btn"
+                variant="outline-dark"
+              >
+                Add New Parameter
+              </Button>
+              <Popover text="Add additional scope parameters if supported by the metric source." color="black" />
+            </div>
           </FormGroup>
         )}
       </div>

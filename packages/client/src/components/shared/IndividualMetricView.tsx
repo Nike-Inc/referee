@@ -27,11 +27,9 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     const canaryData = metricSetPairsByIdMap[selectedMetric].values.experiment;
     const { startTimeMillis, stepMillis } = metricSetPairsByIdMap[selectedMetric].scopes.control;
 
-    const timeLabels = [];
-    const test = [];
+    const timeLabels: number[] = [];
     for (let i = 1, j = startTimeMillis; i < baselineData.length + 1; i++, j += stepMillis) {
       timeLabels.push(j);
-      test.push(i);
     }
 
     const data = {

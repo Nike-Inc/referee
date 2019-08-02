@@ -1,4 +1,17 @@
 .scoring-section {
+
+  #group-weights-wrapper {
+
+    .label-container {
+      display: flex;
+      flex-direction: row;
+
+      .tooltip-container {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
   .alert {
     margin-top: -5px;
     margin-bottom: 10px;

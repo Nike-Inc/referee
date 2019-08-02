@@ -1,4 +1,10 @@
 .form-metrics-container {
+
+  .metric-summaries-footer {
+    display: flex;
+    flex-direction: row;
+  }
+
   .alert {
     margin-top: 10px;
     margin-bottom: 10px;
