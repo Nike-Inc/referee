@@ -1,0 +1,23 @@
+@import '../styles/shared.scss';
+
+.tooltip-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+  margin-bottom: 2px;
+
+  .tooltip-info {
+    font-size: .75em;
+  }
+}
+
+#popover-basic {
+  border: 1px solid $dark-background-color;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+
+  .popover-header {
+    background-color: $dark-background-color;
+    color: $off-white;
+  }
+}
