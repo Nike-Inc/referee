@@ -9,6 +9,7 @@ import { CanaryMetricConfig } from '../../domain/Kayenta';
 import { metricSourceIntegrations } from '../../metricSources';
 
 import './MetricsSection.scss';
+import { Popover } from '../../layout/Popover';
 
 export const MetricsSection = observer(
   ({
@@ -55,7 +56,12 @@ export const MetricsSection = observer(
     metricSourceType: string;
   }): JSX.Element => {
     return (
-      <TitledSection title="Metrics" additionalClassname="form-metrics-container">
+      <TitledSection
+        title="Metrics"
+        additionalClassname="form-metrics-container"
+        tooltipHeader="Metrics"
+        tooltipText="Metrics are measurements of the health of your application and are used to compare the baseline to the experiment."
+      >
         <div>
           <GroupTabsSection
             groups={groups}
@@ -99,6 +105,12 @@ export const MetricsSection = observer(
                 >
                   Add Metric
                 </Button>
+                <Popover
+                  header="Number of Metrics"
+                  text="Each metric group can have any number of metrics in it, but we recommend having less than five metrics per group
+                  in order to keep results meaningful. Putting too many metrics in one group can dilute the results."
+                  color="black"
+                />
               </div>
             </div>
           </div>

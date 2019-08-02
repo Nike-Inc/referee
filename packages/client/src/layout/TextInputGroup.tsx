@@ -1,10 +1,14 @@
 import { Alert, Col, FormControl, FormGroup, FormLabel, Row } from 'react-bootstrap';
 import * as React from 'react';
+import { Popover } from './Popover';
+import { ofNullable } from '../util/OptionalUtils';
 
 export const TextInputGroup = ({
   name,
   label,
   placeHolderText,
+  tooltipHeader,
+  tooltipText,
   value,
   onChange,
   area = false,
@@ -16,6 +20,8 @@ export const TextInputGroup = ({
   name: string;
   label: string;
   placeHolderText?: string;
+  tooltipHeader?: string;
+  tooltipText?: JSX.Element | string;
   value?: string;
   onChange?: any;
   area?: boolean;
@@ -28,6 +34,7 @@ export const TextInputGroup = ({
     <FormGroup as={'div'} controlId={`${name}`}>
       <Row>
         <FormLabel>{label}</FormLabel>
+        {tooltipText && <Popover header={ofNullable(tooltipHeader).orElse('')} color="black" text={tooltipText} />}
       </Row>
       <Col>
         <div className={touched && error ? 'input-error-wrapper' : ''}>

@@ -7,6 +7,8 @@ export const InlineTextGroup = ({
   id,
   label,
   placeHolderText,
+  tooltipHeader,
+  tooltipText,
   value,
   disabled = false,
   onChange = () => {},
@@ -17,6 +19,8 @@ export const InlineTextGroup = ({
   id: string;
   label: string;
   placeHolderText?: string;
+  tooltipHeader?: string;
+  tooltipText?: JSX.Element | string | undefined;
   value?: string;
   disabled?: boolean;
   onBlur?: () => void;
@@ -26,7 +30,14 @@ export const InlineTextGroup = ({
   subText?: string | undefined;
 }): JSX.Element => {
   return (
-    <FormGroup id={id} label={label} touched={touched} error={error}>
+    <FormGroup
+      id={id}
+      label={label}
+      tooltipHeader={tooltipHeader}
+      tooltipText={tooltipText}
+      touched={touched}
+      error={error}
+    >
       <Form.Control
         onBlur={() => {
           onBlur();

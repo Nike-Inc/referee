@@ -4,8 +4,8 @@ import { GroupWeights } from '../../domain/Kayenta';
 import { Alert, Col, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { add } from '../../validation/configValidators';
 import TitledSection from '../../layout/titledSection';
-
 import './ScoringSection.scss';
+import { Popover } from '../../layout/Popover';
 
 export const ScoringSection = observer(
   ({
@@ -20,10 +20,27 @@ export const ScoringSection = observer(
     error: string;
   }): JSX.Element => {
     return (
-      <TitledSection title="Scoring" additionalClassname="scoring-section">
+      <TitledSection
+        title="Scoring"
+        additionalClassname="scoring-section"
+        tooltipHeader="Scoring"
+        tooltipText="Each metric you have to chosen to evaluate is rated as either
+       Pass or Fail through a comparison of the baseline and experiment using a statistical comparison. Each metric group
+       then receives a score based on how many metrics in the group passed compared to the total number of metrics in the
+        group. This score is proportional to the weight of the metric group. Finally, all metric group scores are combined to create the final canary score for an individual canary run."
+      >
         <div id="group-weights-wrapper">
           <Form.Group controlId="group-weights">
-            <Form.Label>Group Weights</Form.Label>
+            <div className="label-container">
+              <Form.Label>Group Weights</Form.Label>
+              <Popover
+                header="Weighting"
+                text="We recommend weighting all groups equally to start. The total weights of all metrics groups
+                       must sum to 100. Wait to adjust the weights only after seeing indicators that one group over another
+                       means more about the health of your service."
+                color="black"
+              />
+            </div>
             <div className="gw-wrapper">
               {Object.keys(computedGroupWeights).length === 0 && (
                 <div className="no-metrics-label">

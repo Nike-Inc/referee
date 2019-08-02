@@ -122,7 +122,7 @@ export default class CanaryExecutorStore {
 
   @computed
   get metricStoreAccounts(): string[] {
-    const accounts = [];
+    const accounts: string[] = [];
 
     accounts.push(
       ...this.credentialsData
@@ -135,7 +135,7 @@ export default class CanaryExecutorStore {
 
   @computed
   get storageAccounts(): string[] {
-    const accounts = [];
+    const accounts: string[] = [];
 
     accounts.push(
       ...this.credentialsData

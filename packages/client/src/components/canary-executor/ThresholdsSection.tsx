@@ -32,6 +32,7 @@ export const ThresholdsSection = observer(
             <InlineTextGroup
               id="marginal-threshold"
               label="Marginal Threshold"
+              tooltipText="Score that a canary run must exceed for future runs to proceed."
               value={marginalThreshold.toString()}
               onChange={e => {
                 updateMarginalThreshold(
@@ -51,6 +52,7 @@ export const ThresholdsSection = observer(
             <InlineTextGroup
               id="pass-threshold"
               label="Pass Threshold"
+              tooltipText="Score that the final canary run must meet or exceed for the canary to pass."
               value={passThreshold.toString()}
               onChange={e => {
                 updatePassThreshold(

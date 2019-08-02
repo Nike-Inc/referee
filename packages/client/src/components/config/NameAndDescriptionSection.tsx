@@ -54,6 +54,8 @@ export const NameAndDescriptionSection = observer(
           name="config-name"
           label="Configuration Name"
           value={name}
+          tooltipHeader="Name"
+          tooltipText="Text name for your configuration. This name will later be part of the path to your canary config file."
           onChange={(e: any) => {
             updateConfigName(e.target.value);
           }}
@@ -67,6 +69,8 @@ export const NameAndDescriptionSection = observer(
           name="config-description"
           label="Configuration Description"
           value={description}
+          tooltipHeader="Description"
+          tooltipText="Text description of what this configuration will be used for."
           area={true}
           rows="1"
           onChange={(e: any) => {

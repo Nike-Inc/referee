@@ -1,3 +1,5 @@
+@import '../../styles/shared';
+
 .titled-section-contents {
 
   #thresholds-section {
@@ -9,6 +11,11 @@
     .row {
       .col-sm-10 {
         flex: 0 0 70%;
+      }
+
+      .label-tooltip-container {
+        display: flex;
+        flex-direction: row;
       }
     }
   }

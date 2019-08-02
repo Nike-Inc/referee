@@ -76,7 +76,7 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
           label="SignalFx Metric"
           value={this.state.metric.query.metricName}
           onChange={e => this.updateQueryObject('metricName', e.target.value)}
-          placeHolderText="The metric name, as reported to SignalFx. ex: requests.count"
+          placeHolderText="Metric name, as reported to SignalFx. ex: requests.count"
         />
         <FormGroup
           id="aggregation-method"

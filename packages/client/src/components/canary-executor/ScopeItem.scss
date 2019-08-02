@@ -1,3 +1,5 @@
+@import '../../styles/shared';
+
 .titled-section-contents {
 
   #scope-item {
@@ -10,6 +12,11 @@
     .row {
       .col-sm-10 {
         flex: 0 0 70%;
+      }
+
+      .label-tooltip-container {
+        display: flex;
+        flex-direction: row;
       }
     }
 
@@ -47,9 +54,21 @@
         color: #495057;
       }
     }
+    .add-esp-btn {
+      margin-top: 10px;
+    }
 
     .esp-kv-pairs {
       padding-bottom: 10px
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: row;
+
+      .tooltip-container {
+        margin-top: 10px;
+      }
     }
   }
 }
