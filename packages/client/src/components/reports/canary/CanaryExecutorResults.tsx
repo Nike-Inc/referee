@@ -6,7 +6,6 @@ import { observer } from 'mobx-react';
 import CanaryExecutorFormView from '../../canary-executor/CanaryExecutorFormView';
 import ConfigFormView from '../../config/ConfigFormView';
 import { fetchCanaryResultsService } from '../../../services/index';
-import { ClipLoader } from 'react-spinners';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -58,7 +57,6 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
         {!canaryExecutorStore.resultsRequestComplete ? (
           <div>
             <h5>Loading</h5>
-            <ClipLoader />
           </div>
         ) : (
           <div>
