@@ -8,7 +8,7 @@ import {
   CanaryResult,
   MetricSetPair
 } from '../domain/Kayenta';
-import { ofNullable } from '../util/OptionalUtils';
+import { ofNullable, safeGet } from '../util/OptionalUtils';
 
 enum classifications {
   FAIL = 'Fail',
@@ -52,12 +52,12 @@ export default class ReportStore {
     this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;
 
-    const judgeResult = ofNullable(this.result.judgeResult).orElseThrow(
-      () => new Error('Expected there to be judgement results on the Canary Result object')
-    );
+    safeGet(() => this.result.judgeResult).ifPresent(judgeResultFromResult => {
+      const judgeResult = judgeResultFromResult;
 
-    judgeResult.results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
-      this.canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
+      judgeResult.results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
+        this.canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
+      });
     });
   }
 
@@ -65,13 +65,15 @@ export default class ReportStore {
   get idListByMetricGroupNameMap(): KvMap<string[]> {
     const idListByMetricGroupNameMap: KvMap<string[]> = {};
 
-    this.result.judgeResult!.results.forEach(canaryAnalysisResult => {
-      canaryAnalysisResult.groups.forEach(group => {
-        if (idListByMetricGroupNameMap[group]) {
-          idListByMetricGroupNameMap[group].push(canaryAnalysisResult.id);
-        } else {
-          idListByMetricGroupNameMap[group] = [canaryAnalysisResult.id];
-        }
+    safeGet(() => this.result.judgeResult).ifPresent(judgeResult => {
+      judgeResult.results.forEach(canaryAnalysisResult => {
+        canaryAnalysisResult.groups.forEach(group => {
+          if (idListByMetricGroupNameMap[group]) {
+            idListByMetricGroupNameMap[group].push(canaryAnalysisResult.id);
+          } else {
+            idListByMetricGroupNameMap[group] = [canaryAnalysisResult.id];
+          }
+        });
       });
     });
 
@@ -81,9 +83,10 @@ export default class ReportStore {
   @computed
   get groupScoreByMetricGroupNameMap(): KvMap<CanaryJudgeGroupScore> {
     const groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore> = {};
-    this.result.judgeResult!.groupScores.forEach(
-      groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore)
-    );
+
+    safeGet(() => this.result.judgeResult).ifPresent(judgeResult => {
+      judgeResult.groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
+    });
 
     return groupScoreByMetricGroupNameMap;
   }

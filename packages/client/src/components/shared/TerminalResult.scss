@@ -1,0 +1,30 @@
+@import '../../styles/shared.scss';
+
+.terminal-canary-wrapper {
+  padding: 2px 0 10px 0;
+
+  .terminal-canary {
+    display: flex;
+    flex-flow: column;
+
+    .main-error {
+      padding: 5px 0 5px 0;
+      text-align: center;
+      background-color: red;
+      font-size: 20px;
+      @extend .heading-font;
+    }
+
+    .stacktrace {
+      background: lightgray;
+      font-weight: bold;
+      padding: 25px;
+      margin: 15px 10px 0 10px;
+      border-radius: 15px;
+
+      .stacktrace-label {
+        font-size: 20px;
+      }
+    }
+  }
+}

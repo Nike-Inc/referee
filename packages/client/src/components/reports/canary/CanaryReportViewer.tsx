@@ -15,11 +15,14 @@ import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import { CanaryRunResult } from './CanaryRunResult';
+import TerminalResult from '../../shared/TerminalResult';
 import log from '../../../util/LoggerFactory';
 import { boundMethod } from 'autobind-decorator';
 import ConfigEditorStore from '../../../stores/ConfigEditorStore';
 import ReportStore from '../../../stores/ReportStore';
 import { observer } from 'mobx-react';
+import TitledSection from '../../../layout/titledSection';
+import CanaryMetadataSection from './CanaryMetadataSection';
 
 interface PathParams {
   executionId: string;
@@ -64,25 +67,28 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
       throw e;
     }
 
-    let canaryConfig: CanaryConfig | undefined = undefined;
-    if (this.stores.reportStore.canaryExecutionStatusResponse!.config !== undefined) {
-      this.stores.configEditorStore.setCanaryConfigObject(
-        this.stores.reportStore.canaryExecutionStatusResponse!.config
-      );
-    }
-    if (!this.stores.configEditorStore.canaryConfigObject) {
-      canaryConfig = await kayentaApiService.fetchCanaryConfig(
-        ofNullable(this.stores.reportStore.canaryExecutionStatusResponse!.canaryConfigId).orElseThrow(
-          () => new Error('Expected either a canary config id or canary config object to be present')
-        )
-      );
-      this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
-    }
+    ofNullable(this.stores.reportStore.canaryExecutionStatusResponse).ifPresent(async response => {
 
-    const metricSetPairList = await kayentaApiService.fetchMetricSetPairList(
-      this.stores.reportStore.metricSetPairListId
-    );
-    this.stores.reportStore.setMetricSetPairList(metricSetPairList);
+      let canaryConfig: CanaryConfig | undefined = undefined;
+      if (response.config !== undefined) {
+        this.stores.configEditorStore.setCanaryConfigObject(response.config);
+      }
+      if (!this.stores.configEditorStore.canaryConfigObject) {
+        canaryConfig = await kayentaApiService.fetchCanaryConfig(
+          ofNullable(response.canaryConfigId).orElseThrow(
+            () => new Error('Expected either a canary config id or canary config object to be present')
+          )
+        );
+        this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
+      }
+
+      if (this.stores.reportStore.metricSetPairListId) {
+        const metricSetPairList = await kayentaApiService.fetchMetricSetPairList(
+          this.stores.reportStore.metricSetPairListId
+        );
+        this.stores.reportStore.setMetricSetPairList(metricSetPairList);
+      }
+    });
 
     this.setState({
       canaryExecutionStatusResponse
@@ -130,7 +136,20 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
         } else if (!canaryExecutionStatusResponse.complete) {
           // TODO canary execution is still running.
         } else {
-          // TODO terminal canary execution stuff here.
+          return (
+            <div className="terminal-canary-wrapper">
+              <TitledSection title="Canary Report" />
+              <CanaryMetadataSection
+                application={reportStore.application as string}
+                canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
+                executionRequest={canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest}
+                handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
+              />
+              <TerminalResult
+                exception={ofNullable(this.stores.reportStore.canaryExecutionStatusResponse).get().exception}
+              />
+            </div>
+          );
         }
       },
       () => <div>SPINNER HERE</div> // TODO
