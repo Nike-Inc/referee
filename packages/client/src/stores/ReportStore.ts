@@ -52,10 +52,8 @@ export default class ReportStore {
     this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;
 
-    safeGet(() => this.result.judgeResult).ifPresent(judgeResultFromResult => {
-      const judgeResult = judgeResultFromResult;
-
-      judgeResult.results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
+    safeGet(() => this.result.judgeResult!.results).ifPresent(results => {
+      results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
         this.canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
       });
     });
@@ -65,8 +63,8 @@ export default class ReportStore {
   get idListByMetricGroupNameMap(): KvMap<string[]> {
     const idListByMetricGroupNameMap: KvMap<string[]> = {};
 
-    safeGet(() => this.result.judgeResult).ifPresent(judgeResult => {
-      judgeResult.results.forEach(canaryAnalysisResult => {
+    safeGet(() => this.result.judgeResult!.results).ifPresent(results => {
+      results.forEach(canaryAnalysisResult => {
         canaryAnalysisResult.groups.forEach(group => {
           if (idListByMetricGroupNameMap[group]) {
             idListByMetricGroupNameMap[group].push(canaryAnalysisResult.id);
@@ -84,8 +82,8 @@ export default class ReportStore {
   get groupScoreByMetricGroupNameMap(): KvMap<CanaryJudgeGroupScore> {
     const groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore> = {};
 
-    safeGet(() => this.result.judgeResult).ifPresent(judgeResult => {
-      judgeResult.groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
+    safeGet(() => this.result.judgeResult!.groupScores).ifPresent(groupScores => {
+      groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
     });
 
     return groupScoreByMetricGroupNameMap;
