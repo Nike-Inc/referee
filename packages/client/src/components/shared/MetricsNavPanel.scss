@@ -8,17 +8,31 @@
   .metrics-container {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     min-width: 350px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
-    .metrics-container-title {
-      text-align: center;
-      background-color: $dark-background-color;
-      color: $dark-bg-font-color;
-      padding: 5px;
-      font-size: 20px;
-      @extend .heading-font;
-      @extend .un-selectable;
+    .overview-button-container {
+      .overview {
+        border-style: none;
+        border-radius: 0;
+      }
+
+      .active {
+        background-color: $dark-background-color;
+        color: $dark-bg-font-color;
+        box-shadow: none;
+        border-style: none;
+        border-radius: 0;
+      }
+
+      .btn-block:focus, .btn-block:hover {
+        background-color: $dark-background-color;
+        color: $dark-bg-font-color;
+        box-shadow: none;
+        border-style: none;
+        border-radius: 0;
+      }
     }
 
     .metrics-filters-container {
@@ -26,7 +40,7 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      border-bottom: 1px solid gray;
+      border-bottom: 1px lightgray solid;
       cursor: pointer;
 
       .metrics-filter {
@@ -40,11 +54,10 @@
           cursor: pointer;
 
           label {
-            margin-bottom: 0px;
+            margin-bottom: 0;
             cursor: pointer;
 
             input {
-              margin-top: 7px;
               cursor: pointer;
             }
           }
@@ -57,22 +70,20 @@
     }
 
     .metrics-container-content {
-      padding: 10px;
 
       .group-metrics-container-wrapper {
         display: flex;
         flex-direction: column;
-        padding: 5px 0px 5px 0px;
 
         .group-metrics-title-container {
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
-          background-color: $dark-background-color;
-          color: $dark-bg-font-color;
-          border-radius: 5px;
+          background-color: $off-white;
           padding: 5px 10px 5px 10px;
+          border-top: 1px lightgray solid;
+          border-bottom: 1px lightgray solid;
 
           .group-score-tab {
             display: flex;
@@ -102,7 +113,6 @@
         }
 
         .group-metrics-content {
-          padding: 10px;
 
           .metric-container {
             display: flex;
@@ -110,6 +120,9 @@
             align-items: center;
             justify-content: space-between;
             flex-grow: 1;
+            border-style: none;
+            border-radius: 0;
+            margin: 0px;
 
             .metric-symbols {
               display: flex;
@@ -121,6 +134,18 @@
                 padding: 0px 5px 0px 5px;
               }
             }
+          }
+
+          .btn-block:focus {
+            background-color: $dark-background-color;
+            color: $dark-bg-font-color;
+            box-shadow: none;
+          }
+
+          .btn-block:hover {
+            background-color: lightgray;
+            color: black;
+            box-shadow: none;
           }
         }
 
@@ -134,7 +159,8 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      border-top: 1px solid gray;
+      border-top: 1px lightgray solid;
+      border-bottom: 1px lightgray solid;
       padding: 10px 15px 10px 15px;
 
       .metrics-key-item {
