@@ -68,7 +68,6 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
     }
 
     ofNullable(this.stores.reportStore.canaryExecutionStatusResponse).ifPresent(async response => {
-
       let canaryConfig: CanaryConfig | undefined = undefined;
       if (response.config !== undefined) {
         this.stores.configEditorStore.setCanaryConfigObject(response.config);
@@ -114,6 +113,8 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
             <CanaryRunResult
               application={reportStore.application as string}
               metricSourceType={configEditorStore.metricSourceType as string}
+              metricsAccountName={reportStore.metricsAccountName as string}
+              storageAccountName={reportStore.storageAccountName as string}
               result={reportStore.result as CanaryResult}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
@@ -141,6 +142,8 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
               <TitledSection title="Canary Report" />
               <CanaryMetadataSection
                 application={reportStore.application as string}
+                metricsAccountName={reportStore.metricsAccountName as string}
+                storageAccountName={reportStore.storageAccountName as string}
                 canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
                 executionRequest={canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest}
                 handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}

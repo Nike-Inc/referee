@@ -153,3 +153,50 @@ export const validateExtendedScopeParams = (type: string, params: KvPair[]): Val
     isValid: Object.keys(errors).length === 0
   };
 };
+
+const additionalParametersSchema = object().shape({
+  application: string().trim(),
+  metricsAccountName: string()
+    .trim()
+    .required('Metrics account is a required property'),
+  storageAccountName: string()
+    .trim()
+    .required('Storage account is a required property')
+});
+
+export const validateAdditionalParameters = (
+  application: string,
+  metricsAccountName: string,
+  storageAccountName: string
+): ValidationResultsWrapper => {
+  let error;
+  const errors: KvMap<string> = {};
+  const additionalParameters = {
+    application: application,
+    metricsAccountName: metricsAccountName,
+    storageAccountName: storageAccountName
+  };
+
+  try {
+    additionalParametersSchema.validateSync(additionalParameters, { abortEarly: false, strict: true });
+  } catch (e) {
+    error = e;
+  }
+
+  if (error) {
+    if (error.name !== 'ValidationError') {
+      throw error;
+    }
+    const inner: [{ path: string; errors: string[] }] = error.inner;
+    if (inner) {
+      inner.forEach(validationError => {
+        errors[validationError.path] = validationError.errors.join(', ');
+      });
+    }
+  }
+
+  return {
+    errors: errors,
+    isValid: Object.keys(errors).length === 0
+  };
+};

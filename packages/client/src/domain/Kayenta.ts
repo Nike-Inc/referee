@@ -28,7 +28,8 @@ export interface CanaryExecutionStatusResponse {
   endTimeIso?: string;
   endTimeMillis?: number;
   configurationAccountName?: string;
-  storageAccountName?: string;
+  metricsAccountName: string;
+  storageAccountName: string;
 }
 
 export interface CanaryResult {

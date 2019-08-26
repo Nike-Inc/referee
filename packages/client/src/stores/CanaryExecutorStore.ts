@@ -6,7 +6,11 @@ import {
   KayentaCredential
 } from '../domain/Kayenta';
 import CanaryExecutionFactory from '../util/CanaryExecutionFactory';
-import { validateCanaryExecution, validateExtendedScopeParams } from '../validation/executionValidators';
+import {
+  validateAdditionalParameters,
+  validateCanaryExecution,
+  validateExtendedScopeParams
+} from '../validation/executionValidators';
 import { ofNullable, trimToEmpty } from '../util/OptionalUtils';
 import log from '../util/LoggerFactory';
 
@@ -74,7 +78,18 @@ export default class CanaryExecutorStore {
       .errors;
     const controlESErrors = validateExtendedScopeParams('control', this.controlExtendedScopes).errors;
     const experimentESErrors = validateExtendedScopeParams('experiment', this.experimentExtendedScopes).errors;
-    return Object.assign({}, canaryExecutionRequestObjectErrors, controlESErrors, experimentESErrors);
+    const additionalParametersErrors = validateAdditionalParameters(
+      this.applicationName,
+      this.metricsAccountName,
+      this.storageAccountName
+    ).errors;
+    return Object.assign(
+      {},
+      canaryExecutionRequestObjectErrors,
+      controlESErrors,
+      experimentESErrors,
+      additionalParametersErrors
+    );
   }
 
   @computed
@@ -91,6 +106,10 @@ export default class CanaryExecutorStore {
         validateExtendedScopeParams('experiment', this.experimentExtendedScopes).isValid
       )
     ) {
+      isValid = false;
+    }
+
+    if (!validateAdditionalParameters(this.applicationName, this.metricsAccountName, this.storageAccountName).isValid) {
       isValid = false;
     }
 
