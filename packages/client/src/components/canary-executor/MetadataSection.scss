@@ -22,12 +22,14 @@
         padding-bottom: 15px;
 
         #dropdown-label {
-          margin-bottom: 0px;
+          margin: 5px 0 0 5px;
+          align-self: flex-start;
         }
 
-        #dropdown {
-          flex-basis: 84%;
-          margin-left: 20px;
+        .dropdown-content-container {
+          display: flex;
+          flex-direction: column;
+          flex: 0 0 84%;
         }
       }
     }

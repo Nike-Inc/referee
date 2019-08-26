@@ -21,6 +21,12 @@ export default class ReportStore {
   application: string = '';
 
   @observable
+  metricsAccountName: string = '';
+
+  @observable
+  storageAccountName: string = '';
+
+  @observable
   result: CanaryResult = {};
 
   @observable
@@ -48,6 +54,8 @@ export default class ReportStore {
   updateFromCanaryResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse) {
     this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
     this.application = ofNullable(canaryExecutionStatusResponse.application).orElse('ad-hoc');
+    this.metricsAccountName = canaryExecutionStatusResponse.metricsAccountName as string;
+    this.storageAccountName = canaryExecutionStatusResponse.storageAccountName as string;
     this.result = canaryExecutionStatusResponse.result as CanaryResult;
     this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;

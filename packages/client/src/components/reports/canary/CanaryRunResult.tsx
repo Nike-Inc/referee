@@ -20,6 +20,8 @@ export const CanaryRunResult = observer(
   ({
     application,
     metricSourceType,
+    metricsAccountName,
+    storageAccountName,
     result,
     canaryConfig,
     thresholds,
@@ -38,6 +40,8 @@ export const CanaryRunResult = observer(
   }: {
     application: string;
     metricSourceType: string;
+    metricsAccountName: string;
+    storageAccountName: string;
     result: CanaryResult;
     canaryConfig: CanaryConfig;
     thresholds: CanaryClassifierThresholdsConfig;
@@ -60,6 +64,8 @@ export const CanaryRunResult = observer(
           <TitledSection title="Canary Report" />
           <CanaryMetadataSection
             application={application}
+            metricsAccountName={metricsAccountName}
+            storageAccountName={storageAccountName}
             canaryConfig={canaryConfig}
             executionRequest={executionRequest}
             handleGoToConfigButtonClick={handleGoToConfigButtonClick}
