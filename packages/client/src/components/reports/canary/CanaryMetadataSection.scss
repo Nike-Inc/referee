@@ -1,78 +1,100 @@
 @import '../../../styles/shared.scss';
 
-.metadata-section {
+.canary-metadata-section {
   display: flex;
-  flex-direction: column;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 20px 60px 20px 60px;
+  justify-content: space-evenly;
 
-  .metadata-columns {
+  .canary-metadata-column {
     display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 0px 60px 0px 60px;
+    flex-direction: column;
+    margin: 10px 20px 10px 20px;
 
-    .metadata-column {
+    .canary-metadata-column-content {
       display: flex;
       flex-direction: column;
-      flex: 1 1 0;
-      margin: 0px 20px 0px 20px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 10px;
 
-      .metadata-column-content {
+      .canary-column-title-wrapper {
+        display: flex;
+        padding-bottom: 5px;
+
+        .canary-column-title {
+          @extend .content-font;
+          font-weight: 700;
+        }
+      }
+
+      .kv-wrapper {
         display: flex;
         flex-direction: column;
+        padding: 3px 20px 3px 0;
 
-        .column-title-wrapper {
-          display: flex;
-          padding-bottom: 5px;
-
-          .column-title {
-            @extend .heading-font;
-            font-size: 18px;
-          }
+        .key {
+          @extend .content-font;
+          font-weight: 700;
         }
 
-        .kv-wrapper {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          flex-wrap: wrap;
-
-          .key {
-            @extend .content-font;
-            font-weight: 600;
-            text-align: left;
-            padding-right: 20px;
-            flex-basis: 33%;
-          }
-
-          .value {
-            @extend .content-font;
-          }
-        }
-        @media screen and (max-width: 1250px) {
-          .kv-wrapper {
-            flex-direction: column;
-          }
+        .value {
+          @extend .content-font;
         }
       }
-      .btn-wrapper {
-        padding-top: 10px;
+
+      .scope-item-wrapper {
+        display: flex;
+        flex-direction: row;
+        width: 260px;
+        margin: 3px 0 3px 0;
+
+        .img {
+          padding-right: 5px;
+          align-self: center;
+        }
       }
     }
-  }
 
-  @media screen and (max-width: 700px) {
-    .metadata-columns {
+    .number-label-card {
+      display: flex;
       flex-direction: column;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding-top: 10px;
+      margin-bottom: 20px;
+      @extend .un-selectable;
 
-      .metadata-column {
-        margin-bottom: 20px;
+      .label-value {
+        @extend .content-font;
+        margin-left: -5px;
+        margin-bottom: -10px;
+        text-align: center;
+      }
+
+      .number-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .number-value {
+          font-size: 60px;
+          align-self: flex-end;
+        }
+
+        .number-unit {
+          font-size: 25px;
+          align-self: flex-end;
+          padding-left: 2px;
+          padding-bottom: 14px;
+        }
       }
     }
-    .metadata-columns > .metadata-column ~ .metadata-column {
-      margin-left: 10px;
+
+    .btn-wrapper {
+      padding-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-self: flex-end;
     }
   }
 
@@ -95,5 +117,12 @@
     .message:empty {
       display: none;
     }
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .canary-metadata-section {
+    justify-content: flex-start;
+    margin: 5px;
   }
 }

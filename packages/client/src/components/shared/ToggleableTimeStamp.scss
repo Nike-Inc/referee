@@ -1,0 +1,44 @@
+@import '../../styles/shared';
+
+.toggleable-time-stamp-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
+
+  .time-stamp{
+    padding-right: 10px;
+    text-align: center;
+  }
+
+  .time-zone-container {
+    display: flex;
+    flex-direction: row;
+    padding: 0px 2px 0px 2px;
+    border: 1px black solid;
+    border-radius: 10px;
+
+    .time-zone {
+      padding: 0 3px 0 3px;
+      margin: 2px 1px 2px 1px;
+      @extend .un-selectable;
+    }
+
+    .btn-clicked {
+      color: #fff;
+      background-color: #343a40;
+      border-color: #343a40;
+      border-radius: 10px;
+    }
+
+    .btn-to-click {
+      background-color: white;
+      color: black;
+      border: none;
+      height: 85%;
+      align-self: center;
+    }
+  }
+}
+
