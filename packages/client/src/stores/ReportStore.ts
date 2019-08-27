@@ -13,7 +13,9 @@ import { ofNullable, safeGet } from '../util/OptionalUtils';
 enum classifications {
   FAIL = 'Fail',
   NODATA = 'Nodata',
-  PASS = 'Pass'
+  PASS = 'Pass',
+  HIGH = 'High',
+  LOW = 'Low'
 }
 
 export default class ReportStore {
@@ -115,9 +117,15 @@ export default class ReportStore {
     classificationCountMap.set(classifications.PASS, 0);
 
     Object.entries(this.canaryAnalysisResultByIdMap).map(id => {
-      let current = classificationCountMap.get(id[1].classification);
+      let label;
+      if (id[1].classification === classifications.HIGH || id[1].classification === classifications.LOW) {
+        label = classifications.FAIL;
+      } else {
+        label = id[1].classification;
+      }
+      let current = classificationCountMap.get(label);
       current++;
-      classificationCountMap.set(id[1].classification, current);
+      classificationCountMap.set(label, current);
     });
 
     return classificationCountMap;

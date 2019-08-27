@@ -79,7 +79,7 @@ $fail-color: $error;
   border-radius: 50%;
 }
 
-.fail {
+.fail, .high, .low {
   background: $fail-color;
 }
 

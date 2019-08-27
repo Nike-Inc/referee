@@ -46,10 +46,15 @@
       .scope-item-wrapper {
         display: flex;
         flex-direction: row;
-        width: 260px;
+        width: 280px;
         margin: 3px 0 3px 0;
 
-        .img {
+        .layer-group, .hourglass {
+          padding-right: 5px;
+          margin-top: 5px;
+        }
+
+        .map-marker {
           padding-right: 5px;
           align-self: center;
         }
