@@ -26,6 +26,7 @@ interface Props {
   metricGroupNamesDescByWeight: string[];
   thresholds: CanaryClassifierThresholdsConfig;
   classificationCountMap: Map<string, number>;
+  displayMetricOverview: boolean;
   handleOverviewSelection: () => void;
   handleMetricSelection: (id: string) => void;
 }
@@ -70,6 +71,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
       classificationCountMap,
       metricGroupNamesDescByWeight,
       thresholds,
+      displayMetricOverview,
       handleOverviewSelection,
       handleMetricSelection
     } = this.props;
@@ -77,22 +79,23 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
     return (
       <div className="metrics-container-wrapper">
         <div className="metrics-container">
-          <div>
-            <Button
-              className="btn-block"
-              onClick={() => {
-                handleOverviewSelection();
-              }}
-              variant="outline-secondary"
-            >
-              Overview
-            </Button>
-          </div>
           <CheckboxRow
             classificationCountMap={classificationCountMap}
             filterMap={this.state.filterMap}
             handleCheckboxChange={this.handleCheckboxChange}
           />
+          <div className="overview-button-container">
+            <Button
+              className="btn-block overview"
+              onClick={() => {
+                handleOverviewSelection();
+              }}
+              variant="outline-dark"
+              active={displayMetricOverview}
+            >
+              Overview
+            </Button>
+          </div>
           <div className="metrics-container-content">
             {metricGroupNamesDescByWeight.map(metricGroupName => {
               return (
@@ -238,7 +241,7 @@ const Metric = ({
       onClick={() => {
         handleMetricSelection(id);
       }}
-      variant="outline-secondary"
+      variant="outline-dark"
     >
       <div className="metric-name">{metricName}</div>
       <div className="metric-symbols">
@@ -251,7 +254,7 @@ const Metric = ({
           className={classNames('dot', {
             [canaryAnalysisResult.classification.toLowerCase()]: true
           })}
-        ></div>
+        />
       </div>
     </Button>
   );
