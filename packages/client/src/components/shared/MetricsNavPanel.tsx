@@ -38,7 +38,9 @@ interface State {
 enum filters {
   FAIL = 'Fail',
   NODATA = 'Nodata',
-  PASS = 'Pass'
+  PASS = 'Pass',
+  HIGH = 'High',
+  LOW = 'Low'
 }
 
 export default class MetricsNavPanel extends React.Component<Props, State> {
@@ -114,7 +116,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                     >
                       <div className="score-wrapper headline-md-marketing">
                         <div className="score">
-                          {Number(groupScoreByMetricGroupNameMap[metricGroupName].score.toFixed(2))}
+                          {Number(groupScoreByMetricGroupNameMap[metricGroupName].score.toFixed(0))}
                         </div>
                       </div>
                     </div>
@@ -123,7 +125,16 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                     {idListByMetricGroupNameMap[metricGroupName]
                       .filter(id => {
                         const canaryAnalysisResult: CanaryAnalysisResult = canaryAnalysisResultByIdMap[id];
-                        return this.state.filterMap.get(canaryAnalysisResult.classification);
+                        let label;
+                        if (
+                          canaryAnalysisResult.classification === filters.HIGH ||
+                          canaryAnalysisResult.classification === filters.LOW
+                        ) {
+                          label = filters.FAIL;
+                        } else {
+                          label = canaryAnalysisResult.classification;
+                        }
+                        return this.state.filterMap.get(label);
                       })
                       .map(id => {
                         const canaryAnalysisResult: CanaryAnalysisResult = canaryAnalysisResultByIdMap[id];
