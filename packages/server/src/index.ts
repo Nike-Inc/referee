@@ -4,11 +4,42 @@ import util from 'util';
 import Optional from 'optional-js';
 import path from 'path';
 import { publicRoot } from './const/appPaths';
+import { SelfReportingMetricsRegistry, LoggingReporter, Dimensions } from 'measured-reporting';
+import { SignalFxMetricsReporter, SignalFxSelfReportingMetricsRegistry } from 'measured-signalfx-reporter';
+import bodyParser from 'body-parser';
 
 const app = express();
+//app.use(createExpressMiddleware());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+interface CustomizableConfiguration {
+  metricsRegistry: SelfReportingMetricsRegistry;
+}
+
+// Hook for org specific customizations
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const customizations: CustomizableConfiguration = require('../../../customizations') || {};
+
+// eslint-disable-next-line prettier/prettier
+const metricsRegistry: SelfReportingMetricsRegistry = Optional
+  .ofNullable(customizations.metricsRegistry)
+  .orElse(new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {} })));
+
 const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => res.redirect(301, '/dashboard'));
+
+interface MetricsProxyRequest {
+  name: string;
+  dimensions?: Dimensions;
+}
+
+app.post('/metrics', (req, res) => {
+  const request = req.body as MetricsProxyRequest;
+  metricsRegistry.getOrCreateCounter(request.name, request.dimensions).inc();
+  res.status(201).end();
+});
 
 app.use(
   '/kayenta',

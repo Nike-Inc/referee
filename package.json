@@ -34,5 +34,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "signalfx": "^7.0.1"
+  }
 }
