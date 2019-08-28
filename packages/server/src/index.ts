@@ -5,7 +5,6 @@ import Optional from 'optional-js';
 import path from 'path';
 import { publicRoot } from './const/appPaths';
 import { SelfReportingMetricsRegistry, LoggingReporter, Dimensions } from 'measured-reporting';
-import { SignalFxMetricsReporter, SignalFxSelfReportingMetricsRegistry } from 'measured-signalfx-reporter';
 import bodyParser from 'body-parser';
 
 const app = express();
