@@ -1,13 +1,18 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { CanaryAnalysisExecutionStatusResponse, CanaryConfig } from '../../../domain/Kayenta';
+import {
+  CanaryAnalysisExecutionRequest,
+  CanaryAnalysisExecutionStatusResponse,
+  CanaryConfig
+} from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import ScapeExecutionsResult from './ScapeExecutionsResult';
 import { boundMethod } from 'autobind-decorator';
-import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
 import ConfigEditorStore from '../../../stores/ConfigEditorStore';
 import { connect, ConnectedComponent } from '../../connectedComponent';
+import ReportStore from '../../../stores/ReportStore';
+import log from '../../../util/LoggerFactory';
 
 interface PathParams {
   executionId: string;
@@ -16,17 +21,18 @@ interface PathParams {
 interface Props extends RouteComponentProps<PathParams> {}
 
 interface Stores {
-  canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
+  reportStore: ReportStore;
 }
 
 interface State {
-  executionStatusResponse?: CanaryAnalysisExecutionStatusResponse;
-  canaryConfig?: CanaryConfig;
+  scapeExecutionStatusResponse?: CanaryAnalysisExecutionStatusResponse;
 }
 
-@connect('canaryExecutorStore')
-@connect('configEditorStore')
+@connect(
+  'configEditorStore',
+  'reportStore'
+)
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Readonly<Props>) {
     super(props);
@@ -34,21 +40,34 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
   }
 
   async componentDidMount(): Promise<void> {
-    const executionId = this.props.match.params.executionId;
-    const executionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
+    let scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined = undefined;
 
-    let canaryConfig = executionStatusResponse.canaryConfig;
-    if (!canaryConfig) {
-      canaryConfig = await kayentaApiService.fetchCanaryConfig(
-        ofNullable(executionStatusResponse.canaryConfigId).orElseThrow(
-          () => new Error('Expected either a canary config id or canary config object to be present')
-        )
-      );
+    const executionId = this.props.match.params.executionId;
+
+    try {
+      scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
+      this.stores.reportStore.updateFromScapeResponse(scapeExecutionStatusResponse);
+    } catch (e) {
+      log.error(`Failed to fetch the canaryAnalysisExecutionStatusResponse for id: ${executionId}`);
+      throw e;
     }
 
+    ofNullable(this.stores.reportStore.scapeExecutionStatusResponse).ifPresent(async response => {
+      let canaryConfig: CanaryConfig | undefined = undefined;
+      if (response.canaryConfig !== undefined) {
+        this.stores.configEditorStore.setCanaryConfigObject(response.canaryConfig);
+      }
+      if (!this.stores.configEditorStore.canaryConfigObject) {
+        canaryConfig = await kayentaApiService.fetchCanaryConfig(
+          ofNullable(response.canaryConfigId).orElseThrow(
+            () => new Error('Expected either a canary config id or canary config object to be present')
+          )
+        );
+        this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
+      }
+    });
     this.setState({
-      executionStatusResponse,
-      canaryConfig
+      scapeExecutionStatusResponse
     });
   }
 
@@ -59,20 +78,24 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
   }
 
   render(): React.ReactNode {
-    const { executionStatusResponse, canaryConfig } = this.state;
+    const { configEditorStore, reportStore } = this.stores;
 
     return mapIfPresentOrElse(
-      ofNullable(executionStatusResponse),
-      executionStatusResponse => {
-        if (executionStatusResponse.complete) {
+      ofNullable(this.state.scapeExecutionStatusResponse),
+      scapeExecutionStatusResponse => {
+        if (scapeExecutionStatusResponse.complete) {
           return (
             <ScapeExecutionsResult
-              executionStatusResponse={executionStatusResponse as CanaryAnalysisExecutionStatusResponse}
-              canaryConfig={canaryConfig as CanaryConfig}
+              application={reportStore.application as string}
+              user={reportStore.user as string}
+              metricsAccountName={reportStore.metricsAccountName as string}
+              storageAccountName={reportStore.storageAccountName as string}
+              request={reportStore.scapeExecutionRequest as CanaryAnalysisExecutionRequest}
+              canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
           );
-        } else if (!executionStatusResponse.complete) {
+        } else if (!scapeExecutionStatusResponse.complete) {
           return <div></div>;
           // TODO execution is still running.
         }
