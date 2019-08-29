@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { docsService } from '../../services';
+import {docsService, metricsService} from '../../services';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import DocsStore from '../../stores/DocsStore';
 import { observer } from 'mobx-react';
@@ -67,6 +67,7 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
       .then(() =>
         docsService.fetchAndUpdateDocContent(Optional.ofNullable(this.props.match.params.path).orElse('index'))
       );
+    metricsService.sendMetric('docSite');
   }
 
   @boundMethod
