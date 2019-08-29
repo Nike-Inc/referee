@@ -10,6 +10,8 @@ export interface KayentaCredential {
 
 export interface CanaryExecutionStatusResponse {
   application?: string;
+  metricsAccountName: string;
+  storageAccountName: string;
   parentPipelineExecutionId?: string;
   pipelineId: string;
   stageStatus: KvMap<string>;
@@ -28,8 +30,6 @@ export interface CanaryExecutionStatusResponse {
   endTimeIso?: string;
   endTimeMillis?: number;
   configurationAccountName?: string;
-  metricsAccountName: string;
-  storageAccountName: string;
 }
 
 export interface CanaryResult {
@@ -204,6 +204,8 @@ export interface MetricSetScope {
 export interface CanaryAnalysisExecutionStatusResponse {
   application: string;
   user: string;
+  metricsAccountName: string;
+  storageAccountName: string;
   parentPipelineExecutionId?: string;
   pipelineId: string;
   stageStatus: StageMetadata[];

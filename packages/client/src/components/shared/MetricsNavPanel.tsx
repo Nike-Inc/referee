@@ -26,6 +26,7 @@ interface Props {
   metricGroupNamesDescByWeight: string[];
   thresholds: CanaryClassifierThresholdsConfig;
   classificationCountMap: Map<string, number>;
+  selectedMetric: string;
   displayMetricOverview: boolean;
   handleOverviewSelection: () => void;
   handleMetricSelection: (id: string) => void;
@@ -73,6 +74,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
       classificationCountMap,
       metricGroupNamesDescByWeight,
       thresholds,
+      selectedMetric,
       displayMetricOverview,
       handleOverviewSelection,
       handleMetricSelection
@@ -151,6 +153,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                             canaryAnalysisResult={canaryAnalysisResult}
                             metricSetPair={metricSetPair}
                             canaryMetricConfig={canaryMetricConfig}
+                            selectedMetric={selectedMetric}
                             handleMetricSelection={handleMetricSelection}
                           />
                         );
@@ -237,6 +240,7 @@ const Metric = ({
   canaryAnalysisResult,
   metricSetPair,
   canaryMetricConfig,
+  selectedMetric,
   handleMetricSelection
 }: {
   id: string;
@@ -244,6 +248,7 @@ const Metric = ({
   canaryAnalysisResult: CanaryAnalysisResult;
   metricSetPair: MetricSetPair;
   canaryMetricConfig: CanaryMetricConfig;
+  selectedMetric: string;
   handleMetricSelection: (id: string) => void;
 }): JSX.Element => {
   return (
@@ -258,7 +263,12 @@ const Metric = ({
       <div className="metric-symbols">
         {canaryMetricConfig.analysisConfigurations.canary.critical && (
           <div className="metric-critical-symbol">
-            <FontAwesomeIcon className="exclamation" size="1x" color="black" icon={faExclamation} />
+            <FontAwesomeIcon
+              className="exclamation"
+              size="1x"
+              color={id === selectedMetric ? 'white' : 'black'}
+              icon={faExclamation}
+            />
           </div>
         )}
         <div

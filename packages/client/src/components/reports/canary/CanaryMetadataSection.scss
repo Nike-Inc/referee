@@ -17,6 +17,7 @@
       flex-direction: column;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 10px;
+      height: 100%;
 
       .canary-column-title-wrapper {
         display: flex;
@@ -32,6 +33,7 @@
         display: flex;
         flex-direction: column;
         padding: 3px 20px 3px 0;
+        flex: 1;
 
         .key {
           @extend .content-font;
@@ -46,7 +48,8 @@
       .scope-item-wrapper {
         display: flex;
         flex-direction: row;
-        width: 280px;
+        flex: 1;
+        width: 260px;
         margin: 3px 0 3px 0;
 
         .layer-group, .hourglass {
@@ -100,27 +103,6 @@
       display: flex;
       justify-content: center;
       align-self: flex-end;
-    }
-  }
-
-  .meter-container {
-    margin: 40px 60px 40px 60px;
-  }
-
-  .message-wrapper {
-    display: flex;
-    justify-content: center;
-    background: $off-white;
-
-    .message {
-      padding: 5px;
-      display: flex;
-      font-size: 18px;
-      text-align: center;
-      @extend .heading-font;
-    }
-    .message:empty {
-      display: none;
     }
   }
 }

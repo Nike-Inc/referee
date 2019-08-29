@@ -2,17 +2,19 @@ import * as React from 'react';
 import {
   CanaryAnalysisExecutionRequest,
   CanaryAnalysisExecutionRequestScope,
-  CanaryAnalysisExecutionResult,
   CanaryConfig
 } from '../../../domain/Kayenta';
 import './ScapeMetadataSection.scss';
 import { Button } from 'react-bootstrap';
-import { Meter } from '../../shared/Meter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHourglassEnd, faHourglassStart, faLayerGroup, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import ToggleableTimeStamp from '../../shared/ToggleableTimeStamp';
 
 interface Props {
   application: string;
   user: string;
-  result: CanaryAnalysisExecutionResult;
+  metricsAccountName: string;
+  storageAccountName: string;
   request: CanaryAnalysisExecutionRequest;
   scope: CanaryAnalysisExecutionRequestScope;
   canaryConfig: CanaryConfig;
@@ -35,16 +37,22 @@ export default class ScapeMetadataSection extends React.Component<Props> {
   }
 
   render(): React.ReactNode {
-    const { application, user, result, request, scope, canaryConfig, handleGoToConfigButtonClick } = this.props;
-
-    const localTimeZone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
-    const last = result.canaryScores.length - 1;
+    const {
+      application,
+      user,
+      metricsAccountName,
+      storageAccountName,
+      request,
+      scope,
+      canaryConfig,
+      handleGoToConfigButtonClick
+    } = this.props;
 
     return (
-      <div className="metadata-section">
-        <div className="metadata-columns">
-          <div className="metadata-column">
-            <div className="metadata-column-content">
+      <div className="scape-metadata-section">
+        <div className="scape-metadata-row">
+          <div className="scape-metadata-column">
+            <div className="scape-metadata-column-content">
               <div className="kv-wrapper">
                 <div className="key">Application</div>
                 <div className="value">{application}</div>
@@ -52,6 +60,89 @@ export default class ScapeMetadataSection extends React.Component<Props> {
               <div className="kv-wrapper">
                 <div className="key">User</div>
                 <div className="value">{user}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">Metrics Account</div>
+                <div className="value">{metricsAccountName}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">Storage Account</div>
+                <div className="value">{storageAccountName}</div>
+              </div>
+            </div>
+          </div>
+          <div className="scape-metadata-column">
+            <div className="scape-metadata-column-content">
+              <div className="kv-wrapper">
+                <div className="key">Baseline</div>
+              </div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
+                <div className="value">{scope.controlScope}</div>
+              </div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
+                <div className="value">{scope.controlLocation}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">Canary</div>
+              </div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
+                <div className="value">{scope.experimentScope}</div>
+              </div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
+                <div className="value">{scope.experimentLocation}</div>
+              </div>
+              <div className="kv-wrapper"></div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassStart} />
+                <ToggleableTimeStamp timeStamp={scope.startTimeIso} />
+              </div>
+              <div className="scope-item-wrapper">
+                <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
+                <ToggleableTimeStamp timeStamp={scope.endTimeIso} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="scape-metadata-row">
+          <div className="scape-metadata-column">
+            {this.calculateLifetime() > 0 && (
+              <div className="number-label-card">
+                <div className="label-value">Lifetime</div>
+                <div className="number-container">
+                  <div className="number-value">{this.calculateLifetime()}</div>
+                  <div className="number-unit">m</div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="scape-metadata-column">
+            <div className="number-label-card">
+              <div className="label-value">Interval</div>
+              <div className="number-container">
+                <div className="number-value">{request.analysisIntervalMins}</div>
+                <div className="number-unit">m</div>
+              </div>
+            </div>
+          </div>
+          <div className="scape-metadata-column">
+            <div className="number-label-card">
+              <div className="label-value">Delay</div>
+              <div className="number-container">
+                <div className="number-value">{request.beginAfterMins}</div>
+                <div className="number-unit">m</div>
+              </div>
+            </div>
+          </div>
+          <div className="scape-metadata-column">
+            <div className="number-label-card">
+              <div className="label-value">Step</div>
+              <div className="number-container">
+                <div className="number-value">{scope.step}</div>
+                <div className="number-unit">s</div>
               </div>
             </div>
             <div className="btn-wrapper">
@@ -65,82 +156,6 @@ export default class ScapeMetadataSection extends React.Component<Props> {
               </Button>
             </div>
           </div>
-
-          <div className="metadata-column">
-            <div className="metadata-column-content">
-              <div className="kv-wrapper">
-                <div className="key">Baseline</div>
-                <div className="value">{scope.controlScope}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key"></div>
-                <div className="value">{scope.controlLocation}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Canary</div>
-                <div className="value">{scope.experimentScope}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key"></div>
-                <div className="value">{scope.experimentLocation}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Start</div>
-                <div className="value">
-                  {new Date(scope.startTimeIso).toLocaleString()} {localTimeZone}
-                </div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key"></div>
-                <div className="value">{scope.startTimeIso}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">End</div>
-                <div className="value">
-                  {new Date(scope.endTimeIso).toLocaleString()} {localTimeZone}
-                </div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key"></div>
-                <div className="value">{scope.endTimeIso}</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="metadata-column">
-            <div className="metadata-column-content">
-              {this.calculateLifetime() > 0 && (
-                <div className="kv-wrapper">
-                  <div className="key">Lifetime</div>
-                  <div className="value">{this.calculateLifetime()}m</div>
-                </div>
-              )}
-              <div className="kv-wrapper">
-                <div className="key">Interval</div>
-                <div className="value">{request.analysisIntervalMins}m</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Delay</div>
-                <div className="value">{request.beginAfterMins}m</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Step</div>
-                <div className="value">{scope.step}s</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="message-wrapper">
-          <div className="message">{result.canaryScoreMessage}</div>
-        </div>
-        <div className="meter-container">
-          <Meter
-            classification={result.didPassThresholds}
-            score={result.canaryScores ? result.canaryScores[last] : 0}
-            marginal={request.thresholds.marginal}
-            pass={request.thresholds.pass}
-          />
         </div>
       </div>
     );

@@ -83,6 +83,7 @@ export const CanaryRunResult = observer(
               metricGroupNamesDescByWeight={metricGroupNamesDescByWeight}
               thresholds={thresholds}
               classificationCountMap={classificationCountMap}
+              selectedMetric={selectedMetric}
               displayMetricOverview={displayMetricOverview}
               handleOverviewSelection={handleOverviewSelection}
               handleMetricSelection={handleMetricSelection}

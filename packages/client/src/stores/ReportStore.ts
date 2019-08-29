@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import {
+  CanaryAnalysisExecutionRequest,
+  CanaryAnalysisExecutionStatusResponse,
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
   CanaryExecutionRequest,
@@ -21,6 +23,9 @@ enum classifications {
 export default class ReportStore {
   @observable
   application: string = '';
+
+  @observable
+  user: string = '';
 
   @observable
   metricsAccountName: string = '';
@@ -47,6 +52,12 @@ export default class ReportStore {
   canaryExecutionStatusResponse: CanaryExecutionStatusResponse | undefined;
 
   @observable
+  scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined;
+
+  @observable
+  scapeExecutionRequest: CanaryAnalysisExecutionRequest | undefined;
+
+  @observable
   selectedMetric: string = '';
 
   @observable
@@ -67,6 +78,17 @@ export default class ReportStore {
         this.canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
       });
     });
+  }
+
+  @action.bound
+  updateFromScapeResponse(scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse) {
+    this.scapeExecutionStatusResponse = scapeExecutionStatusResponse;
+    this.application = ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc');
+    this.user = ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous');
+    this.metricsAccountName = scapeExecutionStatusResponse.metricsAccountName as string;
+    this.storageAccountName = scapeExecutionStatusResponse.storageAccountName as string;
+    this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
+    this.thresholds = this.scapeExecutionRequest.thresholds;
   }
 
   @computed
