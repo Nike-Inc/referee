@@ -8,7 +8,6 @@ import { SelfReportingMetricsRegistry, LoggingReporter, Dimensions } from 'measu
 import bodyParser from 'body-parser';
 
 const app = express();
-//app.use(createExpressMiddleware());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
