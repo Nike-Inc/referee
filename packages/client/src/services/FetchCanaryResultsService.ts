@@ -21,12 +21,9 @@ export default class FetchCanaryResultsService {
       await data();
     } while (!response.complete);
 
-    if (response.status === SUCCESS) {
-      reportStore.updateFromCanaryResponse(response);
-      configEditorStore.setCanaryConfigObject(response.config);
-      canaryExecutorStore.setCanaryExecutionRequestObject(response.canaryExecutionRequest);
-    }
-
+    reportStore.updateFromCanaryResponse(response);
+    configEditorStore.setCanaryConfigObject(response.config);
+    canaryExecutorStore.setCanaryExecutionRequestObject(response.canaryExecutionRequest);
     canaryExecutorStore.updateResultsRequestComplete();
   }
 }
