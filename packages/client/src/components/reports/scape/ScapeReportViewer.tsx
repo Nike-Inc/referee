@@ -2,8 +2,15 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import {
   CanaryAnalysisExecutionRequest,
+  CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig
+  CanaryAnalysisResult,
+  CanaryClassifierThresholdsConfig,
+  CanaryConfig,
+  CanaryExecutionResult,
+  CanaryJudgeGroupScore,
+  CanaryResult,
+  MetricSetPair
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
@@ -13,6 +20,7 @@ import ConfigEditorStore from '../../../stores/ConfigEditorStore';
 import { connect, ConnectedComponent } from '../../connectedComponent';
 import ReportStore from '../../../stores/ReportStore';
 import log from '../../../util/LoggerFactory';
+import { observer } from 'mobx-react';
 
 interface PathParams {
   executionId: string;
@@ -33,6 +41,7 @@ interface State {
   'configEditorStore',
   'reportStore'
 )
+@observer
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Readonly<Props>) {
     super(props);
@@ -65,6 +74,13 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         );
         this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
       }
+
+      if (this.stores.reportStore.metricSetPairListId) {
+        const metricSetPairList = await kayentaApiService.fetchMetricSetPairList(
+          this.stores.reportStore.metricSetPairListId
+        );
+        this.stores.reportStore.setMetricSetPairList(metricSetPairList);
+      }
     });
     this.setState({
       scapeExecutionStatusResponse
@@ -75,6 +91,11 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
   handleGoToConfigButtonClick(config: CanaryConfig): void {
     this.stores.configEditorStore.setCanaryConfigObject(config);
     this.props.history.push('/config/edit');
+  }
+
+  @boundMethod
+  handleCanaryRunSelection(canaryExecutionResult: CanaryExecutionResult): void {
+    this.stores.reportStore.handleCanaryRunSelection(canaryExecutionResult);
   }
 
   render(): React.ReactNode {
@@ -88,10 +109,28 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
             <ScapeExecutionsResult
               application={reportStore.application as string}
               user={reportStore.user as string}
+              metricSourceType={configEditorStore.metricSourceType as string}
               metricsAccountName={reportStore.metricsAccountName as string}
               storageAccountName={reportStore.storageAccountName as string}
+              thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
+              results={reportStore.scapeResults as CanaryAnalysisExecutionResult}
+              selectedCanaryExecutionResult={reportStore.selectedCanaryExecutionResult as CanaryExecutionResult}
+              result={reportStore.canaryResult as CanaryResult}
+              selectedMetric={reportStore.selectedMetric as string}
               request={reportStore.scapeExecutionRequest as CanaryAnalysisExecutionRequest}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
+              canaryAnalysisResultByIdMap={reportStore.canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
+              idListByMetricGroupNameMap={reportStore.idListByMetricGroupNameMap as KvMap<string[]>}
+              groupScoreByMetricGroupNameMap={
+                reportStore.groupScoreByMetricGroupNameMap as KvMap<CanaryJudgeGroupScore>
+              }
+              metricSetPairsByIdMap={reportStore.metricSetPairsByIdMap as KvMap<MetricSetPair>}
+              classificationCountMap={reportStore.classificationCountMap as Map<string, number>}
+              metricGroupNamesDescByWeight={configEditorStore.metricGroupNamesDescByWeight as string[]}
+              displayMetricOverview={reportStore.displayMetricOverview as boolean}
+              handleOverviewSelection={reportStore.handleOverviewSelection}
+              handleCanaryRunSelection={this.handleCanaryRunSelection}
+              handleMetricSelection={reportStore.handleMetricSelection}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
           );

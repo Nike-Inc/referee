@@ -1,10 +1,12 @@
 import { observable, action, computed } from 'mobx';
 import {
   CanaryAnalysisExecutionRequest,
+  CanaryAnalysisExecutionResult,
   CanaryAnalysisExecutionStatusResponse,
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
   CanaryExecutionRequest,
+  CanaryExecutionResult,
   CanaryExecutionStatusResponse,
   CanaryJudgeGroupScore,
   CanaryResult,
@@ -34,13 +36,16 @@ export default class ReportStore {
   storageAccountName: string = '';
 
   @observable
-  result: CanaryResult = {};
+  canaryResult: CanaryResult = {};
+
+  @observable
+  scapeResults: CanaryAnalysisExecutionResult | undefined;
 
   @observable
   thresholds: CanaryClassifierThresholdsConfig | undefined;
 
   @observable
-  canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult> = {};
+  canaryExecutionResultByIdMap: KvMap<CanaryExecutionResult> = {};
 
   @observable
   metricSetPairListId: string = '';
@@ -58,6 +63,9 @@ export default class ReportStore {
   scapeExecutionRequest: CanaryAnalysisExecutionRequest | undefined;
 
   @observable
+  selectedCanaryExecutionResult: CanaryExecutionResult | undefined;
+
+  @observable
   selectedMetric: string = '';
 
   @observable
@@ -69,15 +77,9 @@ export default class ReportStore {
     this.application = ofNullable(canaryExecutionStatusResponse.application).orElse('ad-hoc');
     this.metricsAccountName = canaryExecutionStatusResponse.metricsAccountName as string;
     this.storageAccountName = canaryExecutionStatusResponse.storageAccountName as string;
-    this.result = canaryExecutionStatusResponse.result as CanaryResult;
+    this.canaryResult = canaryExecutionStatusResponse.result as CanaryResult;
     this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;
-
-    safeGet(() => this.result.judgeResult!.results).ifPresent(results => {
-      results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
-        this.canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
-      });
-    });
   }
 
   @action.bound
@@ -87,15 +89,39 @@ export default class ReportStore {
     this.user = ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous');
     this.metricsAccountName = scapeExecutionStatusResponse.metricsAccountName as string;
     this.storageAccountName = scapeExecutionStatusResponse.storageAccountName as string;
+    this.scapeResults = scapeExecutionStatusResponse.canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult;
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
-    this.thresholds = this.scapeExecutionRequest.thresholds;
+
+    safeGet(() => this.scapeResults).ifPresent(results => {
+      const lastRun = results.canaryScores.length - 1;
+      this.selectedCanaryExecutionResult = results.canaryExecutionResults[lastRun];
+      this.canaryResult = this.selectedCanaryExecutionResult.result;
+      this.metricSetPairListId = this.selectedCanaryExecutionResult.metricSetPairListId as string;
+    });
+
+    safeGet(() => this.scapeExecutionRequest).ifPresent(request => {
+      this.thresholds = request.thresholds;
+    });
+  }
+
+  @computed
+  get canaryAnalysisResultByIdMap(): KvMap<CanaryAnalysisResult> {
+    const canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult> = {};
+
+    safeGet(() => this.canaryResult.judgeResult!.results).ifPresent(results => {
+      results.forEach((canaryAnalysisResult: CanaryAnalysisResult) => {
+        canaryAnalysisResultByIdMap[canaryAnalysisResult.id] = canaryAnalysisResult;
+      });
+    });
+
+    return canaryAnalysisResultByIdMap;
   }
 
   @computed
   get idListByMetricGroupNameMap(): KvMap<string[]> {
     const idListByMetricGroupNameMap: KvMap<string[]> = {};
 
-    safeGet(() => this.result.judgeResult!.results).ifPresent(results => {
+    safeGet(() => this.canaryResult.judgeResult!.results).ifPresent(results => {
       results.forEach(canaryAnalysisResult => {
         canaryAnalysisResult.groups.forEach(group => {
           if (idListByMetricGroupNameMap[group]) {
@@ -114,7 +140,7 @@ export default class ReportStore {
   get groupScoreByMetricGroupNameMap(): KvMap<CanaryJudgeGroupScore> {
     const groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore> = {};
 
-    safeGet(() => this.result.judgeResult!.groupScores).ifPresent(groupScores => {
+    safeGet(() => this.canaryResult.judgeResult!.groupScores).ifPresent(groupScores => {
       groupScores.forEach(groupScore => (groupScoreByMetricGroupNameMap[groupScore.name] = groupScore));
     });
 
@@ -167,5 +193,11 @@ export default class ReportStore {
   handleMetricSelection(id: string) {
     this.selectedMetric = id;
     this.displayMetricOverview = false;
+  }
+
+  @action.bound
+  handleCanaryRunSelection(canaryExecutionResult: CanaryExecutionResult) {
+    this.selectedCanaryExecutionResult = canaryExecutionResult;
+    this.displayMetricOverview = true;
   }
 }

@@ -1,0 +1,24 @@
+@import '../../../styles/shared.scss';
+
+.scape-metrics-overview-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+
+  section {
+    margin: 0px;
+  }
+
+  .scape-metrics-overview-content {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+  }
+
+  @media screen and (max-width: 800px) {
+    .scape-metrics-overview-content {
+      flex-wrap: wrap;
+    }
+  }
+}
