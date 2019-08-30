@@ -103,7 +103,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
           <div className="metrics-container-content">
             {metricGroupNamesDescByWeight.map(metricGroupName => {
               return (
-                <div className="group-metrics-container-wrapper">
+                <div className="group-metrics-container-wrapper" key={metricGroupName}>
                   <div className="group-metrics-title-container">
                     <div className="group-metrics-name"> {metricGroupName}</div>
                     <div
@@ -154,6 +154,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                             metricSetPair={metricSetPair}
                             canaryMetricConfig={canaryMetricConfig}
                             selectedMetric={selectedMetric}
+                            displayMetricOverview={displayMetricOverview}
                             handleMetricSelection={handleMetricSelection}
                           />
                         );
@@ -241,6 +242,7 @@ const Metric = ({
   metricSetPair,
   canaryMetricConfig,
   selectedMetric,
+  displayMetricOverview,
   handleMetricSelection
 }: {
   id: string;
@@ -249,6 +251,7 @@ const Metric = ({
   metricSetPair: MetricSetPair;
   canaryMetricConfig: CanaryMetricConfig;
   selectedMetric: string;
+  displayMetricOverview: boolean;
   handleMetricSelection: (id: string) => void;
 }): JSX.Element => {
   return (
@@ -258,6 +261,7 @@ const Metric = ({
         handleMetricSelection(id);
       }}
       variant="outline-dark"
+      active={!displayMetricOverview && selectedMetric === id}
     >
       <div className="metric-name">{metricName}</div>
       <div className="metric-symbols">
