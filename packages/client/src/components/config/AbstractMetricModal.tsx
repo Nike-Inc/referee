@@ -209,7 +209,6 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
 
   @boundMethod
   protected updateQueryObject(key: string, value: any) {
-    console.log(key, value);
     this.setState(
       {
         metric: Object.assign({}, this.state.metric, {

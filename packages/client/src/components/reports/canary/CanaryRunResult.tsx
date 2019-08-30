@@ -59,8 +59,8 @@ export const CanaryRunResult = observer(
     handleGoToConfigButtonClick: (config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest) => void;
   }): JSX.Element => {
     return (
-      <div className="report-container">
-        <div className="metadata-container">
+      <div className="canary-report-container">
+        <div className="canary-metadata-container">
           <TitledSection title="Canary Report" />
           <CanaryMetadataSection
             application={application}
@@ -71,9 +71,9 @@ export const CanaryRunResult = observer(
             handleGoToConfigButtonClick={handleGoToConfigButtonClick}
           />
         </div>
-        <div className="metrics-overview-container">
+        <div className="canary-metrics-overview-container">
           <TitledSection title="Metrics" />
-          <div className="metrics-overview-content">
+          <div className="canary-metrics-overview-content">
             <MetricsNavPanel
               config={canaryConfig}
               metricSetPairsByIdMap={metricSetPairsByIdMap}
