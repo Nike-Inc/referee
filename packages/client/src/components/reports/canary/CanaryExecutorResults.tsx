@@ -65,13 +65,15 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
               <div className="widget">
                 <Summary
                   classification={
-                    reportStore.canaryExecutionStatusResponse
-                      ? reportStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.classification // <- TODO is this safe?
+                    reportStore.canaryExecutionStatusResponse &&
+                    reportStore.canaryExecutionStatusResponse.status !== 'terminal'
+                      ? reportStore.canaryExecutionStatusResponse.result!.judgeResult!.score.classification
                       : TERMINAL
                   }
                   score={
-                    reportStore.canaryExecutionStatusResponse
-                      ? reportStore.canaryExecutionStatusResponse!.result!.judgeResult!.score.score // <- TODO is this safe?
+                    reportStore.canaryExecutionStatusResponse &&
+                    reportStore.canaryExecutionStatusResponse.status !== 'terminal'
+                      ? reportStore.canaryExecutionStatusResponse.result!.judgeResult!.score.score
                       : TERMINAL_SCORE
                   }
                   testingType={canaryExecutorStore.testingType}
