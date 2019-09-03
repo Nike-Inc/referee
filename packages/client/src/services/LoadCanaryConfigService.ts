@@ -41,6 +41,6 @@ export default class LoadCanaryConfigService {
         configEditorStore.setCanaryConfigObject(response.data);
       });
     }
-    await metricsService.sendMetric('canaryConfigTool', `${templateName}`);
+    metricsService.sendMetric('canaryConfigTool', `${templateName}`);
   }
 }
