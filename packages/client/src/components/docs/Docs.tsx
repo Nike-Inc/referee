@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { docsService } from '../../services';
+import { docsService, metricsService } from '../../services';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import DocsStore from '../../stores/DocsStore';
 import { observer } from 'mobx-react';
@@ -93,6 +93,7 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
 
   render(): React.ReactNode {
     const content: Optional<string> = Optional.ofNullable(this.stores.docsStore.content);
+    metricsService.sendMetric('docSite', this.props.location.pathname);
     return (
       <div className="documentation-wrapper">
         <TableOfContentsNav

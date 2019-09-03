@@ -6,6 +6,7 @@ import { connect, ConnectedComponent } from '../components/connectedComponent';
 import { RouterProps } from 'react-router';
 import ConfigEditorStore from '../stores/ConfigEditorStore';
 import { boundMethod } from 'autobind-decorator';
+import { metricsService } from './index';
 
 const { configEditorStore } = stores;
 
@@ -40,5 +41,6 @@ export default class LoadCanaryConfigService {
         configEditorStore.setCanaryConfigObject(response.data);
       });
     }
+    metricsService.sendMetric('canaryConfigTool', `${templateName}`);
   }
 }
