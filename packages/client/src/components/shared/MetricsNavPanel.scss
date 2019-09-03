@@ -67,6 +67,7 @@
 
             input {
               cursor: pointer;
+              margin-left: -15px;
             }
           }
         }
@@ -142,6 +143,14 @@
                 padding: 0px 5px 0px 5px;
               }
             }
+          }
+
+          .active {
+            background-color: $dark-background-color;
+            color: $dark-bg-font-color;
+            box-shadow: none;
+            border-style: none;
+            border-radius: 0;
           }
 
           .btn-block:focus {

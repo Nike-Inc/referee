@@ -1,16 +1,15 @@
 @import '../../../styles/shared.scss';
 
-.report-container {
+.canary-report-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  .metadata-container {
+  .canary-metadata-container {
     padding-top: 2px;
-    border-bottom: 1px solid lightgray;
   }
 
-  .metrics-overview-container {
+  .canary-metrics-overview-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -19,14 +18,14 @@
       margin: 0px;
     }
 
-    .metrics-overview-content {
+    .canary-metrics-overview-content {
       display: flex;
       flex-direction: row;
       flex-grow: 1;
     }
 
     @media screen and (max-width: 800px) {
-      .metrics-overview-content {
+      .canary-metrics-overview-content {
         flex-wrap: wrap;
       }
     }

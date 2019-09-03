@@ -108,14 +108,14 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
       ofNullable(this.state.canaryExecutionStatusResponse),
       canaryExecutionStatusResponse => {
         if (canaryExecutionStatusResponse.complete && canaryExecutionStatusResponse.status !== 'terminal') {
-          // It now safe to assume, to the best of my knowledge, that result, metricSetPairListId will now not be null
+          // It now safe to assume, to the best of my knowledge, that canaryResult, metricSetPairListId will now not be null
           return (
             <CanaryRunResult
               application={reportStore.application as string}
               metricSourceType={configEditorStore.metricSourceType as string}
               metricsAccountName={reportStore.metricsAccountName as string}
               storageAccountName={reportStore.storageAccountName as string}
-              result={reportStore.result as CanaryResult}
+              result={reportStore.canaryResult as CanaryResult}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
               selectedMetric={reportStore.selectedMetric as string}
