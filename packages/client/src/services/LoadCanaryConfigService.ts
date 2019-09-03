@@ -6,6 +6,7 @@ import { connect, ConnectedComponent } from '../components/connectedComponent';
 import { RouterProps } from 'react-router';
 import ConfigEditorStore from '../stores/ConfigEditorStore';
 import { boundMethod } from 'autobind-decorator';
+import {metricsService} from "./index";
 
 const { configEditorStore } = stores;
 
@@ -39,6 +40,10 @@ export default class LoadCanaryConfigService {
       axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`).then(response => {
         configEditorStore.setCanaryConfigObject(response.data);
       });
+      metricsService.sendMetric('canaryConfigTool', `${templateName}`)
+    }
+    else {
+      metricsService.sendMetric('canaryConfigTool', '')
     }
   }
 }

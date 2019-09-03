@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import './ConfigEditor.scss';
 import ConfigFormView from './ConfigFormView';
-import {loadCanaryConfigService, metricsService} from '../../services';
+import {loadCanaryConfigService} from '../../services';
 import { RouterProps } from 'react-router';
 import ConfigFormButtonSection from './ConfigFormButtonSection';
 
@@ -12,7 +12,6 @@ export default class ConfigEditor extends React.Component<Props> {
   async componentDidMount(): Promise<void> {
     window.scrollTo(0, 0);
     await loadCanaryConfigService.loadCanaryFromTemplate();
-    metricsService.sendMetric('canaryConfigTool');
   }
 
   render(): React.ReactNode {
