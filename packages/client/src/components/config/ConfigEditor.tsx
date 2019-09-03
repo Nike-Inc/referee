@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import './ConfigEditor.scss';
 import ConfigFormView from './ConfigFormView';
-import {loadCanaryConfigService} from '../../services';
+import { loadCanaryConfigService } from '../../services';
 import { RouterProps } from 'react-router';
 import ConfigFormButtonSection from './ConfigFormButtonSection';
 

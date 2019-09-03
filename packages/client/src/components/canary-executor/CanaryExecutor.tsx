@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {kayentaApiService, metricsService} from '../../services/';
+import { kayentaApiService, metricsService } from '../../services/';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
 import CanaryExecutorFormView from './CanaryExecutorFormView';
