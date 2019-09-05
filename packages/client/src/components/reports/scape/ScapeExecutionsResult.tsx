@@ -27,6 +27,8 @@ interface Props {
   metricSourceType: string;
   metricsAccountName: string;
   storageAccountName: string;
+  startTime: string;
+  endTime: string;
   thresholds: CanaryClassifierThresholdsConfig;
   results: CanaryAnalysisExecutionResult;
   selectedCanaryExecutionResult: CanaryExecutionResult;
@@ -77,6 +79,8 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
       metricSourceType,
       metricsAccountName,
       storageAccountName,
+      startTime,
+      endTime,
       thresholds,
       results,
       selectedCanaryExecutionResult,
@@ -106,6 +110,8 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
             user={user as string}
             metricsAccountName={metricsAccountName as string}
             storageAccountName={storageAccountName as string}
+            startTime={startTime as string}
+            endTime={endTime as string}
             request={request as CanaryAnalysisExecutionRequest}
             scope={safeGet(() => request.scopes[0]).get() as CanaryAnalysisExecutionRequestScope}
             canaryConfig={canaryConfig as CanaryConfig}
