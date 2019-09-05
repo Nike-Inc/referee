@@ -111,10 +111,10 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
           // It now safe to assume, to the best of my knowledge, that canaryResult, metricSetPairListId will now not be null
           return (
             <CanaryRunResult
-              application={reportStore.application as string}
+              application={ofNullable(canaryExecutionStatusResponse.application).orElse('ad-hoc') as string}
               metricSourceType={configEditorStore.metricSourceType as string}
-              metricsAccountName={reportStore.metricsAccountName as string}
-              storageAccountName={reportStore.storageAccountName as string}
+              metricsAccountName={canaryExecutionStatusResponse.metricsAccountName as string}
+              storageAccountName={canaryExecutionStatusResponse.storageAccountName as string}
               result={reportStore.canaryResult as CanaryResult}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
