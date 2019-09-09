@@ -12,7 +12,7 @@ export default class MetricsService {
       };
     }
     try {
-      axios.post(`${process.env.PUBLIC_URL}/metrics`, data);
+      axios.post(`/metrics`, data);
     } catch (e) {
       log.error(`Unable to send metric: ${metricName} and dimension: ${path}`, e);
     }
