@@ -51,7 +51,7 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
     const filterMap = new Map();
     filterMap.set(filters.FAIL, true);
     filterMap.set(filters.NODATA, true);
-    filterMap.set(filters.PASS, false);
+    filterMap.set(filters.PASS, true);
 
     this.state = {
       filterMap

@@ -105,13 +105,16 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
       ofNullable(this.state.scapeExecutionStatusResponse),
       scapeExecutionStatusResponse => {
         if (scapeExecutionStatusResponse.complete) {
+
           return (
             <ScapeExecutionsResult
-              application={reportStore.application as string}
-              user={reportStore.user as string}
+              application={ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc') as string}
+              user={ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous') as string}
               metricSourceType={configEditorStore.metricSourceType as string}
-              metricsAccountName={reportStore.metricsAccountName as string}
-              storageAccountName={reportStore.storageAccountName as string}
+              metricsAccountName={scapeExecutionStatusResponse.metricsAccountName as string}
+              storageAccountName={scapeExecutionStatusResponse.storageAccountName as string}
+              startTime={scapeExecutionStatusResponse.startTimeIso as string}
+              endTime={scapeExecutionStatusResponse.endTimeIso as string}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
               results={reportStore.scapeResults as CanaryAnalysisExecutionResult}
               selectedCanaryExecutionResult={reportStore.selectedCanaryExecutionResult as CanaryExecutionResult}

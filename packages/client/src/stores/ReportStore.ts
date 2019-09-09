@@ -74,9 +74,6 @@ export default class ReportStore {
   @action.bound
   updateFromCanaryResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse) {
     this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
-    this.application = ofNullable(canaryExecutionStatusResponse.application).orElse('ad-hoc');
-    this.metricsAccountName = canaryExecutionStatusResponse.metricsAccountName as string;
-    this.storageAccountName = canaryExecutionStatusResponse.storageAccountName as string;
     this.canaryResult = canaryExecutionStatusResponse.result as CanaryResult;
     this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;
@@ -85,10 +82,6 @@ export default class ReportStore {
   @action.bound
   updateFromScapeResponse(scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse) {
     this.scapeExecutionStatusResponse = scapeExecutionStatusResponse;
-    this.application = ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc');
-    this.user = ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous');
-    this.metricsAccountName = scapeExecutionStatusResponse.metricsAccountName as string;
-    this.storageAccountName = scapeExecutionStatusResponse.storageAccountName as string;
     this.scapeResults = scapeExecutionStatusResponse.canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult;
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
 

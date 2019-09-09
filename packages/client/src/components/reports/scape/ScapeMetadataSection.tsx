@@ -15,6 +15,8 @@ interface Props {
   user: string;
   metricsAccountName: string;
   storageAccountName: string;
+  startTime: string;
+  endTime: string;
   request: CanaryAnalysisExecutionRequest;
   scope: CanaryAnalysisExecutionRequestScope;
   canaryConfig: CanaryConfig;
@@ -42,6 +44,8 @@ export default class ScapeMetadataSection extends React.Component<Props> {
       user,
       metricsAccountName,
       storageAccountName,
+      startTime,
+      endTime,
       request,
       scope,
       canaryConfig,
@@ -98,11 +102,11 @@ export default class ScapeMetadataSection extends React.Component<Props> {
               <div className="kv-wrapper"></div>
               <div className="scope-item-wrapper">
                 <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassStart} />
-                <ToggleableTimeStamp timeStamp={scope.startTimeIso} />
+                <ToggleableTimeStamp timeStamp={scope.startTimeIso ? scope.startTimeIso : startTime} />
               </div>
               <div className="scope-item-wrapper">
                 <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
-                <ToggleableTimeStamp timeStamp={scope.endTimeIso} />
+                <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
               </div>
             </div>
           </div>
