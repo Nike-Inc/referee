@@ -1,0 +1,125 @@
+@import '../../../styles/shared.scss';
+
+.scape-metrics-overview-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 50px 70px 50px 70px;
+
+  .scape-metrics-results-message-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+
+    .scape-metrics-run-metadata-container {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      margin-right: 20px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+      .kv-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 3px 0 3px 0;
+
+        .key {
+          @extend .content-font;
+          font-weight: 700;
+        }
+
+        .value {
+          @extend .content-font;
+        }
+      }
+
+      .run-time-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 280px;
+        margin: 3px 0 3px 0;
+
+        .hourglass {
+          padding-right: 5px;
+        }
+
+      }
+    }
+
+    .scape-metrics-results-message {
+      display: flex;
+      flex-direction: column;
+      height: 150px;
+      width: 100%;
+      padding: 15px;
+      margin-left: 20px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+      .scape-metrics-results-text {
+        text-align: center;
+        font-weight: 600;
+        padding: 10px 0px 10px 0px;
+      }
+
+      .scape-metrics-meter-container {
+        padding: 10px;
+        vertical-align: center;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    .scape-metrics-results-message-wrapper {
+      flex-direction: column;
+      .scape-metrics-run-metadata-container {
+        margin: 10px;
+      }
+      .scape-metrics-results-message {
+        margin: 10px;
+      }
+    }
+  }
+
+  .scape-metrics-results-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 30px 10px 30px 10px;
+
+    .scape-metrics-results-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      width: 150px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      text-align: center;
+      @extend .un-selectable;
+      @extend .content-font;
+
+      .card-classification-count {
+        font-size: 60px;
+      }
+      .card-classification-label {
+        font-size: 20px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .scape-metrics-results-cards {
+      flex-direction: column;
+      align-content: center;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .scape-metrics-overview-wrapper {
+    margin: 0;
+  }
+}
+

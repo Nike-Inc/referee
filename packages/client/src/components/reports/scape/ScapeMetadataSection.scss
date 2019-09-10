@@ -2,124 +2,177 @@
 
 .scape-metadata-section {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   margin: 20px 20px 20px 20px;
   justify-content: center;
 
-  .scape-metadata-row {
+  .scape-metadata-column {
     display: flex;
+    flex-direction: column;
 
-    .scape-metadata-column {
+    .scape-metadata-column-content {
       display: flex;
       flex-direction: column;
-      margin: 15px 10px 15px 10px;
+      align-self: flex-start;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      margin: 10px 0 10px 0;
+      height: 100%;
 
-      .scape-metadata-column-content {
+      .kv-wrapper {
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        padding: 10px;
-        height: 100%;
+        padding: 3px 20px 3px 0;
 
-        .scape-column-title-wrapper {
-          display: flex;
-          padding-bottom: 5px;
-
-          .scape-column-title {
-            @extend .heading-font;
-            font-size: 18px;
-          }
+        .key {
+          @extend .content-font;
+          font-weight: 700;
         }
 
-        .kv-wrapper {
+        .value {
+          @extend .content-font;
+        }
+      }
+    }
+
+    @media screen and (max-width: 1400px) {
+      .scape-metadata-column-content {
+        margin: 20px;
+      }
+    }
+
+    .scape-metadata-row {
+      display: flex;
+      flex-direction: row;
+      margin: 0 10px 10px 10px;
+      justify-content: space-evenly;
+      align-content: flex-start;
+
+      .scape-metadata-row-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        .scape-metadata-row-content {
           display: flex;
           flex-direction: column;
-          padding: 3px 20px 3px 0;
-          flex: 1;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          padding: 10px;
+          margin: 10px;
 
-          .key {
+          .title {
             @extend .content-font;
             font-weight: 700;
           }
 
-          .value {
+          .scope-item-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 280px;
+            margin: 3px 0 3px 0;
+
+            .layer-group {
+              padding-right: 5px;
+              margin-top: 5px;
+              align-self: flex-start;
+            }
+
+            .hourglass {
+              padding-right: 5px;
+            }
+
+            .map-marker {
+              padding-right: 5px;
+            }
+          }
+        }
+      }
+
+      .scape-metadata-number-cards {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-evenly;
+
+        .number-label-card {
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          width: 110px;
+          padding-top: 10px;
+          margin-left: 10px;
+          margin-right: 10px;
+          @extend .un-selectable;
+
+          .label-value {
             @extend .content-font;
+            margin-left: -5px;
+            margin-bottom: -10px;
+            text-align: center;
+          }
+
+          .number-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            .number-value {
+              font-size: 50px;
+              align-self: flex-end;
+            }
+
+            .number-unit {
+              font-size: 25px;
+              align-self: flex-end;
+              padding-left: 2px;
+              padding-bottom: 10px;
+            }
           }
         }
 
-        .scope-item-wrapper {
+        .btn-wrapper {
           display: flex;
-          flex-direction: row;
-          align-items: center;
-          width: 280px;
-          margin: 3px 0 3px 0;
-
-          .layer-group {
-            padding-right: 5px;
-            margin-top: 5px;
-            align-self: flex-start;
-          }
-
-          .hourglass {
-            padding-right: 5px;
-          }
-
-          .map-marker {
-            padding-right: 5px;
-          }
-        }
-      }
-
-      .number-label-card {
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        width: 110px;
-        padding-top: 10px;
-        @extend .un-selectable;
-
-        .label-value {
-          @extend .content-font;
-          margin-left: -5px;
-          margin-bottom: -10px;
-          text-align: center;
-        }
-
-        .number-container {
-          display: flex;
-          flex-direction: row;
           justify-content: center;
-
-          .number-value {
-            font-size: 50px;
-            align-self: flex-end;
-          }
-
-          .number-unit {
-            font-size: 25px;
-            align-self: flex-end;
-            padding-left: 2px;
-            padding-bottom: 10px;
-          }
+          align-self: center;
+          margin: 10px;
         }
       }
 
-      .btn-wrapper {
-        display: flex;
-        justify-content: center;
-        align-self: flex-end;
-        margin-top: 30px;
+      @media screen and (max-width: 1400px) {
+        .scape-metadata-number-cards {
+          justify-content: flex-start;
+        }
+      }
+
+      @media screen and (max-width: 700px) {
+        .scape-metadata-row-items {
+          justify-content: flex-start;
+        }
+        .scape-metadata-number-cards {
+          flex-direction: column;
+          align-items: center;
+          .number-label-card {
+            margin: 10px;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 1400px) {
+      .scape-metadata-row {
+        justify-content: flex-start;
       }
     }
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
   .scape-metadata-section {
-    justify-content: space-between;
+    flex-direction: column;
     .scape-metadata-row {
       flex-direction: column;
+      align-items: center;
     }
   }
 }

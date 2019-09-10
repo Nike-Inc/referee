@@ -54,110 +54,107 @@ export default class ScapeMetadataSection extends React.Component<Props> {
 
     return (
       <div className="scape-metadata-section">
-        <div className="scape-metadata-row">
-          <div className="scape-metadata-column">
-            <div className="scape-metadata-column-content">
-              <div className="kv-wrapper">
-                <div className="key">Application</div>
-                <div className="value">{application}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">User</div>
-                <div className="value">{user}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Metrics Account</div>
-                <div className="value">{metricsAccountName}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Storage Account</div>
-                <div className="value">{storageAccountName}</div>
-              </div>
+        <div className="scape-metadata-column">
+          <div className="scape-metadata-column-content">
+            <div className="kv-wrapper">
+              <div className="key">Application</div>
+              <div className="value">{application}</div>
             </div>
-          </div>
-          <div className="scape-metadata-column">
-            <div className="scape-metadata-column-content">
-              <div className="kv-wrapper">
-                <div className="key">Baseline</div>
-              </div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
-                <div className="value">{scope.controlScope}</div>
-              </div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
-                <div className="value">{scope.controlLocation}</div>
-              </div>
-              <div className="kv-wrapper">
-                <div className="key">Canary</div>
-              </div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
-                <div className="value">{scope.experimentScope}</div>
-              </div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
-                <div className="value">{scope.experimentLocation}</div>
-              </div>
-              <div className="kv-wrapper"></div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassStart} />
-                <ToggleableTimeStamp timeStamp={scope.startTimeIso ? scope.startTimeIso : startTime} />
-              </div>
-              <div className="scope-item-wrapper">
-                <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
-                <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
-              </div>
+            <div className="kv-wrapper">
+              <div className="key">User</div>
+              <div className="value">{user}</div>
+            </div>
+            <div className="kv-wrapper">
+              <div className="key">Metrics Account</div>
+              <div className="value">{metricsAccountName}</div>
+            </div>
+            <div className="kv-wrapper">
+              <div className="key">Storage Account</div>
+              <div className="value">{storageAccountName}</div>
             </div>
           </div>
         </div>
-        <div className="scape-metadata-row">
-          <div className="scape-metadata-column">
-            {this.calculateLifetime() > 0 && (
+        <div className="scape-metadata-column">
+          <div className="scape-metadata-row">
+            <div className="scape-metadata-row-items">
+              <div className="scape-metadata-row-content">
+                <div className="title">Baseline</div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
+                  <div className="value">{scope.controlScope}</div>
+                </div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
+                  <div className="value">{scope.controlLocation}</div>
+                </div>
+              </div>
+              <div className="scape-metadata-row-content">
+                <div className="title">Canary</div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img layer-group" size="1x" color="black" icon={faLayerGroup} />
+                  <div className="value">{scope.experimentScope}</div>
+                </div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img map-marker" size="lg" color="black" icon={faMapMarkerAlt} />
+                  <div className="value">{scope.experimentLocation}</div>
+                </div>
+              </div>
+              <div className="scape-metadata-row-content">
+                <div className="title">Time</div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassStart} />
+                  <ToggleableTimeStamp timeStamp={scope.startTimeIso ? scope.startTimeIso : startTime} />
+                </div>
+                <div className="scope-item-wrapper">
+                  <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
+                  <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="scape-metadata-row">
+            <div className="scape-metadata-number-cards">
+              {this.calculateLifetime() > 0 && (
+                <div className="number-label-card">
+                  <div className="label-value">Lifetime</div>
+                  <div className="number-container">
+                    <div className="number-value">{this.calculateLifetime()}</div>
+                    <div className="number-unit">m</div>
+                  </div>
+                </div>
+              )}
               <div className="number-label-card">
-                <div className="label-value">Lifetime</div>
+                <div className="label-value">Interval</div>
                 <div className="number-container">
-                  <div className="number-value">{this.calculateLifetime()}</div>
+                  <div className="number-value">{request.analysisIntervalMins}</div>
                   <div className="number-unit">m</div>
                 </div>
               </div>
-            )}
-          </div>
-          <div className="scape-metadata-column">
-            <div className="number-label-card">
-              <div className="label-value">Interval</div>
-              <div className="number-container">
-                <div className="number-value">{request.analysisIntervalMins}</div>
-                <div className="number-unit">m</div>
+              <div className="number-label-card">
+                <div className="label-value">Delay</div>
+                <div className="number-container">
+                  <div className="number-value">{request.beginAfterMins}</div>
+                  <div className="number-unit">m</div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="scape-metadata-column">
-            <div className="number-label-card">
-              <div className="label-value">Delay</div>
-              <div className="number-container">
-                <div className="number-value">{request.beginAfterMins}</div>
-                <div className="number-unit">m</div>
+
+              <div className="number-label-card">
+                <div className="label-value">Step</div>
+                <div className="number-container">
+                  <div className="number-value">{scope.step}</div>
+                  <div className="number-unit">s</div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="scape-metadata-column">
-            <div className="number-label-card">
-              <div className="label-value">Step</div>
-              <div className="number-container">
-                <div className="number-value">{scope.step}</div>
-                <div className="number-unit">s</div>
+              <div className="btn-wrapper">
+                <Button
+                  onClick={() => {
+                    handleGoToConfigButtonClick(canaryConfig);
+                  }}
+                  variant="dark"
+                >
+                  Go to Config
+                </Button>
               </div>
-            </div>
-            <div className="btn-wrapper">
-              <Button
-                onClick={() => {
-                  handleGoToConfigButtonClick(canaryConfig);
-                }}
-                variant="dark"
-              >
-                Go to Config
-              </Button>
             </div>
           </div>
         </div>

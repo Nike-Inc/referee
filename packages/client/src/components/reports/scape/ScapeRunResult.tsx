@@ -3,6 +3,7 @@ import {
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
   CanaryConfig,
+  CanaryExecutionResult,
   CanaryJudgeGroupScore,
   CanaryResult,
   MetricSetPair
@@ -11,7 +12,7 @@ import MetricsNavPanel from '../../shared/MetricsNavPanel';
 import IndividualMetricView from '../../shared/IndividualMetricView';
 import './ScapeRunResult.scss';
 import { observer } from 'mobx-react';
-import CanaryMetricsOverview from '../canary/CanaryMetricsOverview';
+import ScapeMetricsOverview from './ScapeMetricsOverview';
 
 export const ScapeRunResult = observer(
   ({
@@ -21,9 +22,12 @@ export const ScapeRunResult = observer(
     metricsAccountName,
     storageAccountName,
     thresholds,
+    selectedCanaryExecutionResult,
     result,
-    canaryConfig,
+    totalRuns,
+    selectedRunNumber,
     selectedMetric,
+    canaryConfig,
     canaryAnalysisResultByIdMap,
     idListByMetricGroupNameMap,
     groupScoreByMetricGroupNameMap,
@@ -40,9 +44,12 @@ export const ScapeRunResult = observer(
     metricsAccountName: string;
     storageAccountName: string;
     thresholds: CanaryClassifierThresholdsConfig;
+    selectedCanaryExecutionResult: CanaryExecutionResult;
     result: CanaryResult;
-    canaryConfig: CanaryConfig;
+    totalRuns: number;
+    selectedRunNumber: number;
     selectedMetric: string;
+    canaryConfig: CanaryConfig;
     canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult>;
     idListByMetricGroupNameMap: KvMap<string[]>;
     groupScoreByMetricGroupNameMap: KvMap<CanaryJudgeGroupScore>;
@@ -71,8 +78,11 @@ export const ScapeRunResult = observer(
             handleMetricSelection={handleMetricSelection}
           />
           {displayMetricOverview ? (
-            <CanaryMetricsOverview
+            <ScapeMetricsOverview
+              selectedCanaryExecutionResult={selectedCanaryExecutionResult}
               result={result}
+              totalRuns={totalRuns}
+              selectedRunNumber={selectedRunNumber}
               thresholds={thresholds}
               classificationCountMap={classificationCountMap}
             />
