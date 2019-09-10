@@ -68,6 +68,13 @@ $un-selected-size: 85px;
         }
       }
     }
+    @media screen and (max-width: 700px) {
+      .scape-executions-tabs {
+        flex-direction: column;
+        align-content: center;
+        padding: 0;
+      }
+    }
 
     .scape-executions-result-wrapper {
       border-top-left-radius: 20px;
@@ -76,6 +83,7 @@ $un-selected-size: 85px;
       border-right: 3px solid $black;
       border-left: 3px solid $black;
       margin-top: -3px;
+      z-index: 1;
       height: 100%;
     }
   }

@@ -12,7 +12,7 @@ import {
 
 const kayentaClient = axios.create({
   baseURL: `${window.location.origin}/kayenta/`,
-  timeout: 5000
+  timeout: 10000
 });
 
 export default class KayentaApiService {

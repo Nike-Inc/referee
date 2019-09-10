@@ -2,59 +2,78 @@
 
 .canary-metrics-overview-wrapper {
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  margin: 20px 40px 20px 40px;
+  margin: 50px 70px 50px 70px;
 
-  .canary-metrics-overview {
+  .canary-metrics-results-message-wrapper {
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    flex-direction: row;
+    margin: 10px 60px 10px 60px;
 
-    .canary-metrics-results-message-wrapper {
+    .canary-metrics-score-container {
       display: flex;
-      margin: 10px 0px 20px 0px;
+      width: 150px;
+      height: 150px;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
-      .canary-metrics-results-message {
-        flex-grow: 1;
-        padding: 15px;
-        line-height: 15px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
-        .canary-metrics-results-text {
-          text-align: center;
-          font-weight: 600;
-          padding: 10px 0px 10px 0px;
-        }
-
-        .canary-metrics-meter-container {
-          padding: 10px;
-        }
+      .canary-metrics-score {
+        color: white;
+        font-size: 70px;
+        @extend .un-selectable;
+        @extend .content-font;
       }
     }
 
-    .canary-metrics-results-cards {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      flex-grow: 1;
-      margin: 10px;
-    }
-
-    .canary-metrics-results-card {
+    .canary-metrics-results-message {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       height: 150px;
-      width: 150px;
-      margin: 10px;
+      width: 100%;
+      padding: 15px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      text-align: center;
-      @extend .heading-font;
 
-      .card-classification-count {
-        font-size: 50px;
+      .canary-metrics-results-text {
+        text-align: center;
+        font-weight: 600;
+        padding: 10px 0px 10px 0px;
+      }
+
+      .canary-metrics-meter-container {
+        padding: 10px;
+        vertical-align: center;
       }
     }
   }
+
+  .canary-metrics-results-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 30px 60px 30px 60px;
+  }
+
+  .canary-metrics-results-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 150px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    @extend .un-selectable;
+    @extend .content-font;
+
+    .card-classification-count {
+      font-size: 60px;
+    }
+    .card-classification-label {
+      font-size: 20px;
+    }
+  }
 }
+

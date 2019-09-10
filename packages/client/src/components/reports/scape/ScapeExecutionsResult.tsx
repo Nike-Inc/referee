@@ -101,6 +101,8 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
       handleGoToConfigButtonClick
     } = this.props;
 
+    const selectedRunNumber = this.state.selectedCAEIndex + 1;
+
     return (
       <div className="scape-report-container">
         <div className="scape-metadata-container">
@@ -163,7 +165,10 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
                 metricsAccountName={metricsAccountName as string}
                 storageAccountName={storageAccountName as string}
                 thresholds={thresholds as CanaryClassifierThresholdsConfig}
+                selectedCanaryExecutionResult={selectedCanaryExecutionResult as CanaryExecutionResult}
                 result={result as CanaryResult}
+                totalRuns={results.canaryScores.length as number}
+                selectedRunNumber={selectedRunNumber as number}
                 selectedMetric={selectedMetric as string}
                 canaryConfig={canaryConfig as CanaryConfig}
                 canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}

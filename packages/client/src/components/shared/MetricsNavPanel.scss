@@ -11,6 +11,7 @@
     flex-grow: 1;
     min-width: 350px;
     border-right: 2px lightgray solid;
+    margin-top: 1px;
 
     .overview-button-container {
       .overview {
@@ -112,6 +113,7 @@
               .score {
                 font-weight: 600;
                 font-size: 18px;
+                color: white;
               }
             }
           }
@@ -184,6 +186,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        @extend .un-selectable;
 
         .metrics-key-symbol {
           margin-right: 5px;

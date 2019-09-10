@@ -105,7 +105,6 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
       ofNullable(this.state.scapeExecutionStatusResponse),
       scapeExecutionStatusResponse => {
         if (scapeExecutionStatusResponse.complete) {
-
           return (
             <ScapeExecutionsResult
               application={ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc') as string}
