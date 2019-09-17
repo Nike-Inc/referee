@@ -8,27 +8,46 @@ import humanFormat from 'human-format';
 import { metricSourceIntegrations } from '../../metricSources';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import Optional from 'optional-js';
-import { mapIfPresent, ofNullable } from '../../util/OptionalUtils';
+import {mapIfPresent} from '../../util/OptionalUtils';
 
 interface IndividualMetricViewProps {
   selectedMetric: string;
   metricSourceType: string;
+  lifetime: number;
   canaryAnalysisResultByIdMap: KvMap<CanaryAnalysisResult>;
   metricSetPairsByIdMap: KvMap<MetricSetPair>;
 }
 
 const ROUNDING_POSITION: number = 4;
+const MIN_TO_MS_CONVERSION: number = 60000;
 
 @observer
 export default class IndividualMetricView extends React.Component<IndividualMetricViewProps> {
   render(): React.ReactNode {
-    const { selectedMetric, metricSourceType, canaryAnalysisResultByIdMap, metricSetPairsByIdMap } = this.props;
+    const {
+      selectedMetric,
+      metricSourceType,
+      lifetime,
+      canaryAnalysisResultByIdMap,
+      metricSetPairsByIdMap
+    } = this.props;
     const baselineData = metricSetPairsByIdMap[selectedMetric].values.control;
     const canaryData = metricSetPairsByIdMap[selectedMetric].values.experiment;
     const { startTimeMillis, stepMillis } = metricSetPairsByIdMap[selectedMetric].scopes.control;
 
+    const filteredControlDataPoints = baselineData.filter(function(value) {
+      return !(value.toString() === 'NaN');
+    });
+
     const timeLabels: number[] = [];
-    for (let i = 1, j = startTimeMillis; i < baselineData.length + 1; i++, j += stepMillis) {
+    let scale: number = 0;
+    if (lifetime > 0 && filteredControlDataPoints.length > 0) {
+      const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
+      scale = Math.round(lifetimeMillis / filteredControlDataPoints.length);
+    } else {
+      scale = stepMillis;
+    }
+    for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
       timeLabels.push(j);
     }
 

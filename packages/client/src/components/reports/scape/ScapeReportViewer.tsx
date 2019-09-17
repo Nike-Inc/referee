@@ -112,8 +112,9 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
               metricSourceType={configEditorStore.metricSourceType as string}
               metricsAccountName={scapeExecutionStatusResponse.metricsAccountName as string}
               storageAccountName={scapeExecutionStatusResponse.storageAccountName as string}
-              startTime={scapeExecutionStatusResponse.startTimeIso as string}
-              endTime={scapeExecutionStatusResponse.endTimeIso as string}
+              startTime={reportStore.startTime as string}
+              endTime={reportStore.endTime as string}
+              lifetime={reportStore.lifetime as number}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
               results={reportStore.scapeResults as CanaryAnalysisExecutionResult}
               selectedCanaryExecutionResult={reportStore.selectedCanaryExecutionResult as CanaryExecutionResult}
