@@ -35,6 +35,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     const canaryData = metricSetPairsByIdMap[selectedMetric].values.experiment;
     const { startTimeMillis, stepMillis } = metricSetPairsByIdMap[selectedMetric].scopes.control;
 
+    // Temporary fix to create x axis labels by filtering NaNs out of data until we determine more robust solution
     const filteredControlDataPoints = baselineData.filter(function(value) {
       return !(value.toString() === 'NaN');
     });
