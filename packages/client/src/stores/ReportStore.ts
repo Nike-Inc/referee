@@ -22,6 +22,9 @@ enum classifications {
   LOW = 'Low'
 }
 
+const MILLISECOND_CONVERSION = 1000;
+const SEC_TO_MIN_CONVERSION = 60;
+
 export default class ReportStore {
   @observable
   application: string = '';
@@ -71,12 +74,21 @@ export default class ReportStore {
   @observable
   displayMetricOverview: boolean = true;
 
+  @observable
+  startTime: string = '';
+
+  @observable
+  endTime: string = '';
+
   @action.bound
   updateFromCanaryResponse(canaryExecutionStatusResponse: CanaryExecutionStatusResponse) {
+    const request = canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest;
     this.canaryExecutionStatusResponse = canaryExecutionStatusResponse;
     this.canaryResult = canaryExecutionStatusResponse.result as CanaryResult;
-    this.thresholds = (canaryExecutionStatusResponse.canaryExecutionRequest as CanaryExecutionRequest).thresholds;
+    this.thresholds = request.thresholds as CanaryClassifierThresholdsConfig;
     this.metricSetPairListId = canaryExecutionStatusResponse.metricSetPairListId as string;
+    this.startTime = request.scopes.default.controlScope.start as string;
+    this.endTime = request.scopes.default.controlScope.end as string;
   }
 
   @action.bound
@@ -93,7 +105,9 @@ export default class ReportStore {
     });
 
     safeGet(() => this.scapeExecutionRequest).ifPresent(request => {
-      this.thresholds = request.thresholds;
+      this.thresholds = request.thresholds as CanaryClassifierThresholdsConfig;
+      this.startTime = safeGet(() => request.scopes[0]).get().startTimeIso as string;
+      this.endTime = safeGet(() => request.scopes[0]).get().endTimeIso as string;
     });
   }
 
@@ -170,6 +184,18 @@ export default class ReportStore {
     });
 
     return classificationCountMap;
+  }
+
+  @computed
+  get lifetime(): number {
+    if (this.endTime) {
+      const startDate = new Date(this.startTime);
+      const endDate = new Date(this.endTime);
+      const diff = (endDate.getTime() - startDate.getTime()) / MILLISECOND_CONVERSION / SEC_TO_MIN_CONVERSION;
+      return Math.abs(Math.round(diff));
+    } else if (this.scapeExecutionRequest) {
+      return this.scapeExecutionRequest.lifetimeDurationMins;
+    } else return -1;
   }
 
   @action.bound

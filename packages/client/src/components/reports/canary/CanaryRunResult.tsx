@@ -22,6 +22,7 @@ export const CanaryRunResult = observer(
     metricSourceType,
     metricsAccountName,
     storageAccountName,
+    lifetime,
     result,
     canaryConfig,
     thresholds,
@@ -42,6 +43,7 @@ export const CanaryRunResult = observer(
     metricSourceType: string;
     metricsAccountName: string;
     storageAccountName: string;
+    lifetime: number;
     result: CanaryResult;
     canaryConfig: CanaryConfig;
     thresholds: CanaryClassifierThresholdsConfig;
@@ -98,6 +100,7 @@ export const CanaryRunResult = observer(
               <IndividualMetricView
                 selectedMetric={selectedMetric}
                 metricSourceType={metricSourceType}
+                lifetime={lifetime}
                 canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
                 metricSetPairsByIdMap={metricSetPairsByIdMap}
               />

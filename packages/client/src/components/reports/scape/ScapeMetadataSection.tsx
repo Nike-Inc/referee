@@ -17,27 +17,14 @@ interface Props {
   storageAccountName: string;
   startTime: string;
   endTime: string;
+  lifetime: number;
   request: CanaryAnalysisExecutionRequest;
   scope: CanaryAnalysisExecutionRequestScope;
   canaryConfig: CanaryConfig;
   handleGoToConfigButtonClick: (config: CanaryConfig) => void;
 }
 
-const MILLISECOND_CONVERSION = 1000;
-const SEC_TO_MIN_CONVERSION = 60;
-
 export default class ScapeMetadataSection extends React.Component<Props> {
-  private calculateLifetime(): number {
-    if (this.props.scope.endTimeIso) {
-      const startDate = new Date(this.props.scope.startTimeIso);
-      const endDate = new Date(this.props.scope.endTimeIso);
-      const diff = (endDate.getTime() - startDate.getTime()) / MILLISECOND_CONVERSION / SEC_TO_MIN_CONVERSION;
-      return Math.abs(Math.round(diff));
-    } else if (this.props.request.lifetimeDurationMins) {
-      return this.props.request.lifetimeDurationMins;
-    } else return -1;
-  }
-
   render(): React.ReactNode {
     const {
       application,
@@ -46,6 +33,7 @@ export default class ScapeMetadataSection extends React.Component<Props> {
       storageAccountName,
       startTime,
       endTime,
+      lifetime,
       request,
       scope,
       canaryConfig,
@@ -114,11 +102,11 @@ export default class ScapeMetadataSection extends React.Component<Props> {
           </div>
           <div className="scape-metadata-row">
             <div className="scape-metadata-number-cards">
-              {this.calculateLifetime() > 0 && (
+              {lifetime > 0 && (
                 <div className="number-label-card">
                   <div className="label-value">Lifetime</div>
                   <div className="number-container">
-                    <div className="number-value">{this.calculateLifetime()}</div>
+                    <div className="number-value">{lifetime}</div>
                     <div className="number-unit">m</div>
                   </div>
                 </div>

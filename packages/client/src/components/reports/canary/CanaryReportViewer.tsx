@@ -115,6 +115,7 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
               metricSourceType={configEditorStore.metricSourceType as string}
               metricsAccountName={canaryExecutionStatusResponse.metricsAccountName as string}
               storageAccountName={canaryExecutionStatusResponse.storageAccountName as string}
+              lifetime={reportStore.lifetime as number}
               result={reportStore.canaryResult as CanaryResult}
               canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
               thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
