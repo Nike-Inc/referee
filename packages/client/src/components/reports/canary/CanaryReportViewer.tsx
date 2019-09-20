@@ -12,7 +12,7 @@ import {
   MetricSetPair
 } from '../../../domain/Kayenta';
 import CanaryExecutorStore from '../../../stores/CanaryExecutorStore';
-import { kayentaApiService } from '../../../services';
+import {kayentaApiService, metricsService} from '../../../services';
 import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
 import { CanaryRunResult } from './CanaryRunResult';
 import TerminalResult from '../../shared/TerminalResult';
@@ -98,6 +98,7 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
   handleGoToConfigButtonClick(config: CanaryConfig, canaryExecutionRequestObject: CanaryExecutionRequest): void {
     this.stores.configEditorStore.setCanaryConfigObject(config);
     this.stores.canaryExecutorStore.setCanaryExecutionRequestObject(canaryExecutionRequestObject);
+    metricsService.sendMetric('canary_config_tool', 'config-review');
     this.props.history.push('/config/edit');
   }
 

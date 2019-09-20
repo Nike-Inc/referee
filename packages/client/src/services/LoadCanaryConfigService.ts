@@ -19,6 +19,7 @@ export default class LoadCanaryConfigService {
       contents = await navigator.clipboard.readText();
       const unvalidatedJsonObject = JSON.parse(contents);
       // TODO validate object with yup
+      metricsService.sendMetric('canary_config_tool', `clipboard-config`);
       return unvalidatedJsonObject as CanaryConfig;
     } catch (e) {
       log.error('Failed to read and deserialize clipboard contents -', e);
@@ -40,7 +41,7 @@ export default class LoadCanaryConfigService {
       axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`).then(response => {
         configEditorStore.setCanaryConfigObject(response.data);
       });
+      metricsService.sendMetric('canary_config_tool', `${templateName}`);
     }
-    metricsService.sendMetric('canaryConfigTool', `${templateName}`);
   }
 }

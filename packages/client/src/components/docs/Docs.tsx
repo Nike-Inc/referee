@@ -67,6 +67,7 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
       .then(() =>
         docsService.fetchAndUpdateDocContent(Optional.ofNullable(this.props.match.params.path).orElse('index'))
       );
+
   }
 
   @boundMethod
@@ -89,11 +90,11 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
         window.location.reload();
       }
     });
+    //metricsService.sendMetric('docSite', this.props.location.pathname);
   }
 
   render(): React.ReactNode {
     const content: Optional<string> = Optional.ofNullable(this.stores.docsStore.content);
-    metricsService.sendMetric('docSite', this.props.location.pathname);
     return (
       <div className="documentation-wrapper">
         <TableOfContentsNav
