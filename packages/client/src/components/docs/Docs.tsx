@@ -90,7 +90,6 @@ export default class Docs extends ConnectedComponent<Props, Stores> {
         window.location.reload();
       }
     });
-    //metricsService.sendMetric('docSite', this.props.location.pathname);
   }
 
   render(): React.ReactNode {
