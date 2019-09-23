@@ -21,7 +21,7 @@ export default class CanaryExecutor extends ConnectedComponent<Props, Stores> {
   componentDidMount(): void {
     window.scrollTo(0, 0);
     kayentaApiService.fetchCredentials().then(data => this.stores.canaryExecutorStore.setKayentaCredentials(data));
-    metricsService.sendMetric('retrospectiveTool', '');
+    metricsService.sendMetric('retrospective_tool');
   }
 
   render(): React.ReactNode {

@@ -8,6 +8,7 @@ import path from 'path-browserify';
 import Optional from 'optional-js';
 import hljs from 'highlight.js';
 import marked from 'marked';
+import { metricsService } from './index';
 
 const { docsStore } = stores;
 
@@ -90,5 +91,6 @@ export default class DocsService {
         docsStore.updateContent(renderedContent);
       });
     }
+    metricsService.sendMetric('doc_site', 'docs/' + path);
   }
 }

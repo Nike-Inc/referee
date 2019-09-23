@@ -13,11 +13,9 @@ import LoadCanaryConfigNavItem from './config/LoadCanaryConfigNavItem';
 import { CanaryConfig } from '../domain/Kayenta';
 import { boundMethod } from 'autobind-decorator';
 import Optional from 'optional-js';
-import { loadCanaryConfigService, docsService } from '../services';
+import { loadCanaryConfigService, docsService, metricsService } from '../services';
 import DocsStore from '../stores/DocsStore';
 import { observer } from 'mobx-react';
-import { safeGet } from '../util/OptionalUtils';
-import { metricSourceTypes } from '../metricSources';
 
 interface Props extends RouterProps {}
 interface Stores {
@@ -70,6 +68,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
                     onClick={() => {
                       this.stores.configEditorStore.setCanaryConfigObject(CanaryConfigFactory.createNewCanaryConfig());
                       this.props.history.push('/config/edit');
+                      metricsService.sendMetric('canary_config_tool', `created-config`)
                     }}
                   >
                     Create a New Kayenta Canary Config
