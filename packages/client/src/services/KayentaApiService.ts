@@ -43,7 +43,6 @@ export default class KayentaApiService {
           'Content-Type': 'application/json'
         }
       });
-      log.info(response);
       return response.data;
     } catch (error) {
       log.info(error.response);

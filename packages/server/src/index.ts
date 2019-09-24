@@ -6,6 +6,7 @@ import path from 'path';
 import { publicRoot } from './const/appPaths';
 import { SelfReportingMetricsRegistry, LoggingReporter, Dimensions } from 'measured-reporting';
 import bodyParser from 'body-parser';
+import axios from 'axios';
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ const customizations: CustomizableConfiguration = require('../../../customizatio
 // eslint-disable-next-line prettier/prettier
 const metricsRegistry: SelfReportingMetricsRegistry = Optional
   .ofNullable(customizations.metricsRegistry)
-  .orElse(new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {} })));
+  .orElse(new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {}, logLevel: 'ERROR' })));
 
 const port = process.env.PORT || 3001;
 
@@ -37,6 +38,41 @@ app.post('/metrics', (req, res) => {
   const request = req.body as MetricsProxyRequest;
   metricsRegistry.getOrCreateCounter(request.name, request.dimensions).inc();
   res.status(201).end();
+});
+
+app.get('/getDataFromSfX', async (req, res) => {
+  console.log('I WAS CALLED');
+
+  const startTime = '2019-08-07T22:09:57Z';
+  const endTime = '2019-08-07T22:57:56Z';
+
+  const SIGNAL_FX_TOKEN = process.env.REACT_APP_SFX_TOKEN;
+  let query =
+    "data('jmx_memory.used', filter=filter('plugin_instance', 'memory-heap') and filter('server_group', 'carebears-cms-master-cerberus-prod2-baseline-v1') and filter('server_region', 'us-west-2')).mean(by=['server_region', 'server_group']).publish()";
+
+  try {
+    console.log('1.');
+    const response = await axios.post(`https://stream.signalfx.com/v2/signalflow/execute`, query, {
+      params: {
+        start: new Date(startTime).getTime(),
+        stop: new Date(endTime).getTime(),
+        resolution: 10000,
+        maxDelay: 0,
+        immediate: true
+      },
+      headers: {
+        Accepts: 'text/plain',
+        'Content-Type': 'text/plain',
+        'X-SF-Token': SIGNAL_FX_TOKEN
+      }
+    });
+    console.log('2.');
+    console.log(JSON.stringify(response.data));
+  } catch (error) {
+    console.log(error)
+    throw error;
+  }
+  res.status(201).end(); // doesn't return anything
 });
 
 app.use(
