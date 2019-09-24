@@ -9,6 +9,8 @@ import { metricSourceIntegrations } from '../../metricSources';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import Optional from 'optional-js';
 import { mapIfPresent, ofNullable } from '../../util/OptionalUtils';
+import { metricsService } from '../../services';
+
 
 interface IndividualMetricViewProps {
   selectedMetric: string;
@@ -31,6 +33,11 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     for (let i = 1, j = startTimeMillis; i < baselineData.length + 1; i++, j += stepMillis) {
       timeLabels.push(j);
     }
+
+    metricsService.executeSignalfxRequest();
+
+    // TODO: here for time labels, I want to query SignalFx and get the actual x values in epoch time
+    // just stream out x and y values here
 
     const data = {
       labels: timeLabels.slice(),
