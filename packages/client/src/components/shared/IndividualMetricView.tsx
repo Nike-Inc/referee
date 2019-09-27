@@ -23,6 +23,20 @@ const MIN_TO_MS_CONVERSION: number = 60000;
 
 @observer
 export default class IndividualMetricView extends React.Component<IndividualMetricViewProps> {
+  filterNansFromData(data: number[]): number[] {
+    return data.filter(value => {
+      return !(value.toString() === 'NaN');
+    });
+  }
+
+  generateTimeLabelsWithStartTimeZero(dataPoints: number, step: number): number[] {
+    const timeLabelsFromZero: number[] = [];
+    for (let i = 0, j = 0; i < dataPoints; i++, j += step) {
+      timeLabelsFromZero.push(j);
+    }
+    return timeLabelsFromZero;
+  }
+
   render(): React.ReactNode {
     const {
       selectedMetric,
@@ -41,26 +55,17 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
 
     let timeLabels: number[] = [];
 
-    mapIfPresentOrElse(
+    const { controlTimeLabels, experimentTimeLabels } = mapIfPresentOrElse(
       Optional.ofNullable(metricSourceIntegrations[metricSourceType].graphData),
-      graphValueMapper => {
-        const {
-          controlTimeLabels,
-          experimentTimeLabels
-        } = graphValueMapper(metricSetPairsByIdMap[selectedMetric].attributes);
-
-        // TODO check if control and experiment time labels are equal, otherwise start time labels at 0
-
-        // timeLabels = controlTimeLabels;
-        for (let i = 0, j = startTimeMillis; i < baselineData.length; i++, j += stepMillis) {
-          timeLabels.push(j);
-        }
+      graphDataMapper => {
+        return graphDataMapper(metricSetPairsByIdMap[selectedMetric].attributes);
       },
       () => {
-        const filteredControlDataPoints = baselineData.filter(function (value) {
-          return !(value.toString() === 'NaN');
-        });
-        let scale: number = 0;
+        // TODO move into default graph data mapper and calculate control and experiment labels
+        let controlTimeLabels: number[] = [];
+
+        const filteredControlDataPoints = this.filterNansFromData(controlData);
+        let scale: number;
         if (lifetime > 0 && filteredControlDataPoints.length > 0) {
           const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
           scale = Math.round(lifetimeMillis / filteredControlDataPoints.length);
@@ -68,10 +73,30 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           scale = stepMillis;
         }
         for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
-          timeLabels.push(j);
+          controlTimeLabels.push(j);
         }
+        return { controlTimeLabels };
       }
     );
+
+    // Checks if control and experiment have the same time stamps to determine what labels to display
+    // TODO use ternary statements to make more readable
+    if (controlTimeLabels && controlTimeLabels.length) {
+      if (experimentTimeLabels && experimentTimeLabels.length) {
+        if (controlTimeLabels.toString() == experimentTimeLabels.toString()) {
+          timeLabels = controlTimeLabels;
+        } else {
+          timeLabels = this.generateTimeLabelsWithStartTimeZero(
+            this.filterNansFromData(controlData).length,
+            stepMillis
+          );
+        }
+      } else {
+        timeLabels = controlTimeLabels;
+      }
+    } else {
+      timeLabels = this.generateTimeLabelsWithStartTimeZero(this.filterNansFromData(controlData).length, stepMillis);
+    }
 
     const data = {
       labels: timeLabels.slice(),
@@ -145,6 +170,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
                   xAxes: [
                     {
                       stacked: true,
+                      // TODO update axis type for non-time stamp labels
                       type: 'time',
                       time: {
                         unit: 'minute',

@@ -1,12 +1,11 @@
 import * as React from 'react';
 import SignalFxMetricModal from './SignalFxMetricModal';
 import SignalFxCanaryMetricSetQueryConfig from './SignalFxCanaryMetricSetQueryConfig';
-import {MetricModalProps} from '../../components/config/AbstractMetricModal';
-import {array, mixed, object, string, ValidationError} from 'yup';
-import {MetricSourceIntegration} from '../MetricSourceIntegration';
-import {MetricSetPairAttributes} from '../../domain/Kayenta';
-import Optional from "optional-js";
-import {safeGet} from "../../util/OptionalUtils";
+import { MetricModalProps } from '../../components/config/AbstractMetricModal';
+import { array, mixed, object, string, ValidationError } from 'yup';
+import { MetricSourceIntegration } from '../MetricSourceIntegration';
+import { MetricSetPairAttributes } from '../../domain/Kayenta';
+import Optional from 'optional-js';
 
 export const SIGNAL_FX_SERVICE_TYPE: string = 'signalfx';
 
@@ -27,9 +26,6 @@ export const SUPPORTED_AGGREGATION_METHODS = [
   'top',
   'variance'
 ];
-
-const MILLISECOND_CONVERSION = 1000;
-const SEC_TO_MIN_CONVERSION = 60;
 
 const signalFxQuerySchema = {
   metricName: string()
@@ -56,7 +52,7 @@ const signalFxQuerySchema = {
 const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
   const startDate = new Date(startTs);
   const endDate = new Date(endTs);
-  const lifetimeMillis = (endDate.getTime() - startDate.getTime());
+  const lifetimeMillis = endDate.getTime() - startDate.getTime();
 
   let scale: number;
   if (lifetimeMillis > 0 && dataPointCount > 0) {
@@ -98,26 +94,44 @@ const signalFxQueryMapper = (
 };
 
 // https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
-const graphValueMapper = (
+const graphDataMapper = (
   attributes: MetricSetPairAttributes
 ): {
   controlTimeLabels: number[];
   experimentTimeLabels: number[];
 } => {
-  const controlStartTs = Number(Optional.ofNullable(attributes!.control!['actual-start-ts']).orElse(attributes!.control!['requested-start']));
-  const controlEndTs = Number(Optional.ofNullable(attributes!.control!['actual-end-ts']).orElse(attributes!.control!['requested-end']));
+  const controlStartTs = Number(
+    Optional.ofNullable(attributes!.control!['actual-start-ts']).orElse(attributes!.control!['requested-start'])
+  );
+  const controlEndTs = Number(
+    Optional.ofNullable(attributes!.control!['actual-end-ts']).orElse(attributes!.control!['requested-end'])
+  );
   const controlDataPointCount = Number(attributes!.control!['actual-data-point-count']);
   const controlRequestedStep = Number(attributes!.control!['requested-step-milli']);
 
-  const experimentStartTs = Number(Optional.ofNullable(attributes!.experiment!['actual-start-ts']).orElse(attributes!.experiment!['requested-start']));
-  const experimentEndTs = Number(Optional.ofNullable(attributes!.experiment!['actual-end-ts']).orElse(attributes!.experiment!['requested-end']));
+  const experimentStartTs = Number(
+    Optional.ofNullable(attributes!.experiment!['actual-start-ts']).orElse(attributes!.experiment!['requested-start'])
+  );
+  const experimentEndTs = Number(
+    Optional.ofNullable(attributes!.experiment!['actual-end-ts']).orElse(attributes!.experiment!['requested-end'])
+  );
   const experimentDataPointCount = Number(attributes!.experiment!['actual-data-point-count']);
   const experimentRequestedStep = Number(attributes!.experiment!['requested-step-milli']);
 
-  const controlTimeLabels: number[] = timeLabels(controlStartTs, controlEndTs, controlDataPointCount, controlRequestedStep);
-  const experimentTimeLabels: number[] = timeLabels(experimentStartTs, experimentEndTs, experimentDataPointCount, experimentRequestedStep);
+  const controlTimeLabels: number[] = timeLabels(
+    controlStartTs,
+    controlEndTs,
+    controlDataPointCount,
+    controlRequestedStep
+  );
+  const experimentTimeLabels: number[] = timeLabels(
+    experimentStartTs,
+    experimentEndTs,
+    experimentDataPointCount,
+    experimentRequestedStep
+  );
 
-  return {controlTimeLabels, experimentTimeLabels};
+  return { controlTimeLabels, experimentTimeLabels };
 };
 
 const signalFxMetricModalFactory = (props: MetricModalProps) => React.createElement(SignalFxMetricModal, props);
@@ -128,7 +142,7 @@ const SignalFx: MetricSourceIntegration<SignalFxCanaryMetricSetQueryConfig> = {
   canaryMetricSetQueryConfigSchema: signalFxQuerySchema,
   schemaValidationErrorMapper: validationErrorMapper,
   queryMapper: signalFxQueryMapper,
-  graphData: graphValueMapper
+  graphData: graphDataMapper
 };
 
 export default SignalFx;
