@@ -56,7 +56,7 @@ export interface MetricSourceIntegration<T extends CanaryMetricSetQueryConfig> {
   graphData?: (
     attributes: MetricSetPairAttributes
   ) => {
-    controlTimeLabels: string[];
-    experimentTimeLabels: string[];
+    controlTimeLabels: number[];
+    experimentTimeLabels: number[];
   };
 }
