@@ -39,22 +39,39 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     );
     const stepMillis = safeGet(() => metricSetPairsByIdMap[selectedMetric].scopes.control.stepMillis).orElse(0);
 
-    // Temporary fix to create x axis labels by filtering NaNs out of data until we determine more robust solution
-    const filteredControlDataPoints = baselineData.filter(function(value) {
-      return !(value.toString() === 'NaN');
-    });
+    let timeLabels: number[] = [];
 
-    const timeLabels: number[] = [];
-    let scale: number = 0;
-    if (lifetime > 0 && filteredControlDataPoints.length > 0) {
-      const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
-      scale = Math.round(lifetimeMillis / filteredControlDataPoints.length);
-    } else {
-      scale = stepMillis;
-    }
-    for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
-      timeLabels.push(j);
-    }
+    mapIfPresentOrElse(
+      Optional.ofNullable(metricSourceIntegrations[metricSourceType].graphData),
+      graphValueMapper => {
+        const {
+          controlTimeLabels,
+          experimentTimeLabels
+        } = graphValueMapper(metricSetPairsByIdMap[selectedMetric].attributes);
+
+        // TODO check if control and experiment time labels are equal, otherwise start time labels at 0
+
+        // timeLabels = controlTimeLabels;
+        for (let i = 0, j = startTimeMillis; i < baselineData.length; i++, j += stepMillis) {
+          timeLabels.push(j);
+        }
+      },
+      () => {
+        const filteredControlDataPoints = baselineData.filter(function (value) {
+          return !(value.toString() === 'NaN');
+        });
+        let scale: number = 0;
+        if (lifetime > 0 && filteredControlDataPoints.length > 0) {
+          const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
+          scale = Math.round(lifetimeMillis / filteredControlDataPoints.length);
+        } else {
+          scale = stepMillis;
+        }
+        for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
+          timeLabels.push(j);
+        }
+      }
+    );
 
     const data = {
       labels: timeLabels.slice(),

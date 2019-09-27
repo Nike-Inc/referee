@@ -46,4 +46,17 @@ export interface MetricSourceIntegration<T extends CanaryMetricSetQueryConfig> {
   queryMapper?: (
     attributes: MetricSetPairAttributes
   ) => { control: string; experiment: string; displayLanguage?: string };
+
+  /**
+   * Implement this function if the integrations adds the additional time information to the attributes object in the response,
+   * so that it can be used to calculate more accurate graph values.
+   *
+   * @param attributes The attributes from the metric.
+   */
+  graphData?: (
+    attributes: MetricSetPairAttributes
+  ) => {
+    controlTimeLabels: string[];
+    experimentTimeLabels: string[];
+  };
 }
