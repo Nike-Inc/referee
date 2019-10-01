@@ -160,7 +160,7 @@ export default class ReportStore {
   @computed
   get metricSetPairsByIdMap(): KvMap<MetricSetPair> {
     let metricSetPairList: MetricSetPair[] = [];
-    if (this.metricSetPairList) {
+    if (this.metricSetPairList.length > 0) {
       metricSetPairList = this.metricSetPairList;
     } else {
       // TODO make sure this is the best way to check if the map is empty
