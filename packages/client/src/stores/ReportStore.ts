@@ -163,7 +163,6 @@ export default class ReportStore {
     if (this.metricSetPairList.length > 0) {
       metricSetPairList = this.metricSetPairList;
     } else {
-      // TODO make sure this is the best way to check if the map is empty
       if (Object.keys(this.metricSetPairListMap).length > 0) {
         metricSetPairList = this.metricSetPairListMap[this.metricSetPairListId];
       }
@@ -175,6 +174,11 @@ export default class ReportStore {
     });
 
     return metricSetPairsByIdMap;
+  }
+
+  @computed
+  get metricSetPair(): MetricSetPair {
+    return this.metricSetPairsByIdMap[this.selectedMetric];
   }
 
   @computed
@@ -235,6 +239,7 @@ export default class ReportStore {
   @action.bound
   handleCanaryRunSelection(canaryExecutionResult: CanaryExecutionResult) {
     this.selectedCanaryExecutionResult = canaryExecutionResult;
+    this.canaryResult = canaryExecutionResult.result;
     this.displayMetricOverview = true;
     this.metricSetPairListId = canaryExecutionResult.metricSetPairListId as string;
   }
