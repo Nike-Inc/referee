@@ -16,7 +16,6 @@ import { safeGet } from '../../../util/OptionalUtils';
 import { ScapeRunResult } from './ScapeRunResult';
 import './ScapeExecutionsResult.scss';
 import ScoreClassUtils from '../../../util/ScoreClassUtils';
-import { boundMethod } from 'autobind-decorator';
 import TerminalResult from '../../shared/TerminalResult';
 import TitledSection from '../../../layout/titledSection';
 import { observer } from 'mobx-react';
@@ -68,7 +67,6 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
     };
   }
 
-  @boundMethod
   onCAETabClick(index: number) {
     this.setState({ selectedCAEIndex: index });
   }
