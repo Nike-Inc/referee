@@ -12,7 +12,7 @@ import {
   CanaryResult,
   MetricSetPair
 } from '../domain/Kayenta';
-import { ofNullable, safeGet } from '../util/OptionalUtils';
+import { safeGet } from '../util/OptionalUtils';
 
 enum classifications {
   FAIL = 'Fail',
@@ -55,6 +55,9 @@ export default class ReportStore {
 
   @observable
   metricSetPairList: MetricSetPair[] = [];
+
+  @observable
+  metricSetPairListMap: KvMap<MetricSetPair[]> = {};
 
   @observable
   canaryExecutionStatusResponse: CanaryExecutionStatusResponse | undefined;
@@ -156,8 +159,18 @@ export default class ReportStore {
 
   @computed
   get metricSetPairsByIdMap(): KvMap<MetricSetPair> {
+    let metricSetPairList: MetricSetPair[] = [];
+    if (this.metricSetPairList) {
+      metricSetPairList = this.metricSetPairList;
+    } else {
+      // TODO make sure this is the best way to check if the map is empty
+      if (Object.keys(this.metricSetPairListMap).length > 0) {
+        metricSetPairList = this.metricSetPairListMap[this.metricSetPairListId];
+      }
+    }
+
     const metricSetPairsByIdMap: KvMap<MetricSetPair> = {};
-    this.metricSetPairList.forEach(metricSetPair => {
+    metricSetPairList.forEach(metricSetPair => {
       metricSetPairsByIdMap[metricSetPair.id] = metricSetPair;
     });
 
@@ -204,6 +217,11 @@ export default class ReportStore {
   }
 
   @action.bound
+  setMetricSetPairListMap(metricSetPairListMap: KvMap<MetricSetPair[]>) {
+    this.metricSetPairListMap = metricSetPairListMap;
+  }
+
+  @action.bound
   handleOverviewSelection() {
     this.displayMetricOverview = true;
   }
@@ -218,5 +236,6 @@ export default class ReportStore {
   handleCanaryRunSelection(canaryExecutionResult: CanaryExecutionResult) {
     this.selectedCanaryExecutionResult = canaryExecutionResult;
     this.displayMetricOverview = true;
+    this.metricSetPairListId = canaryExecutionResult.metricSetPairListId as string;
   }
 }
