@@ -1,13 +1,14 @@
 import axios from 'axios';
 import log from '../util/LoggerFactory';
 import {
-  CanaryExecutionStatusResponse,
-  CanaryExecutionResponse,
-  KayentaCredential,
-  MetricSetPair,
   CanaryAdhocExecutionRequest,
   CanaryAnalysisExecutionStatusResponse,
-  CanaryConfig
+  CanaryConfig,
+  CanaryExecutionResponse,
+  CanaryExecutionResult,
+  CanaryExecutionStatusResponse,
+  KayentaCredential,
+  MetricSetPair
 } from '../domain/Kayenta';
 
 const kayentaClient = axios.create({
@@ -73,6 +74,16 @@ export default class KayentaApiService {
     }
   }
 
+  async fetchCanaryConfig(configId: string): Promise<CanaryConfig> {
+    try {
+      const response = await kayentaClient.get(`/canaryConfig/${configId}`);
+      return response.data;
+    } catch (e) {
+      log.error(`Failed to fetch canary config with id: ${configId} from Kayenta`, e);
+      throw e;
+    }
+  }
+
   async fetchMetricSetPairList(metricSetPairListId: string): Promise<MetricSetPair[]> {
     try {
       const response = await kayentaClient.get(`/metricSetPairList/${metricSetPairListId}`);
@@ -83,13 +94,14 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryConfig(configId: string): Promise<CanaryConfig> {
-    try {
-      const response = await kayentaClient.get(`/canaryConfig/${configId}`);
-      return response.data;
-    } catch (e) {
-      log.error(`Failed to fetch canary config with id: ${configId} from Kayenta`, e);
-      throw e;
+  async createMetricSetPairListMap(canaryExecutionResults: CanaryExecutionResult[]): Promise<KvMap<MetricSetPair[]>> {
+    const metricSetPairListMap: KvMap<MetricSetPair[]> = {};
+
+    for (let result of canaryExecutionResults) {
+      const id = result.metricSetPairListId;
+      metricSetPairListMap[id] = await this.fetchMetricSetPairList(id);
     }
+
+    return metricSetPairListMap;
   }
 }

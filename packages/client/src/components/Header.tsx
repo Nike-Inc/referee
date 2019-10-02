@@ -68,7 +68,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
                     onClick={() => {
                       this.stores.configEditorStore.setCanaryConfigObject(CanaryConfigFactory.createNewCanaryConfig());
                       this.props.history.push('/config/edit');
-                      metricsService.sendMetric('canary_config_tool', `created-config`)
+                      metricsService.sendMetric('canary_config_tool', `created-config`);
                     }}
                   >
                     Create a New Kayenta Canary Config

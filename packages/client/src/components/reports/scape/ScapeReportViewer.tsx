@@ -75,11 +75,16 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
       }
 
-      if (this.stores.reportStore.metricSetPairListId) {
-        const metricSetPairList = await kayentaApiService.fetchMetricSetPairList(
-          this.stores.reportStore.metricSetPairListId
-        );
-        this.stores.reportStore.setMetricSetPairList(metricSetPairList);
+      // TODO confirm if this is the best way to check if map exists before calling the API
+      if (Object.keys(this.stores.reportStore.metricSetPairListMap).length === 0) {
+        let metricSetPairListMap: KvMap<MetricSetPair[]>;
+        if (this.stores.reportStore.scapeResults) {
+          metricSetPairListMap = await kayentaApiService.createMetricSetPairListMap(
+            this.stores.reportStore.scapeResults.canaryExecutionResults
+          );
+
+          this.stores.reportStore.setMetricSetPairListMap(metricSetPairListMap);
+        }
       }
     });
     this.setState({

@@ -5,7 +5,6 @@ import { boundMethod } from 'autobind-decorator';
 import log from '../../util/LoggerFactory';
 import { metricsService } from '../../services';
 
-
 interface Props {
   onLoad: (config: CanaryConfig) => void;
   onError: (error: any) => void;

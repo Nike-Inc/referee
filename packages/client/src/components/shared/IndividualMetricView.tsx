@@ -8,7 +8,7 @@ import humanFormat from 'human-format';
 import { metricSourceIntegrations } from '../../metricSources';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import Optional from 'optional-js';
-import {mapIfPresent} from '../../util/OptionalUtils';
+import { mapIfPresent, mapIfPresentOrElse, safeGet } from '../../util/OptionalUtils';
 
 interface IndividualMetricViewProps {
   selectedMetric: string;
@@ -31,9 +31,13 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       canaryAnalysisResultByIdMap,
       metricSetPairsByIdMap
     } = this.props;
-    const baselineData = metricSetPairsByIdMap[selectedMetric].values.control;
-    const canaryData = metricSetPairsByIdMap[selectedMetric].values.experiment;
-    const { startTimeMillis, stepMillis } = metricSetPairsByIdMap[selectedMetric].scopes.control;
+
+    const baselineData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.control).orElse([]);
+    const canaryData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.experiment).orElse([]);
+    const startTimeMillis = safeGet(() => metricSetPairsByIdMap[selectedMetric].scopes.control.startTimeMillis).orElse(
+      0
+    );
+    const stepMillis = safeGet(() => metricSetPairsByIdMap[selectedMetric].scopes.control.stepMillis).orElse(0);
 
     // Temporary fix to create x axis labels by filtering NaNs out of data until we determine more robust solution
     const filteredControlDataPoints = baselineData.filter(function(value) {
@@ -243,8 +247,19 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
             </div>
           </div>
           {mapIfPresent(Optional.ofNullable(metricSourceIntegrations[metricSourceType].queryMapper), queryMapper => {
-            const { control, experiment, displayLanguage } = queryMapper(
-              metricSetPairsByIdMap[selectedMetric].attributes
+            const { control, experiment, displayLanguage } = mapIfPresentOrElse(
+              Optional.ofNullable(metricSetPairsByIdMap[selectedMetric]),
+              map => {
+                return queryMapper(map.attributes);
+              },
+              () => {
+                // TODO add card here that pops up saying there has been an error displaying the data
+                return {
+                  control: '',
+                  experiment: '',
+                  displayLanguage: ''
+                };
+              }
             );
             const lang = Optional.ofNullable(displayLanguage).orElse('none');
             return (

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import {
   CanaryAnalysisResult,
   CanaryClassifierThresholdsConfig,
@@ -44,6 +45,7 @@ enum filters {
   LOW = 'Low'
 }
 
+@observer
 export default class MetricsNavPanel extends React.Component<Props, State> {
   constructor(props: Readonly<Props>) {
     super(props);
