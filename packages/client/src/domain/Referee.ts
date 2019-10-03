@@ -17,3 +17,9 @@ export interface ValidationResultsWrapper {
   errors: KvMap<string>;
   isValid: boolean;
 }
+
+export interface DisplayableError {
+  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark' | 'light';
+  heading: string;
+  content: JSX.Element;
+}

@@ -8,7 +8,7 @@ import { stores } from '../stores';
 import Header from './Header';
 import Footer from './Footer';
 import Landing from './Landing';
-import ModalViewer from './ModalViewer';
+import ModalPane from './ModalPane';
 import ConfigEditor from './config/ConfigEditor';
 import CanaryExecutor from './canary-executor/CanaryExecutor';
 import CanaryExecutorResults from './reports/canary/CanaryExecutorResults';
@@ -19,6 +19,7 @@ import 'typeface-assistant/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import CanaryReportViewer from './reports/canary/CanaryReportViewer';
 import ScapeReportViewer from './reports/scape/ScapeReportViewer';
+import ErrorPane from './ErrorPane';
 
 interface AppProps {}
 
@@ -28,10 +29,11 @@ export default class App extends React.Component<AppProps> {
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Provider {...stores}>
           <div id="kayenta-config-manager">
-            <ModalViewer />
+            <ModalPane />
             <Route render={({ history }: { history: H.History }) => <Header history={history} />} />
             <div className="content-container">
               <div className="content-container-inner-wrapper">
+                <ErrorPane />
                 <Route exact={true} path="/" component={Landing} />
                 <Route path="/docs/:path(.*)" component={Docs} />
                 <Route path="/reports/canary/:executionId(.*)" component={CanaryReportViewer} />

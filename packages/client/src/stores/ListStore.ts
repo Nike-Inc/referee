@@ -5,7 +5,7 @@ export class EmptyStackError extends Error {}
 /**
  * Array backed generic stack store
  */
-export default class StackStore<T> {
+export default class ListStore<T> {
   @observable
   data: T[] = [];
 
@@ -24,6 +24,11 @@ export default class StackStore<T> {
   pop(): T {
     this.assertDataHasElements();
     return this.data.pop()!;
+  }
+
+  @action.bound
+  removeIndex(index: number): void {
+    this.data = observable.array([...this.data.slice(0, index), ...this.data.slice(index + 1)]);
   }
 
   @computed
