@@ -5,7 +5,7 @@ import { CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../../domain/Kay
 import { connect, ConnectedComponent } from '../connectedComponent';
 import ConfigEditorStore from '../../stores/ConfigEditorStore';
 import { observer } from 'mobx-react';
-import StackStore from '../../stores/StackStore';
+import ListStore from '../../stores/ListStore';
 import { boundMethod } from 'autobind-decorator';
 import { ScoringSection } from './ScoringSection';
 import { NameAndDescriptionSection } from './NameAndDescriptionSection';
@@ -17,7 +17,7 @@ import { MetricModalProps } from './AbstractMetricModal';
 interface Props extends RouterProps {}
 interface Stores {
   configEditorStore: ConfigEditorStore;
-  modalStore: StackStore<JSX.Element>;
+  modalStore: ListStore<JSX.Element>;
 }
 
 @connect(
