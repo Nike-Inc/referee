@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { kayentaApiService, metricsService } from '../../services/';
+import { kayentaApiService } from '../../services/';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import { observer } from 'mobx-react';
 import CanaryExecutorFormView from './CanaryExecutorFormView';
@@ -21,7 +21,6 @@ export default class CanaryExecutor extends ConnectedComponent<Props, Stores> {
   componentDidMount(): void {
     window.scrollTo(0, 0);
     kayentaApiService.fetchCredentials().then(data => this.stores.canaryExecutorStore.setKayentaCredentials(data));
-    metricsService.sendMetric('retrospective_tool');
   }
 
   render(): React.ReactNode {

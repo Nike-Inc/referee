@@ -2,7 +2,8 @@ import { stores } from '../stores';
 import axios from 'axios';
 import { CanaryConfig } from '../domain/Kayenta';
 import log from '../util/LoggerFactory';
-import { metricsService } from './index';
+import { EVENT, trackEvent } from '../util/MetricUtils';
+import { safeGet } from '../util/OptionalUtils';
 
 const { configEditorStore } = stores;
 
@@ -15,7 +16,7 @@ export default class LoadCanaryConfigService {
       contents = await navigator.clipboard.readText();
       const unvalidatedJsonObject = JSON.parse(contents);
       // TODO validate object with yup
-      metricsService.sendMetric('canary_config_tool', `clipboard-config`);
+      trackEvent(EVENT.LOAD_CONFIG, { source: 'clipboard' });
       return unvalidatedJsonObject as CanaryConfig;
     } catch (e) {
       log.error('Failed to read and deserialize clipboard contents -', e);
@@ -36,8 +37,12 @@ export default class LoadCanaryConfigService {
 
       axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`).then(response => {
         configEditorStore.setCanaryConfigObject(response.data);
+        trackEvent(EVENT.LOAD_CONFIG, {
+          source: 'template',
+          template: templateName,
+          name: safeGet(() => response.data.name).orElse('UNKNOWN')
+        });
       });
-      metricsService.sendMetric('canary_config_tool', `${templateName}`);
     }
   }
 }

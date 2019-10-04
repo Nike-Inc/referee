@@ -3,7 +3,8 @@ import { NavDropdown } from 'react-bootstrap';
 import { CanaryConfig } from '../../domain/Kayenta';
 import { boundMethod } from 'autobind-decorator';
 import log from '../../util/LoggerFactory';
-import { metricsService } from '../../services';
+import { EVENT, trackEvent } from '../../util/MetricUtils';
+import { safeGet } from '../../util/OptionalUtils';
 
 interface Props {
   onLoad: (config: CanaryConfig) => void;
@@ -44,7 +45,10 @@ export default class LoadCanaryConfigNavItem extends React.Component<Props> {
     const unvalidatedJsonObject = JSON.parse(this.fileReader.result as any);
     // TODO validate that json is config
     this.props.onLoad(unvalidatedJsonObject);
-    metricsService.sendMetric('canary_config_tool', `file-config`);
+    trackEvent(EVENT.LOAD_CONFIG, {
+      source: 'file',
+      name: safeGet(() => unvalidatedJsonObject.name).orElse('UNKNOWN')
+    });
   }
 
   render(): React.ReactNode {

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import log from '../util/LoggerFactory';
 import logo from '../assets/logo.svg';
 
 import './Header.scss';
-import { RouterProps } from 'react-router';
+import { RouteComponentProps, RouterProps } from 'react-router';
 import { connect, ConnectedComponent } from './connectedComponent';
 import ConfigEditorStore from '../stores/ConfigEditorStore';
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
@@ -13,11 +13,12 @@ import LoadCanaryConfigNavItem from './config/LoadCanaryConfigNavItem';
 import { CanaryConfig } from '../domain/Kayenta';
 import { boundMethod } from 'autobind-decorator';
 import Optional from 'optional-js';
-import { loadCanaryConfigService, docsService, metricsService } from '../services';
+import { docsService, loadCanaryConfigService } from '../services';
 import DocsStore from '../stores/DocsStore';
 import { observer } from 'mobx-react';
+import { EVENT, trackEvent } from '../util/MetricUtils';
 
-interface Props extends RouterProps {}
+interface Props extends RouteComponentProps {}
 interface Stores {
   configEditorStore: ConfigEditorStore;
   docsStore: DocsStore;
@@ -68,7 +69,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
                     onClick={() => {
                       this.stores.configEditorStore.setCanaryConfigObject(CanaryConfigFactory.createNewCanaryConfig());
                       this.props.history.push('/config/edit');
-                      metricsService.sendMetric('canary_config_tool', `created-config`);
+                      trackEvent(EVENT.NEW_CONFIG);
                     }}
                   >
                     Create a New Kayenta Canary Config

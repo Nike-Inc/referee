@@ -46,7 +46,10 @@ export function mapIfPresent<T>(optional: Optional<T>, presentAction: (value: T)
   }
 }
 
-export function trimToEmpty(value: string): Optional<string> {
+export function trimToEmpty(value: string | undefined): Optional<string> {
+  if (value === undefined) {
+    return Optional.empty();
+  }
   const trimmed = value.trim();
   if (trimmed === '') {
     return Optional.empty();
