@@ -20,9 +20,9 @@ interface CustomizableConfiguration {
 const customizations: CustomizableConfiguration = require('../../../customizations') || {};
 
 // eslint-disable-next-line prettier/prettier
-const metricsRegistry: SelfReportingMetricsRegistry = Optional
-  .ofNullable(customizations.metricsRegistry)
-  .orElse(new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {} })));
+const metricsRegistry: SelfReportingMetricsRegistry = Optional.ofNullable(customizations.metricsRegistry).orElse(
+  new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {} }))
+);
 
 const port = process.env.PORT || 3001;
 

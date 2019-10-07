@@ -20,6 +20,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import CanaryReportViewer from './reports/canary/CanaryReportViewer';
 import ScapeReportViewer from './reports/scape/ScapeReportViewer';
 import ErrorPane from './ErrorPane';
+import PageViewTracker from './PageViewTracker';
 
 interface AppProps {}
 
@@ -30,7 +31,8 @@ export default class App extends React.Component<AppProps> {
         <Provider {...stores}>
           <div id="kayenta-config-manager">
             <ModalPane />
-            <Route render={({ history }: { history: H.History }) => <Header history={history} />} />
+            <Route component={PageViewTracker} />
+            <Route component={Header} />
             <div className="content-container">
               <div className="content-container-inner-wrapper">
                 <ErrorPane />

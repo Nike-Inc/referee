@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { docsService, metricsService } from '../../services';
+import { docsService } from '../../services';
 import { connect, ConnectedComponent } from '../connectedComponent';
 import DocsStore from '../../stores/DocsStore';
 import { observer } from 'mobx-react';
