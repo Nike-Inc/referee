@@ -60,16 +60,20 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       labels: timeLabels.slice(),
       datasets: [
         {
-          label: 'Canary',
-          backgroundColor: 'rgb(255,225,0)',
-          borderColor: 'rgb(161,161,161, 0.2)',
-          data: canaryData.slice()
+          label: 'Baseline',
+          backgroundColor: 'rgb(6, 89, 137)',
+          borderColor: 'rgb(6, 89, 137)',
+          borderWidth: 2,
+          fill: false,
+          data: baselineData.slice()
         },
         {
-          label: 'Baseline',
-          backgroundColor: 'rgb(211, 211, 211)',
-          borderColor: 'rgb(211, 211, 211)',
-          data: baselineData.slice()
+          label: 'Canary',
+          backgroundColor: 'rgb(240, 111, 31)',
+          borderColor: 'rgb(240, 111, 31)',
+          borderWidth: 2,
+          fill: false,
+          data: canaryData.slice()
         }
       ]
     };
@@ -104,7 +108,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
                 },
                 elements: {
                   point: {
-                    radius: 0
+                    radius: 1
                   }
                 },
                 tooltips: {
@@ -144,6 +148,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
                   yAxes: [
                     {
                       stacked: false,
+                      beginAtZero: true,
                       ticks: {
                         fontColor: 'rgb(0,0,0, 0.8)',
                         fontSize: 15,
