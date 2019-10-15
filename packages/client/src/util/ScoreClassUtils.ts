@@ -16,8 +16,8 @@ export function getClassFromScore(
 }
 
 export function getGroupClassFromScore(score: number, scoreThresholds: CanaryClassifierThresholdsConfig) {
-  const { pass, marginal } = scoreThresholds;
-  return score >= pass ? 'pass' : score >= marginal ? 'marginal' : 'fail';
+  const { pass } = scoreThresholds;
+  return score >= pass ? 'pass' : 'fail';
 }
 
 export default {
