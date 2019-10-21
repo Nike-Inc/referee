@@ -49,7 +49,7 @@ const signalFxQuerySchema = {
 /**
  * Calculate time labels for metric graphs based on start, end, and number of data points
  */
-const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
+export const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
   const startDate = new Date(startTs);
   const endDate = new Date(endTs);
   const lifetimeMillis = endDate.getTime() - startDate.getTime();
@@ -82,7 +82,6 @@ const validationErrorMapper = (errors: KvMap<string>, validationError: Validatio
   }
 };
 
-// https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
 const signalFxQueryMapper = (
   attributes: MetricSetPairAttributes
 ): { control: string; experiment: string; displayLanguage?: string } => {
@@ -93,7 +92,6 @@ const signalFxQueryMapper = (
   };
 };
 
-// https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
 const graphDataMapper = (
   attributes: MetricSetPairAttributes
 ): {
