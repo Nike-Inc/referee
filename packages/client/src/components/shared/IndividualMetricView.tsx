@@ -46,8 +46,8 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       metricSetPairsByIdMap
     } = this.props;
 
-    const baselineData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.control).orElse([]);
-    const canaryData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.experiment).orElse([]);
+    const controlData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.control).orElse([]);
+    const experimentData = safeGet(() => metricSetPairsByIdMap[selectedMetric].values.experiment).orElse([]);
     const startTimeMillis = safeGet(() => metricSetPairsByIdMap[selectedMetric].scopes.control.startTimeMillis).orElse(
       0
     );
@@ -107,7 +107,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           borderColor: 'rgb(6, 89, 137)',
           borderWidth: 2,
           fill: false,
-          data: baselineData.slice()
+          data: controlData.slice()
         },
         {
           label: 'Canary',
@@ -115,7 +115,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           borderColor: 'rgb(240, 111, 31)',
           borderWidth: 2,
           fill: false,
-          data: canaryData.slice()
+          data: experimentData.slice()
         }
       ]
     };
