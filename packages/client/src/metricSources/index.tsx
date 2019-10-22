@@ -16,17 +16,20 @@ const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[
  * A Map of metric source integration types to metric source integrations
  */
 // prettier-ignore
-export const metricSourceIntegrations: KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>> =
-  enabledMetricSources.reduce((result, metricsSource) => {
-    result[metricsSource.type] = metricsSource;
-    return result;
-  },
-  {} as KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>>
-);
+export const metricSourceIntegrations: () => KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>> = () => {
+  return enabledMetricSources.reduce((result, metricsSource) => {
+      result[metricsSource.type] = metricsSource;
+      return result;
+    },
+    {} as KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>>
+  );
+};
 
 /**
  * The list of metric source types
  */
-export const metricSourceTypes: string[] = enabledMetricSources.map(
-  metricSourceIntegration => metricSourceIntegration.type
-);
+export const metricSourceTypes: () => string[] = () => {
+  return enabledMetricSources.map(
+    metricSourceIntegration => metricSourceIntegration.type
+  );
+};

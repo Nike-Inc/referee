@@ -73,7 +73,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
 
 
     const { controlTimeLabels, experimentTimeLabels } = mapIfPresentOrElse(
-      Optional.ofNullable(metricSourceIntegrations[metricSourceType].graphData),
+      Optional.ofNullable(metricSourceIntegrations()[metricSourceType].graphData),
       graphDataMapper => {
         return graphDataMapper(metricSetPairsByIdMap[selectedMetric].attributes);
       },
@@ -313,7 +313,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
               </div>
             </div>
           </div>
-          {mapIfPresent(Optional.ofNullable(metricSourceIntegrations[metricSourceType].queryMapper), queryMapper => {
+          {mapIfPresent(Optional.ofNullable(metricSourceIntegrations()[metricSourceType].queryMapper), queryMapper => {
             const { control, experiment, displayLanguage } = mapIfPresentOrElse(
               Optional.ofNullable(metricSetPairsByIdMap[selectedMetric]),
               map => {

@@ -4,10 +4,10 @@ import CreatableSelect from 'react-select/lib/Creatable';
 import TitledSection from '../../layout/titledSection';
 import { CanaryMetricConfig, CanaryMetricSetQueryConfig } from '../../domain/Kayenta';
 import './AbstractMetricModal.scss';
-import { validateCanaryMetricConfig } from '../../validation/configValidators';
 import { FormGroup } from '../../layout/FormGroup';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
 import { boundMethod } from 'autobind-decorator';
+import { ValidationResultsWrapper } from '../../domain/Referee';
 
 const initialState = {
   errors: {},
@@ -62,7 +62,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     super(props);
 
     if (props.existingMetric) {
-      const validationErrors = validateCanaryMetricConfig(props.existingMetric, props.type);
+      const validationErrors = this.validateCanaryMetricConfig(props.existingMetric, props.type);
       this.state = Object.assign({}, this.getInitialState(), {
         existingMetric: props.existingMetric,
         metric: props.existingMetric,
@@ -84,6 +84,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
       this.state = this.getInitialState();
     }
   }
+
+  abstract validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper;
 
   private getInitialState(): MetricModalState<T> {
     return Object.assign({}, initialState, {
@@ -231,7 +233,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
   }
 
   protected validate(): void {
-    this.setState(validateCanaryMetricConfig(this.state.metric, this.props.type));
+    this.setState(this.validateCanaryMetricConfig(this.state.metric, this.props.type));
   }
 
   abstract getQueryInitialState(): T;
@@ -443,7 +445,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
             </Button>
             <Button
               onClick={() => {
-                const valErrors = validateCanaryMetricConfig(this.state.metric, this.props.type);
+                const valErrors = this.validateCanaryMetricConfig(this.state.metric, this.props.type);
                 if (!valErrors.isValid) {
                   this.setState(valErrors);
                   this.setState({

@@ -11,7 +11,7 @@ import { safeGet } from '../util/OptionalUtils';
  */
 export default class ConfigEditorStore {
   @observable
-  metricSourceType: string = metricSourceTypes[0];
+  metricSourceType: string = metricSourceTypes()[0];
 
   @observable
   canaryConfigObject: CanaryConfig = CanaryConfigFactory.createNewCanaryConfig();

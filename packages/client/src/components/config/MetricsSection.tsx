@@ -89,7 +89,7 @@ export const MetricsSection = observer(
                 <Button
                   onClick={() => {
                     pushModal(
-                      metricSourceIntegrations[metricSourceType].createMetricsModal({
+                      metricSourceIntegrations()[metricSourceType].createMetricsModal({
                         type: metricSourceType,
                         groups: groups,
                         cancel: popModal,
