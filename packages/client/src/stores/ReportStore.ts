@@ -99,6 +99,8 @@ export default class ReportStore {
     this.scapeExecutionStatusResponse = scapeExecutionStatusResponse;
     this.scapeResults = scapeExecutionStatusResponse.canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult;
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
+    this.startTime = scapeExecutionStatusResponse.startTimeIso as string;
+    this.endTime = scapeExecutionStatusResponse.endTimeIso as string;
 
     safeGet(() => this.scapeResults).ifPresent(results => {
       const lastRun = results.canaryScores.length - 1;
@@ -109,8 +111,6 @@ export default class ReportStore {
 
     safeGet(() => this.scapeExecutionRequest).ifPresent(request => {
       this.thresholds = request.thresholds as CanaryClassifierThresholdsConfig;
-      this.startTime = safeGet(() => request.scopes[0]).get().startTimeIso as string;
-      this.endTime = safeGet(() => request.scopes[0]).get().endTimeIso as string;
     });
   }
 
