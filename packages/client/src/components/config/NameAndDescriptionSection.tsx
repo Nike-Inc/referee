@@ -35,7 +35,7 @@ export const NameAndDescriptionSection = observer(
     return (
       <TitledSection title="Metadata" additionalClassname="name-and-description">
         <SelectInputGroup
-          options={metricSourceTypes}
+          options={metricSourceTypes()}
           name="metric-source-type"
           label="Metric Source Type"
           value={metricSourceType}

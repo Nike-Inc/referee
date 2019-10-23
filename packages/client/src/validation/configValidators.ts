@@ -17,7 +17,7 @@ const getCanaryMetricConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>
         {},
         {
           type: mixed()
-            .oneOf(metricSourceTypes)
+            .oneOf(metricSourceTypes())
             .required()
         },
         metricQueryObjectSchema
@@ -104,7 +104,7 @@ export const validateCanaryMetricConfig = (
   let error: ValidationError | undefined;
   const errors: KvMap<string> = {};
   try {
-    const querySchema = metricSourceIntegrations[type].canaryMetricSetQueryConfigSchema;
+    const querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
     getCanaryMetricConfigSchema(querySchema).validateSync(metric, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;
@@ -117,7 +117,7 @@ export const validateCanaryMetricConfig = (
     const inner: ValidationError[] = error.inner;
     if (inner) {
       inner.forEach(validationError => {
-        ofNullable(metricSourceIntegrations[type].schemaValidationErrorMapper).ifPresent(validationErrorMapper => {
+        ofNullable(metricSourceIntegrations()[type].schemaValidationErrorMapper).ifPresent(validationErrorMapper => {
           validationErrorMapper(errors, validationError);
         });
         if (
@@ -150,7 +150,7 @@ export const validateCanaryConfig = (canaryConfig: CanaryConfig): ValidationResu
     const querySchema = safeGet<KvMap<Schema<any>>>(() => {
       // Attempt to grab the type from the first metric.
       const type = canaryConfig.metrics[0].query.type;
-      return metricSourceIntegrations[type].canaryMetricSetQueryConfigSchema;
+      return metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
     }).orElse({});
     getCanaryConfigSchema(querySchema).validateSync(canaryConfig, { abortEarly: false, strict: true });
   } catch (e) {
