@@ -55,6 +55,23 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
 
     let timeLabels: number[] = [];
 
+    // // Temporary fix to create x axis labels by filtering NaNs out of data until we determine more robust solution
+    // const filteredControlDataPoints = controlData.filter(function(value) {
+    //   return !(value.toString() === 'NaN');
+    // });
+    //
+    // let scale: number = 0;
+    // if (lifetime > 0 && filteredControlDataPoints.length > 0) {
+    //   const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
+    //   scale = Math.round(lifetimeMillis / filteredControlDataPoints.length);
+    // } else {
+    //   scale = stepMillis;
+    // }
+    // for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
+    //   timeLabels.push(j);
+    // }
+
+
     const { controlTimeLabels, experimentTimeLabels } = mapIfPresentOrElse(
       Optional.ofNullable(metricSourceIntegrations[metricSourceType].graphData),
       graphDataMapper => {
@@ -73,30 +90,32 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           scale = stepMillis;
         }
         for (let i = 0, j = startTimeMillis; i < filteredControlDataPoints.length; i++, j += scale) {
-          controlTimeLabels.push(j);
+          // controlTimeLabels.push(j);
+          timeLabels.push(j);
         }
-        return { controlTimeLabels };
+        // return { controlTimeLabels };
+        return { timeLabels };
       }
     );
 
     // Checks if control and experiment have the same time stamps to determine what labels to display
     // TODO use ternary statements to make more readable
-    if (controlTimeLabels && controlTimeLabels.length) {
-      if (experimentTimeLabels && experimentTimeLabels.length) {
-        if (controlTimeLabels.toString() == experimentTimeLabels.toString()) {
-          timeLabels = controlTimeLabels;
-        } else {
-          timeLabels = this.generateTimeLabelsWithStartTimeZero(
-            this.filterNansFromData(controlData).length,
-            stepMillis
-          );
-        }
-      } else {
-        timeLabels = controlTimeLabels;
-      }
-    } else {
-      timeLabels = this.generateTimeLabelsWithStartTimeZero(this.filterNansFromData(controlData).length, stepMillis);
-    }
+    // if (controlTimeLabels && controlTimeLabels.length) {
+    //   if (experimentTimeLabels && experimentTimeLabels.length) {
+    //     if (controlTimeLabels.toString() == experimentTimeLabels.toString()) {
+    //       timeLabels = controlTimeLabels;
+    //     } else {
+    //       timeLabels = this.generateTimeLabelsWithStartTimeZero(
+    //         this.filterNansFromData(controlData).length,
+    //         stepMillis
+    //       );
+    //     }
+    //   } else {
+    //     timeLabels = controlTimeLabels;
+    //   }
+    // } else {
+    //   timeLabels = this.generateTimeLabelsWithStartTimeZero(this.filterNansFromData(controlData).length, stepMillis);
+    // }
 
     const data = {
       labels: timeLabels.slice(),
