@@ -29,7 +29,5 @@ export const metricSourceIntegrations: () => KvMap<MetricSourceIntegration<Canar
  * The list of metric source types
  */
 export const metricSourceTypes: () => string[] = () => {
-  return enabledMetricSources.map(
-    metricSourceIntegration => metricSourceIntegration.type
-  );
+  return enabledMetricSources.map(metricSourceIntegration => metricSourceIntegration.type);
 };

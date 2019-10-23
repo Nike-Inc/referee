@@ -71,7 +71,6 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     //   timeLabels.push(j);
     // }
 
-
     const { controlTimeLabels, experimentTimeLabels } = mapIfPresentOrElse(
       Optional.ofNullable(metricSourceIntegrations()[metricSourceType].graphData),
       graphDataMapper => {

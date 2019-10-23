@@ -13,7 +13,7 @@ import { ValidationResultsWrapper } from '../../domain/Referee';
 
 export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCanaryMetricSetQueryConfig> {
   validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper {
-      return validateCanaryMetricConfig(existingMetric, type);
+    return validateCanaryMetricConfig(existingMetric, type);
   }
 
   getQueryInitialState(): SignalFxCanaryMetricSetQueryConfig {

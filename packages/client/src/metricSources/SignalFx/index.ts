@@ -46,23 +46,31 @@ const signalFxQuerySchema = {
   )
 };
 
-/**
- * Calculate time labels for metric graphs based on start, end, and number of data points
- */
-export const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
+export const lifetimeMillis = (startTs: number, endTs: number) => {
   const startDate = new Date(startTs);
   const endDate = new Date(endTs);
-  const lifetimeMillis = endDate.getTime() - startDate.getTime();
+  return endDate.getTime() - startDate.getTime();
+};
 
+export const scale = (lifetimeMillis: number, dataPointCount: number, step: number) => {
   let scale: number;
   if (lifetimeMillis > 0 && dataPointCount > 0) {
     scale = Math.round(lifetimeMillis / dataPointCount);
   } else {
     scale = step;
   }
+  return scale;
+};
+
+/**
+ * Calculate time labels for metric graphs based on start, end, and number of data points
+ */
+export const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
+  const lifetime: number = lifetimeMillis(startTs, endTs);
+  const labelsScale: number = scale(lifetime, dataPointCount, step);
 
   const timeLabels: number[] = [];
-  for (let i = 0, j = startTs; i < dataPointCount; i++, j += scale) {
+  for (let i = 0, j = startTs; i < dataPointCount; i++, j += labelsScale) {
     timeLabels.push(j);
   }
 
