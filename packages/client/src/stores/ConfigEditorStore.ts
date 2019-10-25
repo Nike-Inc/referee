@@ -112,7 +112,7 @@ export default class ConfigEditorStore {
       .filter(key => !uniqueGroups.has(key))
       .forEach(keyToDelete => delete this.canaryConfigObject.classifier.groupWeights[keyToDelete]);
 
-    this.metricSourceType = safeGet(() => this.canaryConfigObject.metrics[0].query.type).orElse(metricSourceTypes[0]);
+    this.metricSourceType = safeGet(() => this.canaryConfigObject.metrics[0].query.type).orElse(metricSourceTypes()[0]);
   }
 
   @action.bound
