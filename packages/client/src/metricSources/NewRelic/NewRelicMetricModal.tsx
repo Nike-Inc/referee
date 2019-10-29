@@ -3,8 +3,15 @@ import { AbstractMetricModal } from '../../components/config/AbstractMetricModal
 import NewRelicCanaryMetricSetQueryConfig from './NewRelicCanaryMetricSetQueryConfig';
 import { NEW_RELIC_SERVICE_TYPE } from './index';
 import { InlineTextGroup } from '../../layout/InlineTextGroup';
+import { validateCanaryMetricConfig } from '../../validation/configValidators';
+import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { ValidationResultsWrapper } from '../../domain/Referee';
 
 export default class NewRelicMetricModal extends AbstractMetricModal<NewRelicCanaryMetricSetQueryConfig> {
+  validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper {
+    return validateCanaryMetricConfig(existingMetric, type);
+  }
+
   getQueryInitialState(): NewRelicCanaryMetricSetQueryConfig {
     return {
       type: NEW_RELIC_SERVICE_TYPE,

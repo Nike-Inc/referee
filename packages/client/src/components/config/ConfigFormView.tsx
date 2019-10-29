@@ -101,7 +101,7 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
         this.stores.modalStore.pop();
       }
     };
-    const metricModal = metricSourceIntegrations[type].createMetricsModal(props);
+    const metricModal = metricSourceIntegrations()[type].createMetricsModal(props);
     this.stores.modalStore.push(metricModal);
   }
 

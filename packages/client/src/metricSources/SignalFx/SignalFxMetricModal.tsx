@@ -7,8 +7,15 @@ import { boundMethod } from 'autobind-decorator';
 import SignalFxCanaryMetricSetQueryConfig from './SignalFxCanaryMetricSetQueryConfig';
 import { SIGNAL_FX_SERVICE_TYPE, SUPPORTED_AGGREGATION_METHODS } from './index';
 import KeyValuePair from '../../layout/KeyValuePair';
+import { validateCanaryMetricConfig } from '../../validation/configValidators';
+import { CanaryMetricConfig } from '../../domain/Kayenta';
+import { ValidationResultsWrapper } from '../../domain/Referee';
 
 export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCanaryMetricSetQueryConfig> {
+  validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper {
+    return validateCanaryMetricConfig(existingMetric, type);
+  }
+
   getQueryInitialState(): SignalFxCanaryMetricSetQueryConfig {
     return {
       type: SIGNAL_FX_SERVICE_TYPE,

@@ -5,6 +5,7 @@ import { MetricModalProps } from '../../components/config/AbstractMetricModal';
 import { array, mixed, object, string, ValidationError } from 'yup';
 import { MetricSourceIntegration } from '../MetricSourceIntegration';
 import { MetricSetPairAttributes } from '../../domain/Kayenta';
+import Optional from 'optional-js';
 
 export const SIGNAL_FX_SERVICE_TYPE: string = 'signalfx';
 
@@ -45,6 +46,37 @@ const signalFxQuerySchema = {
   )
 };
 
+export const lifetimeMillis = (startTs: number, endTs: number) => {
+  const startDate = new Date(startTs);
+  const endDate = new Date(endTs);
+  return endDate.getTime() - startDate.getTime();
+};
+
+export const scale = (lifetimeMillis: number, dataPointCount: number, step: number) => {
+  let scale: number;
+  if (lifetimeMillis > 0 && dataPointCount > 0) {
+    scale = Math.round(lifetimeMillis / dataPointCount);
+  } else {
+    scale = step;
+  }
+  return scale;
+};
+
+/**
+ * Calculate time labels for metric graphs based on start, end, and number of data points
+ */
+export const timeLabels = (startTs: number, endTs: number, dataPointCount: number, step: number) => {
+  const lifetime: number = lifetimeMillis(startTs, endTs);
+  const labelsScale: number = scale(lifetime, dataPointCount, step);
+
+  const timeLabels: number[] = [];
+  for (let i = 0, j = startTs; i < dataPointCount; i++, j += labelsScale) {
+    timeLabels.push(j);
+  }
+
+  return timeLabels;
+};
+
 /**
  * We want to map all the query pair errors to the dimensions form group / key
  */
@@ -58,7 +90,6 @@ const validationErrorMapper = (errors: KvMap<string>, validationError: Validatio
   }
 };
 
-// https://github.com/spinnaker/kayenta/blob/master/kayenta-signalfx/src/main/java/com/netflix/kayenta/signalfx/metrics/SignalFxMetricsService.java#L153
 const signalFxQueryMapper = (
   attributes: MetricSetPairAttributes
 ): { control: string; experiment: string; displayLanguage?: string } => {
@@ -69,6 +100,46 @@ const signalFxQueryMapper = (
   };
 };
 
+const graphDataMapper = (
+  attributes: MetricSetPairAttributes
+): {
+  controlTimeLabels: number[];
+  experimentTimeLabels: number[];
+} => {
+  const controlStartTs = Number(
+    Optional.ofNullable(attributes!.control!['actual-start-ts']).orElse(attributes!.control!['requested-start'])
+  );
+  const controlEndTs = Number(
+    Optional.ofNullable(attributes!.control!['actual-end-ts']).orElse(attributes!.control!['requested-end'])
+  );
+  const controlDataPointCount = Number(attributes!.control!['actual-data-point-count']);
+  const controlRequestedStep = Number(attributes!.control!['requested-step-milli']);
+
+  const experimentStartTs = Number(
+    Optional.ofNullable(attributes!.experiment!['actual-start-ts']).orElse(attributes!.experiment!['requested-start'])
+  );
+  const experimentEndTs = Number(
+    Optional.ofNullable(attributes!.experiment!['actual-end-ts']).orElse(attributes!.experiment!['requested-end'])
+  );
+  const experimentDataPointCount = Number(attributes!.experiment!['actual-data-point-count']);
+  const experimentRequestedStep = Number(attributes!.experiment!['requested-step-milli']);
+
+  const controlTimeLabels: number[] = timeLabels(
+    controlStartTs,
+    controlEndTs,
+    controlDataPointCount,
+    controlRequestedStep
+  );
+  const experimentTimeLabels: number[] = timeLabels(
+    experimentStartTs,
+    experimentEndTs,
+    experimentDataPointCount,
+    experimentRequestedStep
+  );
+
+  return { controlTimeLabels, experimentTimeLabels };
+};
+
 const signalFxMetricModalFactory = (props: MetricModalProps) => React.createElement(SignalFxMetricModal, props);
 
 const SignalFx: MetricSourceIntegration<SignalFxCanaryMetricSetQueryConfig> = {
@@ -76,7 +147,8 @@ const SignalFx: MetricSourceIntegration<SignalFxCanaryMetricSetQueryConfig> = {
   createMetricsModal: signalFxMetricModalFactory,
   canaryMetricSetQueryConfigSchema: signalFxQuerySchema,
   schemaValidationErrorMapper: validationErrorMapper,
-  queryMapper: signalFxQueryMapper
+  queryMapper: signalFxQueryMapper,
+  graphData: graphDataMapper
 };
 
 export default SignalFx;
