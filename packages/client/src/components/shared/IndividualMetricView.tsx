@@ -114,18 +114,22 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
     return (
       <div className="individual-metric-view">
         <div className="graph-card">
-          <div className="metric-graph-title">{canaryAnalysisResultByIdMap[selectedMetric].name}</div>
+          <div className="metric-graph-title">
+            {safeGet(() => canaryAnalysisResultByIdMap[selectedMetric].name).orElse('')}
+          </div>
           <div className="metric-graph-data">
             <LineGraph data={data} />
           </div>
         </div>
         <div className="cards-row">
-          <DataTable
-            selectedMetric={selectedMetric}
-            metricSourceType={metricSourceType}
-            lifetime={lifetime}
-            canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
-          />
+          {canaryAnalysisResultByIdMap[selectedMetric] && (
+            <DataTable
+              selectedMetric={selectedMetric}
+              metricSourceType={metricSourceType}
+              lifetime={lifetime}
+              canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap}
+            />
+          )}
           {mapIfPresent(Optional.ofNullable(metricSourceIntegrations()[metricSourceType].queryMapper), queryMapper => {
             const { control, experiment, displayLanguage } = mapIfPresentOrElse(
               Optional.ofNullable(metricSetPairsByIdMap[selectedMetric]),
@@ -261,6 +265,7 @@ const DataTable = ({
           <div className="data-table-row-title">Max</div>
           <div className="data-table-row-title">Std Dev</div>
         </div>
+
         <div className="data-table-column">
           <div className="data-table-column-title">Baseline</div>
           <div className="data-table-row-item">

@@ -23,6 +23,10 @@ import ReportStore from '../../../stores/ReportStore';
 import { observer } from 'mobx-react';
 import TitledSection from '../../../layout/titledSection';
 import CanaryMetadataSection from './CanaryMetadataSection';
+import ListStore from '../../../stores/ListStore';
+import { DisplayableError } from '../../../domain/Referee';
+import './CanaryReportViewer.scss';
+import logo from '../../../assets/logo.svg';
 
 interface PathParams {
   executionId: string;
@@ -34,6 +38,7 @@ interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
   reportStore: ReportStore;
+  errorStore: ListStore<DisplayableError>;
 }
 
 interface State {
@@ -46,7 +51,8 @@ interface State {
 @connect(
   'configEditorStore',
   'canaryExecutorStore',
-  'reportStore'
+  'reportStore',
+  'errorStore'
 )
 @observer
 export default class CanaryReportViewer extends ConnectedComponent<Props, Stores, State> {
@@ -64,6 +70,12 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
       this.stores.reportStore.updateFromCanaryResponse(canaryExecutionStatusResponse);
     } catch (e) {
       log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${executionId}`);
+      this.stores.errorStore.push({
+        heading: `Failed to fetch the canaryExecutionStatusResponse for id: ${executionId}`,
+        content: (
+          <div>We are unable to find a canary run for id: {executionId}. Please confirm this id is correct. </div>
+        )
+      });
       throw e;
     }
 
@@ -156,7 +168,11 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
           );
         }
       },
-      () => <div>SPINNER HERE</div> // TODO
+      () => (
+        <div className="img-container">
+          <img id="logo" src={logo} alt="" />
+        </div>
+      )
     );
   }
 }
