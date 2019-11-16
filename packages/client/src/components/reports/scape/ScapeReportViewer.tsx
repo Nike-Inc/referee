@@ -21,6 +21,11 @@ import { connect, ConnectedComponent } from '../../connectedComponent';
 import ReportStore from '../../../stores/ReportStore';
 import log from '../../../util/LoggerFactory';
 import { observer } from 'mobx-react';
+import logo from '../../../assets/logo.svg';
+import ListStore from '../../../stores/ListStore';
+import { DisplayableError } from '../../../domain/Referee';
+import './ScapeReportViewer.scss';
+import Optional from 'optional-js';
 
 interface PathParams {
   executionId: string;
@@ -31,15 +36,18 @@ interface Props extends RouteComponentProps<PathParams> {}
 interface Stores {
   configEditorStore: ConfigEditorStore;
   reportStore: ReportStore;
+  errorStore: ListStore<DisplayableError>;
 }
 
 interface State {
   scapeExecutionStatusResponse?: CanaryAnalysisExecutionStatusResponse;
+  executionId?: string;
 }
 
 @connect(
   'configEditorStore',
-  'reportStore'
+  'reportStore',
+  'errorStore'
 )
 @observer
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
@@ -51,13 +59,19 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
   async componentDidMount(): Promise<void> {
     let scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined = undefined;
 
-    const executionId = this.props.match.params.executionId;
+    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
 
     try {
       scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
       this.stores.reportStore.updateFromScapeResponse(scapeExecutionStatusResponse);
     } catch (e) {
-      log.error(`Failed to fetch the canaryAnalysisExecutionStatusResponse for id: ${executionId}`);
+      log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${executionId}`);
+      this.stores.errorStore.push({
+        heading: `Failed to fetch the canaryExecutionStatusResponse for id: ${executionId}`,
+        content: (
+          <div>We are unable to find a canary run for id: {executionId}. Please confirm this id is correct. </div>
+        )
+      });
       throw e;
     }
 
@@ -88,7 +102,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
       }
     });
     this.setState({
-      scapeExecutionStatusResponse
+      scapeExecutionStatusResponse,
+      executionId
     });
   }
 
@@ -104,12 +119,12 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
   }
 
   render(): React.ReactNode {
-    const { configEditorStore, reportStore } = this.stores;
+    const { configEditorStore, reportStore, errorStore } = this.stores;
 
     return mapIfPresentOrElse(
       ofNullable(this.state.scapeExecutionStatusResponse),
       scapeExecutionStatusResponse => {
-        if (scapeExecutionStatusResponse.complete) {
+        if (scapeExecutionStatusResponse.complete && reportStore.scapeResults && reportStore.scapeExecutionRequest) {
           return (
             <ScapeExecutionsResult
               application={ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc') as string}
@@ -142,12 +157,28 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
           );
-        } else if (!scapeExecutionStatusResponse.complete) {
-          return <div></div>;
-          // TODO execution is still running.
+        } else {
+          log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${this.state.executionId}`);
+          errorStore.push({
+            heading: `Failed to fetch the canaryExecutionStatusResponse for id: ${this.state.executionId}`,
+            content: (
+              <div>
+                We are unable to find a canary run for id: {this.state.executionId}. Please confirm this id is correct.{' '}
+              </div>
+            )
+          });
+          return (
+            <div className="img-container">
+              <img id="logo" src={logo} alt="" />
+            </div>
+          );
         }
       },
-      () => <div>SPINNER HERE</div> // TODO
+      () => (
+        <div className="img-container">
+          <img id="logo" src={logo} alt="" />
+        </div>
+      )
     );
   }
 }

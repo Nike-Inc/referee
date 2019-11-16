@@ -63,7 +63,7 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
 
     // Set the last canary execution as the selected execution by default.
     this.state = {
-      selectedCAEIndex: this.props.results.canaryScores.length - 1
+      selectedCAEIndex: safeGet(() => this.props.results.canaryScores.length - 1).orElse(0)
     };
   }
 

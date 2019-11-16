@@ -10,17 +10,21 @@ import { kayentaApiService } from '../../services';
 import { boundMethod } from 'autobind-decorator';
 import './CanaryExecutorButtonSection.scss';
 import { CanaryAdhocExecutionRequest } from '../../domain/Kayenta';
+import ListStore from '../../stores/ListStore';
+import { DisplayableError } from '../../domain/Referee';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
   configEditorStore: ConfigEditorStore;
+  errorStore: ListStore<DisplayableError>;
 }
 
 interface Props extends RouterProps {}
 
 @connect(
   'canaryExecutorStore',
-  'configEditorStore'
+  'configEditorStore',
+  'errorStore'
 )
 @observer
 export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
@@ -50,6 +54,10 @@ export default class CanaryExecutorButtonSection extends ConnectedComponent<Prop
       );
     } catch (e) {
       log.error('Failed to fetch response: ', e);
+      this.stores.errorStore.push({
+        heading: `Failed to fetch response`,
+        content: <div></div>
+      });
       throw e;
     }
   }
