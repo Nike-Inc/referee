@@ -1,5 +1,7 @@
 # Referee
 
+![Referee Logo](/docs/assets/referee-cutout-sticker.png)
+
 Referee is a user interface for using Spinnaker's Kayenta, a platform for Automated Canary Analysis (ACA), as a standalone service.
 
 Referee is very much inspired by the Spinnakers official UI (Deck).
