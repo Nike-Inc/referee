@@ -1,0 +1,14 @@
+@import '../../../styles/shared.scss';
+
+.img-container {
+  margin: 100px;
+  height: 100%;
+
+  #logo {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+  }
+}
+

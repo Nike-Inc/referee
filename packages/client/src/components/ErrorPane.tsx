@@ -22,6 +22,7 @@ export default class ErrorPane extends ConnectedComponent<{}, Stores> {
         <div>
           {errorStore.data.map((error, index) => (
             <Alert
+              key={index}
               variant={ofNullable(error.variant).orElse('danger')}
               onClose={() => errorStore.removeIndex(index)}
               dismissible
