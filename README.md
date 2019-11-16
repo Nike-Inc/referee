@@ -7,6 +7,7 @@ Referee is a user interface for using Spinnaker's Kayenta, a platform for Automa
 Referee is very much inspired by the Spinnakers official UI (Deck).
 
 Referee is a React Single Page Application written in Typescript, using Create React App.
+
 Referee also has an express backend to serve the app and act as a reverse proxy for Kayenta and handle UI KPI tracking. We can probably make this optional, but right now it is required.
 
 ## Why did we build Referee
