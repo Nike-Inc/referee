@@ -19,7 +19,7 @@ interface CustomizableConfiguration {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const customizations: CustomizableConfiguration = require('../../../customizations') || {};
 
-// If the operators have not supplied thier own metrics reporter than just default to the 
+// If the operators have not supplied their own metrics reporter than just default to the
 // logging reporter which will log metrics and KPIs to stdout
 // eslint-disable-next-line prettier/prettier
 const metricsRegistry: SelfReportingMetricsRegistry = Optional.ofNullable(customizations.metricsRegistry).orElse(
