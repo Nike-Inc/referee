@@ -12,7 +12,7 @@ import {
   MetricSetPair
 } from '../../../domain/Kayenta';
 import ScapeMetadataSection from './ScapeMetadataSection';
-import {ofNullable, safeGet} from '../../../util/OptionalUtils';
+import { ofNullable, safeGet } from '../../../util/OptionalUtils';
 import { ScapeRunResult } from './ScapeRunResult';
 import './ScapeExecutionsResult.scss';
 import ScoreClassUtils from '../../../util/ScoreClassUtils';
@@ -55,8 +55,7 @@ interface State {
   selectedCAEIndex: number;
 }
 
-const isTerminalFailure = (executionResultStatus: String) =>
-    executionResultStatus === 'TERMINAL';
+const isTerminalFailure = (executionResultStatus: String) => executionResultStatus === 'TERMINAL';
 
 @observer
 export default class ScapeExecutionsResult extends React.Component<Props, State> {
@@ -126,8 +125,7 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
           />
         </div>
 
-        {!isTerminalFailure(executionStatus)
-            ?
+        {!isTerminalFailure(executionStatus) ? (
           <div className="scape-executions">
             <div className="scape-executions-tabs">
               {results.canaryExecutionResults.map((canaryExecutionResult, index) => {
@@ -193,23 +191,19 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
               )}
             </div>
           </div>
-
-        :
+        ) : (
           <div className="terminal-canary-wrapper">
             <TerminalResult
-                exception={ofNullable(exception).orElse(
-                    {
-                            "details":
-                              {
-                                "error": "The canary terminated without an error message",
-                                "stackTrace": null,
-                                "errors": null
-                              }
-                          })
+              exception={ofNullable(exception).orElse({
+                details: {
+                  error: 'Terminal: The canary terminated without an error message.',
+                  stackTrace: null,
+                  errors: null
                 }
+              })}
             />
           </div>
-        }
+        )}
       </div>
     );
   }
