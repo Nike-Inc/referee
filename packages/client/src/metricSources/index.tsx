@@ -47,14 +47,18 @@ export const defaultGraphDataMapper = (
 } => {
   let controlTimeLabels: number[] = [];
   let scale: number;
+  const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
   if (lifetime > 0 && dataPointCount > 0) {
-    const lifetimeMillis: number = lifetime * MIN_TO_MS_CONVERSION;
     scale = Math.round(lifetimeMillis / dataPointCount);
   } else {
     scale = stepMillis;
   }
   for (let i = 0, j = startTimeMillis; i < dataPointCount; i++, j += scale) {
     controlTimeLabels.push(j);
+  }
+  if (controlTimeLabels.length === 0) {
+    controlTimeLabels.push(startTimeMillis)
+    controlTimeLabels.push(startTimeMillis + lifetimeMillis)
   }
   return { controlTimeLabels };
 };
