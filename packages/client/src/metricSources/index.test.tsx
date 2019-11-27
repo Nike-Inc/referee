@@ -53,7 +53,7 @@ it('generates empty graph labels with zero data points', () => {
   const startTimeMillis = 1565215800000;
   const stepMillis = 10000;
 
-  const expectedControlLabels: number[] = [];
+  const expectedControlLabels: number[] = [1565215800000, 1565218500000];
   const { controlTimeLabels } = defaultGraphDataMapper(lifetime, dataPointCount, startTimeMillis, stepMillis);
   expect(controlTimeLabels).toEqual(expectedControlLabels);
 });
@@ -64,7 +64,7 @@ it('generates default graph labels with parameters of zero', () => {
   const startTimeMillis = 0;
   const stepMillis = 0;
 
-  const expectedControlLabels: number[] = [];
+  const expectedControlLabels: number[] = [0, 0];
   const { controlTimeLabels } = defaultGraphDataMapper(lifetime, dataPoints, startTimeMillis, stepMillis);
   expect(controlTimeLabels).toEqual(expectedControlLabels);
 });
@@ -75,7 +75,7 @@ it('generates default graph labels with empty parameters', () => {
   const startTimeMillis = NaN;
   const stepMillis = NaN;
 
-  const expectedControlLabels: number[] = [];
+  const expectedControlLabels: number[] = [NaN, NaN];
   const { controlTimeLabels } = defaultGraphDataMapper(lifetime, dataPoints, startTimeMillis, stepMillis);
   expect(controlTimeLabels).toEqual(expectedControlLabels);
 });

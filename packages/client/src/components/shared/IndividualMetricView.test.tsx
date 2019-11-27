@@ -151,7 +151,7 @@ it('calculates time labels from parameters of zero', () => {
   const startTimeMillis = 0;
   const stepMillis = 0;
 
-  const expected: number[] = [];
+  const expected: number[] = [0, 0];
   const actual: number[] = calculateTimeLabels(
     selectedMetric,
     metricSourceType,
