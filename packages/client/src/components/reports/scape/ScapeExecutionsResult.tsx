@@ -12,7 +12,7 @@ import {
   MetricSetPair
 } from '../../../domain/Kayenta';
 import ScapeMetadataSection from './ScapeMetadataSection';
-import { ofNullable, safeGet } from '../../../util/OptionalUtils';
+import { safeGet } from '../../../util/OptionalUtils';
 import { ScapeRunResult } from './ScapeRunResult';
 import './ScapeExecutionsResult.scss';
 import ScoreClassUtils from '../../../util/ScoreClassUtils';
@@ -26,8 +26,6 @@ interface Props {
   metricSourceType: string;
   metricsAccountName: string;
   storageAccountName: string;
-  executionStatus: string;
-  exception: any;
   startTime: string;
   endTime: string;
   lifetime: number;
@@ -55,7 +53,8 @@ interface State {
   selectedCAEIndex: number;
 }
 
-const isTerminalFailure = (executionResultStatus: String) => executionResultStatus === 'TERMINAL';
+const isTerminalFailure = (selectedCanaryExecutionResult: CanaryExecutionResult) =>
+  selectedCanaryExecutionResult.executionStatus === 'TERMINAL' && selectedCanaryExecutionResult.exception;
 
 @observer
 export default class ScapeExecutionsResult extends React.Component<Props, State> {
@@ -79,8 +78,6 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
       metricSourceType,
       metricsAccountName,
       storageAccountName,
-      executionStatus,
-      exception,
       startTime,
       endTime,
       lifetime,
@@ -124,86 +121,71 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
             handleGoToConfigButtonClick={handleGoToConfigButtonClick}
           />
         </div>
-
-        {!isTerminalFailure(executionStatus) ? (
-          <div className="scape-executions">
-            <div className="scape-executions-tabs">
-              {results.canaryExecutionResults.map((canaryExecutionResult, index) => {
-                const score = isTerminalFailure(canaryExecutionResult.executionStatus)
-                  ? 0
-                  : safeGet(() => canaryExecutionResult.result.judgeResult).get().score.score;
-                return (
-                  <div className="scape-tab-wrapper" key={canaryExecutionResult.executionId}>
-                    <div
-                      key={`execution-${index}`}
-                      className={[
-                        'btn',
-                        'scape-tab',
-                        ScoreClassUtils.getClassFromScore(score, results.canaryScores, thresholds, index),
-                        index === this.state.selectedCAEIndex ? 'selected' : 'not-selected'
-                      ].join(' ')}
-                      onClick={() => {
-                        this.onCAETabClick(index);
-                        handleCanaryRunSelection(canaryExecutionResult);
-                      }}
-                    >
-                      <div className="score-wrapper headline-md-marketing">
-                        <div className="score">{score.toFixed(0)}</div>
-                        <div className="label uppercase">
-                          {ScoreClassUtils.getClassFromScore(score, results.canaryScores, thresholds, index)}
-                        </div>
+        <div className="scape-executions">
+          <div className="scape-executions-tabs">
+            {results.canaryExecutionResults.map((canaryExecutionResult, index) => {
+              const score = isTerminalFailure(canaryExecutionResult)
+                ? 0
+                : safeGet(() => canaryExecutionResult.result.judgeResult).get().score.score;
+              return (
+                <div className="scape-tab-wrapper" key={canaryExecutionResult.executionId}>
+                  <div
+                    key={`execution-${index}`}
+                    className={[
+                      'btn',
+                      'scape-tab',
+                      ScoreClassUtils.getClassFromScore(score, results.canaryScores, thresholds, index),
+                      index === this.state.selectedCAEIndex ? 'selected' : 'not-selected'
+                    ].join(' ')}
+                    onClick={() => {
+                      this.onCAETabClick(index);
+                      handleCanaryRunSelection(canaryExecutionResult);
+                    }}
+                  >
+                    <div className="score-wrapper headline-md-marketing">
+                      <div className="score">{score.toFixed(0)}</div>
+                      <div className="label uppercase">
+                        {ScoreClassUtils.getClassFromScore(score, results.canaryScores, thresholds, index)}
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-            <div className="scape-executions-result-wrapper">
-              {isTerminalFailure(selectedCanaryExecutionResult.executionStatus) ? (
-                <div className="terminal-canary-wrapper">
-                  <TerminalResult exception={selectedCanaryExecutionResult.exception} />
                 </div>
-              ) : (
-                <ScapeRunResult
-                  application={application as string}
-                  user={user as string}
-                  metricSourceType={metricSourceType as string}
-                  metricsAccountName={metricsAccountName as string}
-                  storageAccountName={storageAccountName as string}
-                  thresholds={thresholds as CanaryClassifierThresholdsConfig}
-                  lifetime={lifetime as number}
-                  selectedCanaryExecutionResult={selectedCanaryExecutionResult as CanaryExecutionResult}
-                  result={result as CanaryResult}
-                  totalRuns={results.canaryScores.length as number}
-                  selectedRunNumber={selectedRunNumber as number}
-                  selectedMetric={selectedMetric as string}
-                  canaryConfig={canaryConfig as CanaryConfig}
-                  canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
-                  idListByMetricGroupNameMap={idListByMetricGroupNameMap as KvMap<string[]>}
-                  groupScoreByMetricGroupNameMap={groupScoreByMetricGroupNameMap as KvMap<CanaryJudgeGroupScore>}
-                  metricSetPairsByIdMap={metricSetPairsByIdMap as KvMap<MetricSetPair>}
-                  classificationCountMap={classificationCountMap as Map<string, number>}
-                  metricGroupNamesDescByWeight={metricGroupNamesDescByWeight as string[]}
-                  displayMetricOverview={displayMetricOverview as boolean}
-                  handleOverviewSelection={handleOverviewSelection}
-                  handleMetricSelection={handleMetricSelection}
-                />
-              )}
-            </div>
+              );
+            })}
           </div>
-        ) : (
-          <div className="terminal-canary-wrapper">
-            <TerminalResult
-              exception={ofNullable(exception).orElse({
-                details: {
-                  error: 'Terminal: The canary terminated without an error message.',
-                  stackTrace: null,
-                  errors: null
-                }
-              })}
-            />
+          <div className="scape-executions-result-wrapper">
+            {isTerminalFailure(selectedCanaryExecutionResult) ? (
+              <div className="terminal-canary-wrapper">
+                <TerminalResult exception={selectedCanaryExecutionResult.exception} />
+              </div>
+            ) : (
+              <ScapeRunResult
+                application={application as string}
+                user={user as string}
+                metricSourceType={metricSourceType as string}
+                metricsAccountName={metricsAccountName as string}
+                storageAccountName={storageAccountName as string}
+                thresholds={thresholds as CanaryClassifierThresholdsConfig}
+                lifetime={lifetime as number}
+                selectedCanaryExecutionResult={selectedCanaryExecutionResult as CanaryExecutionResult}
+                result={result as CanaryResult}
+                totalRuns={results.canaryScores.length as number}
+                selectedRunNumber={selectedRunNumber as number}
+                selectedMetric={selectedMetric as string}
+                canaryConfig={canaryConfig as CanaryConfig}
+                canaryAnalysisResultByIdMap={canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
+                idListByMetricGroupNameMap={idListByMetricGroupNameMap as KvMap<string[]>}
+                groupScoreByMetricGroupNameMap={groupScoreByMetricGroupNameMap as KvMap<CanaryJudgeGroupScore>}
+                metricSetPairsByIdMap={metricSetPairsByIdMap as KvMap<MetricSetPair>}
+                classificationCountMap={classificationCountMap as Map<string, number>}
+                metricGroupNamesDescByWeight={metricGroupNamesDescByWeight as string[]}
+                displayMetricOverview={displayMetricOverview as boolean}
+                handleOverviewSelection={handleOverviewSelection}
+                handleMetricSelection={handleMetricSelection}
+              />
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }
