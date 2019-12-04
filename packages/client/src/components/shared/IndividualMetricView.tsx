@@ -122,7 +122,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
 
     return (
       <div className="individual-metric-view">
-        {filteredControlDataPointsLength < 16 && (
+        {filteredControlDataPointsLength < 50 && (
           <div className="info-card warning-border">
             <div className="info-content">
               This metric has fewer than 50 data points
