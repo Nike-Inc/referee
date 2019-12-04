@@ -7,6 +7,19 @@
   overflow: auto;
   width: 100%;
 
+  .info-card {
+    margin: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .info-content{
+      padding: 0px 20px 0px 20px;
+      display: flex;
+    }
+  }
+
   .graph-card {
     margin: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

@@ -107,6 +107,10 @@ $fail-color: $error;
   border-left: 5px solid $pass-color;
 }
 
+.warning-border {
+  border-left: 5px solid $marginal-color;
+}
+
 .nodata {
   background: $nodata;
 }

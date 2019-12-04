@@ -90,6 +90,7 @@ export const ScapeRunResult = observer(
             />
           ) : (
             <IndividualMetricView
+              config={canaryConfig}
               selectedMetric={selectedMetric}
               metricSourceType={metricSourceType}
               lifetime={lifetime}

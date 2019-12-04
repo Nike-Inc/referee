@@ -3,15 +3,18 @@ import { observer } from 'mobx-react';
 import './IndividualMetricView.scss';
 import { Line } from 'react-chartjs-2';
 import NumberFormat from 'react-number-format';
-import { CanaryAnalysisResult, MetricSetPair } from '../../domain/Kayenta';
+import { CanaryAnalysisResult, CanaryConfig, CanaryMetricConfig, MetricSetPair } from '../../domain/Kayenta';
 import humanFormat from 'human-format';
 import { defaultGraphDataMapper, metricSourceIntegrations } from '../../metricSources';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import Optional from 'optional-js';
-import { mapIfPresent, mapIfPresentOrElse, safeGet } from '../../util/OptionalUtils';
+import { mapIfPresent, mapIfPresentOrElse, ofNullable, safeGet } from '../../util/OptionalUtils';
 import { SIGNAL_FX_SERVICE_TYPE } from '../../metricSources/SignalFx';
+import classNames from 'classnames';
+import { Popover } from '../../layout/Popover';
 
 interface IndividualMetricViewProps {
+  config: CanaryConfig;
   selectedMetric: string;
   metricSourceType: string;
   lifetime: number;
@@ -64,6 +67,7 @@ export const calculateTimeLabels = (
 export default class IndividualMetricView extends React.Component<IndividualMetricViewProps> {
   render(): React.ReactNode {
     const {
+      config,
       selectedMetric,
       metricSourceType,
       lifetime,
@@ -111,8 +115,39 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       ]
     };
 
+    const metricName = canaryAnalysisResultByIdMap[selectedMetric].name;
+    const canaryMetricConfig: CanaryMetricConfig = ofNullable(
+      config.metrics.find(canaryMetricConfig => canaryMetricConfig.name === metricName)
+    ).orElseThrow(() => new Error(`Failed to find CanaryMetricConfig for ${metricName}`));
+
     return (
       <div className="individual-metric-view">
+        {filteredControlDataPointsLength < 16 && (
+          <div className="info-card warning-border">
+            <div className="info-content">
+              This metric has fewer than 50 data points
+              <Popover
+                header="What is this?"
+                text="In order to produce statistically accurate results, your metrics need to report at least 50 data
+                points per interval (DPI). Reporting less than 50 DPI will produce warnings in your canary result."
+                color="black"
+              />
+            </div>
+          </div>
+        )}
+        {safeGet(() => canaryAnalysisResultByIdMap[selectedMetric].classification).isPresent() && (
+          <div
+            className={classNames('info-card', {
+              'pass-border': canaryAnalysisResultByIdMap[selectedMetric].classification === 'Pass',
+              'fail-border': canaryAnalysisResultByIdMap[selectedMetric].classification !== 'Pass'
+            })}
+          >
+            <div className="info-content">
+              This {canaryMetricConfig.analysisConfigurations.canary.critical && 'critical '} metric has{' '}
+              {canaryAnalysisResultByIdMap[selectedMetric].classification === 'Pass' ? 'passed' : 'failed'}
+            </div>
+          </div>
+        )}
         <div className="graph-card">
           <div className="metric-graph-title">
             {safeGet(() => canaryAnalysisResultByIdMap[selectedMetric].name).orElse('')}
