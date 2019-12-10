@@ -132,8 +132,6 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
               metricSourceType={configEditorStore.metricSourceType as string}
               metricsAccountName={scapeExecutionStatusResponse.metricsAccountName as string}
               storageAccountName={scapeExecutionStatusResponse.storageAccountName as string}
-              executionStatus={scapeExecutionStatusResponse.executionStatus as string}
-              exception={scapeExecutionStatusResponse.exception}
               startTime={reportStore.startTime as string}
               endTime={reportStore.endTime as string}
               lifetime={reportStore.lifetime as number}
