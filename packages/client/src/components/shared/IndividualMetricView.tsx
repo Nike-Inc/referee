@@ -22,6 +22,8 @@ interface IndividualMetricViewProps {
   metricSetPairsByIdMap: KvMap<MetricSetPair>;
 }
 
+const roundToFourDecimalPlaces = (num: number) => Math.round(num * 10000) / 10000;
+
 const ROUNDING_POSITION: number = 4;
 
 export const filterNansFromData = (data: number[]): number[] => {
@@ -102,7 +104,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           borderColor: 'rgb(6, 89, 137)',
           borderWidth: 2,
           fill: false,
-          data: controlData.slice()
+          data: controlData.slice().map(n => roundToFourDecimalPlaces(n))
         },
         {
           label: 'Canary',
@@ -110,7 +112,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
           borderColor: 'rgb(240, 111, 31)',
           borderWidth: 2,
           fill: false,
-          data: experimentData.slice()
+          data: experimentData.slice().map(n => roundToFourDecimalPlaces(n))
         }
       ]
     };
