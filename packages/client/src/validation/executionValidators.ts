@@ -33,8 +33,8 @@ const canaryScopeSchema = object().shape({
   }),
   end: string()
     .test({
-      name: 'End should not be earlier than start',
-      message: 'End should not be earlier than start',
+      name: 'End time should be after start time',
+      message: 'End time should be after start time',
       test: function test(sut) {
         const endDate = new Date(sut);
         const startDate = new Date(this.parent.start);
