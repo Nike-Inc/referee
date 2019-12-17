@@ -31,19 +31,34 @@ const canaryScopeSchema = object().shape({
       }
     }
   }),
-  end: string().test({
-    name: 'End should be an ISO 8061 time stamp',
-    message: 'End should be an ISO 8061 time stamp',
-    test: sut => {
-      const date = new Date(sut);
-      try {
-        date.toISOString();
-        return true;
-      } catch (e) {
-        return false;
+  end: string()
+    .test({
+      name: 'End time should be after start time',
+      message: 'End time should be after start time',
+      test: function test(sut) {
+        const endDate = new Date(sut);
+        const startDate = new Date(this.parent.start);
+        try {
+          startDate.toISOString();
+        } catch (e) {
+          return true;
+        }
+        return endDate > startDate;
       }
-    }
-  }),
+    })
+    .test({
+      name: 'End should be an ISO 8061 time stamp',
+      message: 'End should be an ISO 8061 time stamp',
+      test: sut => {
+        const date = new Date(sut);
+        try {
+          date.toISOString();
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+    }),
   extendedScopeParams: object()
 });
 
