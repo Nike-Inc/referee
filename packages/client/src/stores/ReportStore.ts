@@ -48,6 +48,9 @@ export default class ReportStore {
   thresholds: CanaryClassifierThresholdsConfig | undefined;
 
   @observable
+  applicationMetadata: KvMap<string> | undefined;
+
+  @observable
   canaryExecutionResultByIdMap: KvMap<CanaryExecutionResult> = {};
 
   @observable
@@ -111,6 +114,9 @@ export default class ReportStore {
 
     safeGet(() => this.scapeExecutionRequest).ifPresent(request => {
       this.thresholds = request.thresholds as CanaryClassifierThresholdsConfig;
+      safeGet(() => this.scapeExecutionRequest!.siteLocal!.applicationMetadata).ifPresent(applicationMetadata => {
+        this.applicationMetadata = applicationMetadata as KvMap<string>;
+      });
     });
   }
 

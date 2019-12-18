@@ -13,6 +13,7 @@ import ToggleableTimeStamp from '../../shared/ToggleableTimeStamp';
 interface Props {
   application: string;
   user: string;
+  applicationMetadata: KvMap<string>;
   metricsAccountName: string;
   storageAccountName: string;
   startTime: string;
@@ -29,6 +30,7 @@ export default class ScapeMetadataSection extends React.Component<Props> {
     const {
       application,
       user,
+      applicationMetadata,
       metricsAccountName,
       storageAccountName,
       startTime,
@@ -60,6 +62,28 @@ export default class ScapeMetadataSection extends React.Component<Props> {
               <div className="key">Storage Account</div>
               <div className="value">{storageAccountName}</div>
             </div>
+            {applicationMetadata && (
+              <>
+                {applicationMetadata['environment'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Environment</div>
+                    <div className="value">{applicationMetadata['environment']}</div>
+                  </div>
+                )}
+                {applicationMetadata['domain'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Domain</div>
+                    <div className="value">{applicationMetadata['domain']}</div>
+                  </div>
+                )}
+                {applicationMetadata['department'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Department</div>
+                    <div className="value">{applicationMetadata['department']}</div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
         <div className="scape-metadata-column">
