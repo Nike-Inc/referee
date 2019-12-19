@@ -9,33 +9,39 @@
     display: flex;
     flex-direction: column;
 
-    .scape-metadata-column-content {
+    .scape-metadata-properties-columns {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-self: flex-start;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 10px;
       margin: 10px 0 10px 0;
       height: 100%;
 
-      .kv-wrapper {
+      .scape-metadata-properties-column {
         display: flex;
         flex-direction: column;
-        padding: 3px 20px 3px 0;
+        max-width: 140px;
 
-        .key {
-          @extend .content-font;
-          font-weight: 700;
-        }
+        .kv-wrapper {
+          display: flex;
+          flex-direction: column;
+          padding: 3px 20px 3px 0;
 
-        .value {
-          @extend .content-font;
+          .key {
+            @extend .content-font;
+            font-weight: 700;
+          }
+
+          .value {
+            @extend .content-font;
+          }
         }
       }
     }
 
     @media screen and (max-width: 1400px) {
-      .scape-metadata-column-content {
+      .scape-metadata-properties-columns {
         margin: 20px;
       }
     }
@@ -51,7 +57,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
 
         .scape-metadata-row-content {
           display: flex;
@@ -69,7 +75,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            width: 280px;
+            max-width: 280px;
             margin: 3px 0 3px 0;
 
             .layer-group {
@@ -85,6 +91,10 @@
             .map-marker {
               padding-right: 5px;
             }
+          }
+
+          .timestamp-min-width {
+            min-width: 250px;
           }
         }
       }
@@ -148,6 +158,7 @@
       @media screen and (max-width: 700px) {
         .scape-metadata-row-items {
           justify-content: flex-start;
+          flex-wrap: wrap;
         }
         .scape-metadata-number-cards {
           flex-direction: column;
