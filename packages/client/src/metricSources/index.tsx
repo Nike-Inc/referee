@@ -57,8 +57,8 @@ export const defaultGraphDataMapper = (
     controlTimeLabels.push(j);
   }
   if (controlTimeLabels.length === 0) {
-    controlTimeLabels.push(startTimeMillis)
-    controlTimeLabels.push(startTimeMillis + lifetimeMillis)
+    controlTimeLabels.push(startTimeMillis);
+    controlTimeLabels.push(startTimeMillis + lifetimeMillis);
   }
   return { controlTimeLabels };
 };

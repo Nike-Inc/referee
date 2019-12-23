@@ -83,7 +83,11 @@ export interface CanaryExecutionRequest {
   scopes: KvMap<CanaryScopePair>;
   thresholds: CanaryClassifierThresholdsConfig;
   metadata?: Metadata[];
-  siteLocal?: KvMap<any>;
+  siteLocal?: CanaryExecutionSiteLocal;
+}
+
+export interface CanaryExecutionSiteLocal {
+  applicationMetadata?: KvMap<string>;
 }
 
 export interface Metadata {

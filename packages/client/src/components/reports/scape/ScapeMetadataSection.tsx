@@ -13,6 +13,7 @@ import ToggleableTimeStamp from '../../shared/ToggleableTimeStamp';
 interface Props {
   application: string;
   user: string;
+  applicationMetadata: KvMap<string>;
   metricsAccountName: string;
   storageAccountName: string;
   startTime: string;
@@ -29,6 +30,7 @@ export default class ScapeMetadataSection extends React.Component<Props> {
     const {
       application,
       user,
+      applicationMetadata,
       metricsAccountName,
       storageAccountName,
       startTime,
@@ -43,23 +45,47 @@ export default class ScapeMetadataSection extends React.Component<Props> {
     return (
       <div className="scape-metadata-section">
         <div className="scape-metadata-column">
-          <div className="scape-metadata-column-content">
-            <div className="kv-wrapper">
-              <div className="key">Application</div>
-              <div className="value">{application}</div>
+          <div className="scape-metadata-properties-columns">
+            <div className="scape-metadata-properties-column">
+              <div className="kv-wrapper">
+                <div className="key">Application</div>
+                <div className="value">{application}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">User</div>
+                <div className="value">{user}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">Metrics Account</div>
+                <div className="value">{metricsAccountName}</div>
+              </div>
+              <div className="kv-wrapper">
+                <div className="key">Storage Account</div>
+                <div className="value">{storageAccountName}</div>
+              </div>
             </div>
-            <div className="kv-wrapper">
-              <div className="key">User</div>
-              <div className="value">{user}</div>
-            </div>
-            <div className="kv-wrapper">
-              <div className="key">Metrics Account</div>
-              <div className="value">{metricsAccountName}</div>
-            </div>
-            <div className="kv-wrapper">
-              <div className="key">Storage Account</div>
-              <div className="value">{storageAccountName}</div>
-            </div>
+            {applicationMetadata && (
+              <div className="scape-metadata-properties-column">
+                {applicationMetadata['environment'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Environment</div>
+                    <div className="value">{applicationMetadata['environment']}</div>
+                  </div>
+                )}
+                {applicationMetadata['domain'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Domain</div>
+                    <div className="value">{applicationMetadata['domain']}</div>
+                  </div>
+                )}
+                {applicationMetadata['department'] && (
+                  <div className="kv-wrapper">
+                    <div className="key">Department</div>
+                    <div className="value">{applicationMetadata['department']}</div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="scape-metadata-column">
@@ -89,11 +115,11 @@ export default class ScapeMetadataSection extends React.Component<Props> {
               </div>
               <div className="scape-metadata-row-content">
                 <div className="title">Time</div>
-                <div className="scope-item-wrapper">
+                <div className="scope-item-wrapper timestamp-min-width">
                   <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassStart} />
                   <ToggleableTimeStamp timeStamp={scope.startTimeIso ? scope.startTimeIso : startTime} />
                 </div>
-                <div className="scope-item-wrapper">
+                <div className="scope-item-wrapper timestamp-min-width">
                   <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
                   <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
                 </div>

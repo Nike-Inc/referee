@@ -24,6 +24,7 @@ interface Props {
   application: string;
   user: string;
   metricSourceType: string;
+  applicationMetadata: KvMap<string>;
   metricsAccountName: string;
   storageAccountName: string;
   startTime: string;
@@ -76,6 +77,7 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
       application,
       user,
       metricSourceType,
+      applicationMetadata,
       metricsAccountName,
       storageAccountName,
       startTime,
@@ -110,6 +112,7 @@ export default class ScapeExecutionsResult extends React.Component<Props, State>
           <ScapeMetadataSection
             application={application as string}
             user={user as string}
+            applicationMetadata={applicationMetadata as KvMap<string>}
             metricsAccountName={metricsAccountName as string}
             storageAccountName={storageAccountName as string}
             startTime={startTime as string}
