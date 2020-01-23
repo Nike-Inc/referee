@@ -579,12 +579,8 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                         title="Effect Size"
                         additionalClassname="effect-size"
                         tooltipHeader="Effect Size"
-                        tooltipText={
-                          <>
-                            Controls the degree of statistical significance the metric needs to fail or fail critically.
-                            Metrics marked as critical can also define criticalIncrease and criticalDecrease.
-                          </>
-                        }
+                        tooltipText="Controls the degree of statistical significance the metric needs to fail or fail critically.
+                            Metrics marked as critical can also define criticalIncrease and criticalDecrease."
                       />
                       {this.getCriticalityFromState() === 'critical' ? (
                         <>
@@ -655,7 +651,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                         title="Outliers"
                         additionalClassname="outliers"
                         tooltipHeader="Outliers"
-                        tooltipText={<>Controls how to classify and handle outliers.</>}
+                        tooltipText={'Controls how to classify and handle outliers.'}
                       />
                       <FormGroup
                         id="outlier-strategy"
