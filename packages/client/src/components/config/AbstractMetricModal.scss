@@ -35,4 +35,17 @@
       margin-bottom: 0 !important;
     }
   }
+
+  .accordion__heading {
+    margin: 5px;
+
+    .chevron {
+      margin-left: 5px;
+    }
+  }
+
+  .alert {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
