@@ -147,7 +147,7 @@ export interface CanaryAnalysisConfiguration {
   critical?: boolean;
   mustHaveData?: boolean;
   effectSize?: CanaryMetricEffectSizeConfigs;
-  outliers? : CanaryMetricOutliersConfig;
+  outliers?: CanaryMetricOutliersConfig;
 }
 
 export interface CanaryMetricOutliersConfig {
@@ -177,7 +177,7 @@ export interface CanaryMetricEffectSizeConfig {
 }
 
 export interface CanaryMetricEffectSizeConfigs {
-    [name: string]: CanaryMetricEffectSizeConfig;
+  [name: string]: CanaryMetricEffectSizeConfig;
 }
 
 export interface CanaryJudgeConfig {

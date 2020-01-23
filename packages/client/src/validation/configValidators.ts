@@ -41,24 +41,21 @@ const getCanaryMetricConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>
             critical: boolean(),
             mustHaveData: boolean(),
             effectSize: object()
-                .shape({
-                  allowedIncrease: number()
-                      .notRequired(),
-                  allowedDecrease: number()
-                      .notRequired(),
-                  criticalIncrease: number()
-                      .notRequired(),
-                  criticalDecrease: number()
-                      .notRequired(),
-                }).notRequired(),
+              .shape({
+                allowedIncrease: number().notRequired(),
+                allowedDecrease: number().notRequired(),
+                criticalIncrease: number().notRequired(),
+                criticalDecrease: number().notRequired()
+              })
+              .notRequired(),
             outliers: object()
-                .shape({
-                  strategy: string()
-                      .oneOf(['keep', 'remove'])
-                      .notRequired(),
-                  outlierFactor: number()
-                      .notRequired(),
-                }).notRequired()
+              .shape({
+                strategy: string()
+                  .oneOf(['keep', 'remove'])
+                  .notRequired(),
+                outlierFactor: number().notRequired()
+              })
+              .notRequired()
           })
           .required()
       })

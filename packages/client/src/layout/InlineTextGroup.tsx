@@ -29,7 +29,7 @@ export const InlineTextGroup = ({
   touched?: boolean;
   error?: string | undefined;
   subText?: JSX.Element | string | undefined;
-  isNumber?: boolean
+  isNumber?: boolean;
 }): JSX.Element => {
   return (
     <FormGroup
@@ -46,7 +46,7 @@ export const InlineTextGroup = ({
         }}
         disabled={disabled}
         autoComplete="off"
-        type={isNumber ? "number" : "text"}
+        type={isNumber ? 'number' : 'text'}
         value={value}
         placeholder={placeHolderText}
         onChange={onChange}

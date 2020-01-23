@@ -15,14 +15,11 @@ import {
   AccordionItemButton,
   AccordionItemPanel
 } from 'react-accessible-accordion';
-import {faChevronCircleRight, faChevronCircleDown} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {safeGet } from '../../util/OptionalUtils';
+import { faChevronCircleRight, faChevronCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { safeGet } from '../../util/OptionalUtils';
 
-export const SUPPORTED_OUTLIER_STRATEGIES = [
-  'keep',
-  'remove'
-];
+export const SUPPORTED_OUTLIER_STRATEGIES = ['keep', 'remove'];
 
 const initialState = {
   errors: {},
@@ -40,7 +37,7 @@ const initialState = {
   },
   isValid: true,
   existingMetric: undefined,
-  showAdvancedConfiguration: false,
+  showAdvancedConfiguration: false
 };
 
 const initialMetricState = {
@@ -123,53 +120,57 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
   }
 
   private getEffectSizeObject(key: string): string {
-    const effectSizeObjectValue = safeGet(() => this.state.metric.analysisConfigurations.canary.effectSize![key])
-    return effectSizeObjectValue.isPresent()? effectSizeObjectValue.get().toString():'';
+    const effectSizeObjectValue = safeGet(() => this.state.metric.analysisConfigurations.canary.effectSize![key]);
+    return effectSizeObjectValue.isPresent() ? effectSizeObjectValue.get().toString() : '';
   }
 
   private handleEffectSizeObjectChange(key: string, value: string): void {
     if (value === '') {
-      const effectSize = this.state.metric.analysisConfigurations.canary.effectSize
-      effectSize && delete effectSize[key] && this.setState(
+      const effectSize = this.state.metric.analysisConfigurations.canary.effectSize;
+      effectSize &&
+        delete effectSize[key] &&
+        this.setState(
           {
             metric: Object.assign({}, this.state.metric, {
               analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
                 canary: Object.assign({}, this.state.metric.analysisConfigurations.canary, {
-                    effectSize: Object.assign({}, effectSize)
+                  effectSize: Object.assign({}, effectSize)
                 })
               })
             })
           },
           this.validate
-      );
-    } else{
-    parseFloat(value) &&
-    this.setState(
-        {
-          metric: Object.assign({}, this.state.metric, {
-            analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
-              canary: Object.assign({}, this.state.metric.analysisConfigurations.canary, {
-                effectSize: Object.assign({}, this.state.metric.analysisConfigurations.canary.effectSize, {
-                  [key]: parseFloat(value)
+        );
+    } else {
+      parseFloat(value) &&
+        this.setState(
+          {
+            metric: Object.assign({}, this.state.metric, {
+              analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
+                canary: Object.assign({}, this.state.metric.analysisConfigurations.canary, {
+                  effectSize: Object.assign({}, this.state.metric.analysisConfigurations.canary.effectSize, {
+                    [key]: parseFloat(value)
+                  })
                 })
               })
             })
-          })
-        },
-        this.validate
-    );
+          },
+          this.validate
+        );
     }
   }
 
   private getOutlierFactor(): string {
-    const outlierFactor = safeGet(() => this.state.metric.analysisConfigurations.canary.outliers!.outlierFactor)
-    return outlierFactor.isPresent()? outlierFactor.get().toString():'';
+    const outlierFactor = safeGet(() => this.state.metric.analysisConfigurations.canary.outliers!.outlierFactor);
+    return outlierFactor.isPresent() ? outlierFactor.get().toString() : '';
   }
 
   private handleOutlierFactorChange(value: string): void {
     if (value === '') {
-      const outliers = this.state.metric.analysisConfigurations.canary.outliers
-      outliers && delete outliers.outlierFactor && this.setState(
+      const outliers = this.state.metric.analysisConfigurations.canary.outliers;
+      outliers &&
+        delete outliers.outlierFactor &&
+        this.setState(
           {
             metric: Object.assign({}, this.state.metric, {
               analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
@@ -180,10 +181,10 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
             })
           },
           this.validate
-      );
-    } else{
+        );
+    } else {
       parseFloat(value) &&
-      this.setState(
+        this.setState(
           {
             metric: Object.assign({}, this.state.metric, {
               analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
@@ -196,30 +197,30 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
             })
           },
           this.validate
-      );
+        );
     }
   }
 
   private getOutlierStrategy(): string {
-    const outlierStrategy = safeGet(() => this.state.metric.analysisConfigurations.canary.outliers!.strategy)
-    return outlierStrategy.isPresent()? outlierStrategy.get().toString():'keep';
+    const outlierStrategy = safeGet(() => this.state.metric.analysisConfigurations.canary.outliers!.strategy);
+    return outlierStrategy.isPresent() ? outlierStrategy.get().toString() : 'keep';
   }
 
   private handleOutlierStrategyChange(value: string): void {
-      this.setState(
-          {
-            metric: Object.assign({}, this.state.metric, {
-              analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
-                canary: Object.assign({}, this.state.metric.analysisConfigurations.canary, {
-                  outliers: Object.assign({}, this.state.metric.analysisConfigurations.canary.outliers, {
-                    strategy: value
-                  })
-                })
+    this.setState(
+      {
+        metric: Object.assign({}, this.state.metric, {
+          analysisConfigurations: Object.assign({}, this.state.metric.analysisConfigurations, {
+            canary: Object.assign({}, this.state.metric.analysisConfigurations.canary, {
+              outliers: Object.assign({}, this.state.metric.analysisConfigurations.canary.outliers, {
+                strategy: value
               })
             })
-          },
-          this.validate
-      );
+          })
+        })
+      },
+      this.validate
+    );
   }
 
   private handleFailOnChange(option: string): void {
@@ -549,122 +550,156 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                 {/* Inject the metric source specific JSX here */}
                 {this.getMetricSourceSpecificJsx()}
                 <Accordion
-                    allowZeroExpanded={true}
-                    onChange={() => this.setState({showAdvancedConfiguration : !this.state.showAdvancedConfiguration})}
+                  allowZeroExpanded={true}
+                  onChange={() => this.setState({ showAdvancedConfiguration: !this.state.showAdvancedConfiguration })}
                 >
-                    <AccordionItem>
-                      <AccordionItemHeading>
-                        <AccordionItemButton>
-                          <div className="titled-section-title">Advanced<FontAwesomeIcon className="img chevron" size="sm" color="black" icon={this.state.showAdvancedConfiguration?faChevronCircleDown:faChevronCircleRight} /></div>
-                        </AccordionItemButton>
-                      </AccordionItemHeading>
-                      <AccordionItemPanel>
-                        <Alert variant="warning">For advanced users only. The following advanced features are incubating changes and are subject to breaking changes without notice in the future. Changing these values may affect your canary result in unexpected ways.</Alert>
-                      </AccordionItemPanel>
-                      <AccordionItemPanel>
-                        <TitledSection title="Effect Size" additionalClassname="effect-size" tooltipHeader="Effect Size" tooltipText={<>Controls the degree of statistical significance the metric needs to fail or fail critically. Metrics marked as critical can also define criticalIncrease and criticalDecrease.</>}/>
-                        {this.getCriticalityFromState() === 'critical' ?
-                            <>
-                              <InlineTextGroup
-                                  id="criticalIncrease"
-                                  label="Critical Increase"
-                                  touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalIncrease']}
-                                  error={this.state.errors['analysisConfigurations.canary.effectSize.criticalIncrease']}
-                                  value={this.getEffectSizeObject('criticalIncrease')}
-                                  onChange={e => this.handleEffectSizeObjectChange('criticalIncrease', e.target.value)}
-                                  onBlur={() => {
-                                    this.touch('analysisConfigurations.canary.effectSize.criticalIncrease');
-                                  }}
-                                  placeHolderText="5.0"
-                                  isNumber={true}
-                                  subText="The multiplier increase that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 5.0 make the canary fail critically if there is a 5x increase."
-                              />
-                              <InlineTextGroup
-                                  id="criticalDecrease"
-                                  label="Critical Decrease"
-                                  touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalDecrease']}
-                                  error={this.state.errors['analysisConfigurations.canary.effectSize.criticalDecrease']}
-                                  value={this.getEffectSizeObject('criticalDecrease')}
-                                  onChange={e => this.handleEffectSizeObjectChange('criticalDecrease', e.target.value)}
-                                  onBlur={() => {
-                                    this.touch('analysisConfigurations.canary.effectSize.criticalDecrease');
-                                  }}
-                                  placeHolderText="0.5"
-                                  isNumber={true}
-                                  subText="The multiplier decrease that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 0.5 make the canary fail critically if there is a 50% decrease."
-                              />
-                            </> :
+                  <AccordionItem>
+                    <AccordionItemHeading>
+                      <AccordionItemButton>
+                        <div className="titled-section-title">
+                          Advanced
+                          <FontAwesomeIcon
+                            className="img chevron"
+                            size="sm"
+                            color="black"
+                            icon={this.state.showAdvancedConfiguration ? faChevronCircleDown : faChevronCircleRight}
+                          />
+                        </div>
+                      </AccordionItemButton>
+                    </AccordionItemHeading>
+                    <AccordionItemPanel>
+                      <Alert variant="warning">
+                        For advanced users only. The following advanced features are incubating changes and are subject
+                        to breaking changes without notice in the future. Changing these values may affect your canary
+                        result in unexpected ways.
+                      </Alert>
+                    </AccordionItemPanel>
+                    <AccordionItemPanel>
+                      <TitledSection
+                        title="Effect Size"
+                        additionalClassname="effect-size"
+                        tooltipHeader="Effect Size"
+                        tooltipText={
+                          <>
+                            Controls the degree of statistical significance the metric needs to fail or fail critically.
+                            Metrics marked as critical can also define criticalIncrease and criticalDecrease.
+                          </>
+                        }
+                      />
+                      {this.getCriticalityFromState() === 'critical' ? (
                         <>
                           <InlineTextGroup
-                              id="allowedIncrease"
-                              label="Allowed Increase"
-                              touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedIncrease']}
-                              error={this.state.errors['analysisConfigurations.canary.effectSize.allowedIncrease']}
-                              value={this.getEffectSizeObject('allowedIncrease')}
-                              onChange={e => this.handleEffectSizeObjectChange('allowedIncrease', e.target.value)}
-                              onBlur={() => {
-                                this.touch('analysisConfigurations.canary.effectSize.allowedIncrease');
-                              }}
-                              placeHolderText="1.1"
-                              isNumber={true}
-                              subText="The multiplier increase that must be met for the metric to fail. This example value of 1.1 makes the metric fail when the metric has increased 10% from the baseline."
+                            id="criticalIncrease"
+                            label="Critical Increase"
+                            touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalIncrease']}
+                            error={this.state.errors['analysisConfigurations.canary.effectSize.criticalIncrease']}
+                            value={this.getEffectSizeObject('criticalIncrease')}
+                            onChange={e => this.handleEffectSizeObjectChange('criticalIncrease', e.target.value)}
+                            onBlur={() => {
+                              this.touch('analysisConfigurations.canary.effectSize.criticalIncrease');
+                            }}
+                            placeHolderText="5.0"
+                            isNumber={true}
+                            subText="The multiplier increase that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 5.0 make the canary fail critically if there is a 5x increase."
                           />
                           <InlineTextGroup
-                              id="allowedDecrease"
-                              label="Allowed Decrease"
-                              touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedDecrease']}
-                              error={this.state.errors['analysisConfigurations.canary.effectSize.allowedDecrease']}
-                              value={this.getEffectSizeObject('allowedDecrease')}
-                              onChange={e => this.handleEffectSizeObjectChange('allowedDecrease', e.target.value)}
-                              onBlur={() => {
-                                this.touch('analysisConfigurations.canary.effectSize.allowedDecrease');
-                              }}
-                              placeHolderText="0.9"
-                              isNumber={true}
-                              subText="The multiplier decrease that must be met for the metric to fail. This example value of 0.9 makes the metric fail when the metric has decreased 10% from the baseline."
+                            id="criticalDecrease"
+                            label="Critical Decrease"
+                            touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalDecrease']}
+                            error={this.state.errors['analysisConfigurations.canary.effectSize.criticalDecrease']}
+                            value={this.getEffectSizeObject('criticalDecrease')}
+                            onChange={e => this.handleEffectSizeObjectChange('criticalDecrease', e.target.value)}
+                            onBlur={() => {
+                              this.touch('analysisConfigurations.canary.effectSize.criticalDecrease');
+                            }}
+                            placeHolderText="0.5"
+                            isNumber={true}
+                            subText="The multiplier decrease that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 0.5 make the canary fail critically if there is a 50% decrease."
                           />
                         </>
-                        }
-                      </AccordionItemPanel>
-                      <AccordionItemPanel>
-                        <TitledSection title="Outliers" additionalClassname="outliers" tooltipHeader="Outliers" tooltipText={<>Controls how to classify and handle outliers.</>}/>
-                        <FormGroup
-                            id="outlier-strategy"
-                            label="Outlier Strategy"
-                            touched={this.state.touched['analysisConfigurations.canary.outliers.strategy']}
-                            error={this.state.errors['analysisConfigurations.canary.outliers.strategy']}
-                        >
-                          <Form.Control
-                              as="select"
-                              value={this.getOutlierStrategy()}
-                              onChange={(e: any) => {
-                                  this.handleOutlierStrategyChange(e.target.value);
-                              }}
-                          >
-                            {SUPPORTED_OUTLIER_STRATEGIES.map(strategy => (
-                                <option key={strategy}>{strategy}</option>
-                            ))}
-                          </Form.Control>
-                          <Form.Text className="text-muted">
-                            Keep or remove outliers
-                          </Form.Text>
-                        </FormGroup>
-                        <InlineTextGroup
+                      ) : (
+                        <>
+                          <InlineTextGroup
+                            id="allowedIncrease"
+                            label="Allowed Increase"
+                            touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedIncrease']}
+                            error={this.state.errors['analysisConfigurations.canary.effectSize.allowedIncrease']}
+                            value={this.getEffectSizeObject('allowedIncrease')}
+                            onChange={e => this.handleEffectSizeObjectChange('allowedIncrease', e.target.value)}
                             onBlur={() => {
-                              this.touch('analysisConfigurations.canary.outliers.outlierFactor');
+                              this.touch('analysisConfigurations.canary.effectSize.allowedIncrease');
                             }}
-                            touched={this.state.touched['analysisConfigurations.canary.outliers.outlierFactor']}
-                            error={this.state.errors['analysisConfigurations.canary.outliers.outlierFactor']}
-                            id="outlierFactor"
-                            label="Outlier Factor"
-                            value={this.getOutlierFactor()}
-                            onChange={e => this.handleOutlierFactorChange(e.target.value)}
-                            placeHolderText="1.5"
+                            placeHolderText="1.1"
                             isNumber={true}
-                            subText={<>Values which fall below Q1-factor*(IQR) or above Q3+factor(IQR) are considered outliers. See <a href={"https://github.com/spinnaker/kayenta/blob/master/docs/canary-config.md#outliers"}>Outliers</a> for details.</>}
-                        />
-                      </AccordionItemPanel>
-                    </AccordionItem>
+                            subText="The multiplier increase that must be met for the metric to fail. This example value of 1.1 makes the metric fail when the metric has increased 10% from the baseline."
+                          />
+                          <InlineTextGroup
+                            id="allowedDecrease"
+                            label="Allowed Decrease"
+                            touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedDecrease']}
+                            error={this.state.errors['analysisConfigurations.canary.effectSize.allowedDecrease']}
+                            value={this.getEffectSizeObject('allowedDecrease')}
+                            onChange={e => this.handleEffectSizeObjectChange('allowedDecrease', e.target.value)}
+                            onBlur={() => {
+                              this.touch('analysisConfigurations.canary.effectSize.allowedDecrease');
+                            }}
+                            placeHolderText="0.9"
+                            isNumber={true}
+                            subText="The multiplier decrease that must be met for the metric to fail. This example value of 0.9 makes the metric fail when the metric has decreased 10% from the baseline."
+                          />
+                        </>
+                      )}
+                    </AccordionItemPanel>
+                    <AccordionItemPanel>
+                      <TitledSection
+                        title="Outliers"
+                        additionalClassname="outliers"
+                        tooltipHeader="Outliers"
+                        tooltipText={<>Controls how to classify and handle outliers.</>}
+                      />
+                      <FormGroup
+                        id="outlier-strategy"
+                        label="Outlier Strategy"
+                        touched={this.state.touched['analysisConfigurations.canary.outliers.strategy']}
+                        error={this.state.errors['analysisConfigurations.canary.outliers.strategy']}
+                      >
+                        <Form.Control
+                          as="select"
+                          value={this.getOutlierStrategy()}
+                          onChange={(e: any) => {
+                            this.handleOutlierStrategyChange(e.target.value);
+                          }}
+                        >
+                          {SUPPORTED_OUTLIER_STRATEGIES.map(strategy => (
+                            <option key={strategy}>{strategy}</option>
+                          ))}
+                        </Form.Control>
+                        <Form.Text className="text-muted">Keep or remove outliers</Form.Text>
+                      </FormGroup>
+                      <InlineTextGroup
+                        onBlur={() => {
+                          this.touch('analysisConfigurations.canary.outliers.outlierFactor');
+                        }}
+                        touched={this.state.touched['analysisConfigurations.canary.outliers.outlierFactor']}
+                        error={this.state.errors['analysisConfigurations.canary.outliers.outlierFactor']}
+                        id="outlierFactor"
+                        label="Outlier Factor"
+                        value={this.getOutlierFactor()}
+                        onChange={e => this.handleOutlierFactorChange(e.target.value)}
+                        placeHolderText="1.5"
+                        isNumber={true}
+                        subText={
+                          <>
+                            Values which fall below Q1-factor*(IQR) or above Q3+factor(IQR) are considered outliers. See{' '}
+                            <a href={'https://github.com/spinnaker/kayenta/blob/master/docs/canary-config.md#outliers'}>
+                              Outliers
+                            </a>{' '}
+                            for details.
+                          </>
+                        }
+                      />
+                    </AccordionItemPanel>
+                  </AccordionItem>
                 </Accordion>
               </Form>
             </TitledSection>
