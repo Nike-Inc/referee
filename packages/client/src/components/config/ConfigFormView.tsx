@@ -13,6 +13,7 @@ import { MetricsSection } from './MetricsSection';
 import { RouterProps } from 'react-router';
 import { metricSourceIntegrations } from '../../metricSources';
 import { MetricModalProps } from './AbstractMetricModal';
+import { safeGet } from '../../util/OptionalUtils';
 
 interface Props extends RouterProps {}
 interface Stores {
@@ -91,6 +92,8 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
   @boundMethod
   editMetric(metric: CanaryMetricConfig, groups: string[]): void {
     const type = (metric.query as CanaryMetricSetQueryConfig).type;
+    const isQueryTypeSimple =
+      safeGet(() => (metric.query as CanaryMetricSetQueryConfig).customInlineTemplate).orElse('') === '';
     const props: MetricModalProps = {
       type: type,
       groups: groups,
@@ -99,7 +102,8 @@ export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
       submit: (a: CanaryMetricConfig, b: CanaryMetricConfig | undefined) => {
         this.stores.configEditorStore.createOrUpdateMetric(a, b);
         this.stores.modalStore.pop();
-      }
+      },
+      isQueryTypeSimple: isQueryTypeSimple
     };
     const metricModal = metricSourceIntegrations()[type].createMetricsModal(props);
     this.stores.modalStore.push(metricModal);

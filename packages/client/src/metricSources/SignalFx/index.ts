@@ -28,12 +28,13 @@ export const SUPPORTED_AGGREGATION_METHODS = [
 ];
 
 const signalFxQuerySchema = {
-  metricName: string()
-    .trim()
-    .required(),
-  aggregationMethod: mixed()
-    .oneOf(SUPPORTED_AGGREGATION_METHODS)
-    .required(),
+  aggregationMethod: mixed().oneOf(SUPPORTED_AGGREGATION_METHODS),
+  metricName: string().when('aggregationMethod', {
+    is: aggregationMethod => aggregationMethod,
+    then: string()
+      .trim()
+      .required()
+  }),
   queryPairs: array().of(
     object().shape({
       key: string()
@@ -43,7 +44,21 @@ const signalFxQuerySchema = {
         .trim()
         .required()
     })
-  )
+  ),
+  customInlineTemplate: string().when('aggregationMethod', {
+    is: aggregationMethod => !aggregationMethod,
+    then: string()
+      .trim()
+      .test({
+        name: 'Custom inline template must be a valid SignalFlow function',
+        message: 'Custom inline template must be a valid SignalFlow function',
+        test: sut => {
+          const regex = /data\(.+\)\.publish\(\)/;
+          return regex.test(sut);
+        }
+      })
+      .required()
+  })
 };
 
 export const lifetimeMillis = (startTs: number, endTs: number) => {

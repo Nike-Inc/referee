@@ -86,6 +86,20 @@ const classifierSchema = object()
 
 const judgeSchema = object().required();
 
+const customInlineQuerySchema = {
+  customInlineTemplate: string()
+    .trim()
+    .test({
+      name: 'Custom inline template must be a valid SignalFlow function',
+      message: 'Custom inline template must be a valid SignalFlow function',
+      test: sut => {
+        const regex = /data\(.+\)\.publish\(\)/;
+        return regex.test(sut);
+      }
+    })
+    .required()
+};
+
 const getCanaryConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>): ObjectSchema => {
   return object().shape({
     applications: array()
@@ -109,12 +123,16 @@ const getCanaryConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>): Obj
 
 export const validateCanaryMetricConfig = (
   metric: CanaryMetricConfig<CanaryMetricSetQueryConfig>,
-  type: string
+  type: string,
+  isQueryTypeSimple: boolean
 ): ValidationResultsWrapper => {
   let error: ValidationError | undefined;
   const errors: KvMap<string> = {};
+
   try {
-    const querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
+    const querySchema = isQueryTypeSimple
+      ? metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema
+      : customInlineQuerySchema;
     getCanaryMetricConfigSchema(querySchema).validateSync(metric, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;
