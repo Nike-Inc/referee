@@ -21,11 +21,7 @@ interface Stores {
 
 interface Props extends RouterProps {}
 
-@connect(
-  'canaryExecutorStore',
-  'configEditorStore',
-  'errorStore'
-)
+@connect('canaryExecutorStore', 'configEditorStore', 'errorStore')
 @observer
 export default class CanaryExecutorButtonSection extends ConnectedComponent<Props, Stores> {
   @boundMethod

@@ -38,10 +38,7 @@ interface Props extends RouteComponentProps<ResultsPathParams> {}
 const TERMINAL = 'Terminal';
 const TERMINAL_SCORE = 0;
 
-@connect(
-  'canaryExecutorStore',
-  'reportStore'
-)
+@connect('canaryExecutorStore', 'reportStore')
 @observer
 export default class CanaryExecutorResults extends ConnectedComponent<Props, Stores> {
   async componentDidMount(): Promise<void> {

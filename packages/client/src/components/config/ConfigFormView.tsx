@@ -21,10 +21,7 @@ interface Stores {
   modalStore: ListStore<JSX.Element>;
 }
 
-@connect(
-  'configEditorStore',
-  'modalStore'
-)
+@connect('configEditorStore', 'modalStore')
 @observer
 export default class ConfigFormView extends ConnectedComponent<Props, Stores> {
   groupEdit: any;

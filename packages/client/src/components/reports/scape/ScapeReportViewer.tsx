@@ -44,11 +44,7 @@ interface State {
   executionId?: string;
 }
 
-@connect(
-  'configEditorStore',
-  'reportStore',
-  'errorStore'
-)
+@connect('configEditorStore', 'reportStore', 'errorStore')
 @observer
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Readonly<Props>) {
