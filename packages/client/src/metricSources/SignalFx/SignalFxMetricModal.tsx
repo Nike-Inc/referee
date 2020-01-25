@@ -184,7 +184,7 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
               value={this.state.metric.query.customInlineTemplate}
               placeholder="ex:
           data('requests.count', filter=filter('response_code', '5*') and
-          filter('server_group', 'server_group_name') and filter('server_region', 'us-west-2'))
+          filter('server_group', '${scope}') and filter('server_region', '${location}'))
           .sum(by=['server_region', 'server_group']).publish()"
               onChange={(e: any) => {
                 this.updateQueryObject('customInlineTemplate', e.target.value);
