@@ -9,7 +9,7 @@ import { ValidationResultsWrapper } from '../../domain/Referee';
 
 export default class NewRelicMetricModal extends AbstractMetricModal<NewRelicCanaryMetricSetQueryConfig> {
   validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper {
-    return validateCanaryMetricConfig(existingMetric, type);
+    return validateCanaryMetricConfig(existingMetric, type, true);
   }
 
   getQueryInitialState(): NewRelicCanaryMetricSetQueryConfig {

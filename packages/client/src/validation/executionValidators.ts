@@ -127,14 +127,11 @@ const extendedScopeParametersSchema = array()
     name: 'test that all kv pair keys are unique so that we can convert the list to a map',
     message: DUPLICATE_SCOPE_KEYS_ERROR_MESSAGE,
     test: (sut: KvPair[]) => {
-      const keyToCountMap = sut.reduce(
-        (accumulator: KvMap<number>, currentKvPair) => {
-          // Reduce the list of pairs to a key to count map
-          accumulator[currentKvPair.key] = accumulator[currentKvPair.key] ? accumulator[currentKvPair.key] + 1 : 1;
-          return accumulator;
-        },
-        {} as KvMap<number>
-      );
+      const keyToCountMap = sut.reduce((accumulator: KvMap<number>, currentKvPair) => {
+        // Reduce the list of pairs to a key to count map
+        accumulator[currentKvPair.key] = accumulator[currentKvPair.key] ? accumulator[currentKvPair.key] + 1 : 1;
+        return accumulator;
+      }, {} as KvMap<number>);
 
       // Return false if any keys have have a count > 1
       return !Object.keys(keyToCountMap).find(key => keyToCountMap[key] > 1);

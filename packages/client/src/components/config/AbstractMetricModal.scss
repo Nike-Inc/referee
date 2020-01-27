@@ -19,6 +19,13 @@
   .form-text {
     margin-left: 20px;
     margin-bottom: 3px;
+
+    code {
+      color: black;
+    }
+    .indent {
+      margin-left: 20px;
+    }
   }
 
   #add-dimension-btn {

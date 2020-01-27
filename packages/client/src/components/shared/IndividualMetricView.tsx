@@ -117,7 +117,7 @@ export default class IndividualMetricView extends React.Component<IndividualMetr
       ]
     };
 
-    const metricName = canaryAnalysisResultByIdMap[selectedMetric].name;
+    const metricName = safeGet(() => canaryAnalysisResultByIdMap[selectedMetric].name).orElse('');
     const canaryMetricConfig: CanaryMetricConfig = ofNullable(
       config.metrics.find(canaryMetricConfig => canaryMetricConfig.name === metricName)
     ).orElseThrow(() => new Error(`Failed to find CanaryMetricConfig for ${metricName}`));

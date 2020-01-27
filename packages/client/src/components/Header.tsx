@@ -24,10 +24,7 @@ interface Stores {
   docsStore: DocsStore;
 }
 
-@connect(
-  'configEditorStore',
-  'docsStore'
-)
+@connect('configEditorStore', 'docsStore')
 @observer
 export default class Header extends ConnectedComponent<Props, Stores> {
   componentDidMount(): void {

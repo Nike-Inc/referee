@@ -37,6 +37,7 @@ const initialState = {
   },
   isValid: true,
   existingMetric: undefined,
+  isQueryTypeSimple: true,
   showAdvancedConfiguration: false
 };
 
@@ -58,6 +59,7 @@ export interface MetricModalProps {
   groups: string[];
   cancel: () => void;
   submit: (metric: CanaryMetricConfig, existingMetric: CanaryMetricConfig | undefined) => void;
+  isQueryTypeSimple: boolean;
 }
 
 export interface MetricModalState<T extends CanaryMetricSetQueryConfig> {
@@ -67,6 +69,7 @@ export interface MetricModalState<T extends CanaryMetricSetQueryConfig> {
   isValid: boolean;
   metric: CanaryMetricConfig<T>;
   showAdvancedConfiguration: boolean;
+  isQueryTypeSimple: boolean;
 }
 
 export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> extends React.Component<
@@ -77,11 +80,16 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     super(props);
 
     if (props.existingMetric) {
-      const validationErrors = this.validateCanaryMetricConfig(props.existingMetric, props.type);
+      const validationErrors = this.validateCanaryMetricConfig(
+        props.existingMetric,
+        props.type,
+        props.isQueryTypeSimple
+      );
       this.state = Object.assign({}, this.getInitialState(), {
         existingMetric: props.existingMetric,
         metric: props.existingMetric,
         isValid: validationErrors.isValid,
+        isQueryTypeSimple: props.isQueryTypeSimple,
         errors: validationErrors.errors,
         touched: {
           groups: true,
@@ -100,7 +108,11 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     }
   }
 
-  abstract validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper;
+  abstract validateCanaryMetricConfig(
+    existingMetric: CanaryMetricConfig,
+    type: string,
+    isQueryTypeSimple: boolean
+  ): ValidationResultsWrapper;
 
   private getInitialState(): MetricModalState<T> {
     return Object.assign({}, initialState, {
@@ -329,6 +341,37 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
   }
 
   @boundMethod
+  protected handleQueryTypeSimple(isQueryTypeSimple: boolean): void {
+    this.setState(
+      {
+        isQueryTypeSimple: isQueryTypeSimple,
+        metric: Object.assign({}, this.state.metric, {
+          query: this.getQueryInitialState()
+        })
+      },
+      this.validate
+    );
+  }
+
+  @boundMethod
+  protected handleQueryTypeInline(isQueryTypeSimple: boolean): void {
+    this.setState(
+      {
+        isQueryTypeSimple: isQueryTypeSimple,
+        metric: Object.assign({}, this.state.metric, {
+          query: Object.assign(
+            {},
+            ...Object.entries(this.state.metric.query)
+              .filter(([k]) => k === 'customInlineTemplate' || k === 'type' || k === 'serviceType')
+              .map(([k, v]) => ({ [k]: v }))
+          )
+        })
+      },
+      this.validate
+    );
+  }
+
+  @boundMethod
   protected updateQueryObject(key: string, value: any) {
     this.setState(
       {
@@ -352,7 +395,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
   }
 
   protected validate(): void {
-    this.setState(this.validateCanaryMetricConfig(this.state.metric, this.props.type));
+    this.setState(this.validateCanaryMetricConfig(this.state.metric, this.props.type, this.props.isQueryTypeSimple));
   }
 
   abstract getQueryInitialState(): T;
@@ -546,9 +589,10 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                   disabled={false}
                   subText="default is the only accepted value here."
                 />
-
+                <div className="titled-section-break" />
                 {/* Inject the metric source specific JSX here */}
                 {this.getMetricSourceSpecificJsx()}
+                <div className="titled-section-break" />
                 <Accordion
                   allowZeroExpanded={true}
                   onChange={() => this.setState({ showAdvancedConfiguration: !this.state.showAdvancedConfiguration })}
@@ -712,7 +756,11 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
             </Button>
             <Button
               onClick={() => {
-                const valErrors = this.validateCanaryMetricConfig(this.state.metric, this.props.type);
+                const valErrors = this.validateCanaryMetricConfig(
+                  this.state.metric,
+                  this.props.type,
+                  this.state.isQueryTypeSimple
+                );
                 if (!valErrors.isValid) {
                   this.setState(valErrors);
                   this.setState({

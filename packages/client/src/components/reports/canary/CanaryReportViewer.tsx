@@ -48,12 +48,7 @@ interface State {
 /**
  * The smart top level component for viewing a report of the /canary results.
  */
-@connect(
-  'configEditorStore',
-  'canaryExecutorStore',
-  'reportStore',
-  'errorStore'
-)
+@connect('configEditorStore', 'canaryExecutorStore', 'reportStore', 'errorStore')
 @observer
 export default class CanaryReportViewer extends ConnectedComponent<Props, Stores, State> {
   constructor(props: Props, context: any) {
@@ -104,6 +99,8 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
     this.setState({
       canaryExecutionStatusResponse
     });
+
+    console.log('canary config: ' + JSON.stringify(this.stores.configEditorStore.canaryConfigObject.metrics));
   }
 
   @boundMethod

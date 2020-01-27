@@ -96,7 +96,8 @@ export const MetricsSection = observer(
                         submit: (a, b) => {
                           createOrUpdateMetric(a, b);
                           popModal();
-                        }
+                        },
+                        isQueryTypeSimple: true
                       })
                     );
                   }}
