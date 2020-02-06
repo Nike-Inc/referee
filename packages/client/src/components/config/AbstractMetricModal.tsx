@@ -640,7 +640,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                             }}
                             placeHolderText="5.0"
                             isNumber={true}
-                            subText="The multiplier increase that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 5.0 make the canary fail critically if there is a 5x increase."
+                            subText="The multiplier increase that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 5.0 make the canary fail critically if there is a 5x increase. Defaults to 1.0."
                           />
                           <InlineTextGroup
                             id="criticalDecrease"
@@ -654,7 +654,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                             }}
                             placeHolderText="0.5"
                             isNumber={true}
-                            subText="The multiplier decrease that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 0.5 make the canary fail critically if there is a 50% decrease."
+                            subText="The multiplier decrease that must be met for the metric to be a critical failure and fail the entire analysis with a score of 0. This example value of 0.5 make the canary fail critically if there is a 50% decrease. Defaults to 1.0."
                           />
                         </>
                       ) : (
@@ -671,7 +671,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                             }}
                             placeHolderText="1.1"
                             isNumber={true}
-                            subText="The multiplier increase that must be met for the metric to fail. This example value of 1.1 makes the metric fail when the metric has increased 10% from the baseline."
+                            subText="The multiplier increase that must be met for the metric to fail. This example value of 1.1 makes the metric fail when the metric has increased 10% from the baseline. Defaults to 1.0."
                           />
                           <InlineTextGroup
                             id="allowedDecrease"
@@ -685,7 +685,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                             }}
                             placeHolderText="0.9"
                             isNumber={true}
-                            subText="The multiplier decrease that must be met for the metric to fail. This example value of 0.9 makes the metric fail when the metric has decreased 10% from the baseline."
+                            subText="The multiplier decrease that must be met for the metric to fail. This example value of 0.9 makes the metric fail when the metric has decreased 10% from the baseline. Defaults to 1.0."
                           />
                         </>
                       )}
