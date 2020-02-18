@@ -102,6 +102,8 @@ export default class ConfigEditorStore {
     const uniqueGroups = new Set();
     if (this.canaryConfigObject && Array.isArray(this.canaryConfigObject.metrics)) {
       this.canaryConfigObject.metrics.forEach(metric => {
+        const queryStrippedSlashes = JSON.stringify(metric.query).replace(/\$\\\\/g, '$');
+        metric.query = JSON.parse(queryStrippedSlashes);
         metric.groups.forEach(group => {
           uniqueGroups.add(group);
         });
