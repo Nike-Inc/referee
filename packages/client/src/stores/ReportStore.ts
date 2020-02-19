@@ -17,6 +17,7 @@ import { safeGet } from '../util/OptionalUtils';
 enum classifications {
   FAIL = 'Fail',
   NODATA = 'Nodata',
+  NODATAFAIL = 'NodataFailMetric',
   PASS = 'Pass',
   HIGH = 'High',
   LOW = 'Low'
@@ -196,7 +197,10 @@ export default class ReportStore {
 
     Object.entries(this.canaryAnalysisResultByIdMap).map(id => {
       let label;
-      if (id[1].classification === classifications.HIGH || id[1].classification === classifications.LOW) {
+      if (id[1].classification === classifications.HIGH ||
+          id[1].classification === classifications.LOW ||
+          id[1].classification === classifications.NODATAFAIL
+      ) {
         label = classifications.FAIL;
       } else {
         label = id[1].classification;
