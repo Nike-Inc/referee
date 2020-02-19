@@ -99,8 +99,6 @@ export default class CanaryReportViewer extends ConnectedComponent<Props, Stores
     this.setState({
       canaryExecutionStatusResponse
     });
-
-    console.log('canary config: ' + JSON.stringify(this.stores.configEditorStore.canaryConfigObject.metrics));
   }
 
   @boundMethod

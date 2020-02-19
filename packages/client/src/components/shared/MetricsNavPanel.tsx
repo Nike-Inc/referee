@@ -40,6 +40,7 @@ interface State {
 enum filters {
   FAIL = 'Fail',
   NODATA = 'Nodata',
+  NODATAFAIL = 'NodataFailMetric',
   PASS = 'Pass',
   HIGH = 'High',
   LOW = 'Low'
@@ -132,7 +133,8 @@ export default class MetricsNavPanel extends React.Component<Props, State> {
                         let label;
                         if (
                           canaryAnalysisResult.classification === filters.HIGH ||
-                          canaryAnalysisResult.classification === filters.LOW
+                          canaryAnalysisResult.classification === filters.LOW ||
+                          canaryAnalysisResult.classification === filters.NODATAFAIL
                         ) {
                           label = filters.FAIL;
                         } else {
@@ -182,6 +184,7 @@ const CheckboxRow = ({
   filterMap: Map<string, boolean>;
   handleCheckboxChange: (classification: string) => void;
 }): JSX.Element => {
+
   return (
     <div className="metrics-filters-container">
       <div className="metrics-filter btn">
