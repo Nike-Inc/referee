@@ -184,7 +184,6 @@ const CheckboxRow = ({
   filterMap: Map<string, boolean>;
   handleCheckboxChange: (classification: string) => void;
 }): JSX.Element => {
-
   return (
     <div className="metrics-filters-container">
       <div className="metrics-filter btn">
