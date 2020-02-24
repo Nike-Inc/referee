@@ -197,9 +197,10 @@ export default class ReportStore {
 
     Object.entries(this.canaryAnalysisResultByIdMap).map(id => {
       let label;
-      if (id[1].classification === classifications.HIGH ||
-          id[1].classification === classifications.LOW ||
-          id[1].classification === classifications.NODATAFAIL
+      if (
+        id[1].classification === classifications.HIGH ||
+        id[1].classification === classifications.LOW ||
+        id[1].classification === classifications.NODATAFAIL
       ) {
         label = classifications.FAIL;
       } else {

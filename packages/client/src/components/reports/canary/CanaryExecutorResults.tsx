@@ -23,6 +23,7 @@ import './CanaryExecutorResults.scss';
 import { Button } from 'react-bootstrap';
 import { Meter } from '../../shared/Meter';
 import ReportStore from '../../../stores/ReportStore';
+import logo from '../../../assets/logo-modified.svg';
 
 interface Stores {
   canaryExecutorStore: CanaryExecutorStore;
@@ -52,8 +53,8 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
     return (
       <div className="canary-executor-results">
         {!canaryExecutorStore.resultsRequestComplete ? (
-          <div>
-            <h5>Loading</h5>
+          <div className="canary-executor-spinner">
+            <img className="logo" src={logo} alt="" />
           </div>
         ) : (
           <div>
