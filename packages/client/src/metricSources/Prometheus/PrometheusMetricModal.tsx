@@ -32,7 +32,7 @@ export default class PrometheusMetricModal extends AbstractMetricModal<Prometheu
           label="Custom Inline Template"
           value={this.state.metric.query.customInlineTemplate}
           onChange={e => this.updateQueryObject('customInlineTemplate', e.target.value)}
-          placeHolderText="PromQL:histogram_quantile(0.5, prometheus_http_response_size_bytes_bucket{instance="localhost:9090",handler="${scope}"})"
+          placeHolderText={`PromQL:histogram_quantile(0.5, prometheus_http_response_size_bytes_bucket{instance="localhost:9090",handler="scope"})`}
           subText="Custom template which enables metric-specific PromQL queries."
         />
       </div>
