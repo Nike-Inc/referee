@@ -26,6 +26,7 @@ import ListStore from '../../../stores/ListStore';
 import { DisplayableError } from '../../../domain/Referee';
 import './ScapeReportViewer.scss';
 import Optional from 'optional-js';
+import ScapeExecutionsInProgressResult from './ScapeExecutionsInProgressResult';
 import { add } from '../../../validation/configValidators';
 
 interface PathParams {
@@ -170,6 +171,43 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
               handleMetricSelection={reportStore.handleMetricSelection}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
+          );
+        } else if (!scapeExecutionStatusResponse.complete && reportStore.scapeExecutionRequest) {
+          return (
+            <div>
+              <ScapeExecutionsInProgressResult
+                stageStatusList={ofNullable(scapeExecutionStatusResponse.stageStatus).orElse([])}
+                application={ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc') as string}
+                user={ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous') as string}
+                metricSourceType={configEditorStore.metricSourceType as string}
+                metricsAccountName={scapeExecutionStatusResponse.metricsAccountName as string}
+                storageAccountName={scapeExecutionStatusResponse.storageAccountName as string}
+                applicationMetadata={reportStore.applicationMetadata as KvMap<string>}
+                startTime={reportStore.startTime as string}
+                endTime={reportStore.endTime as string}
+                lifetime={reportStore.lifetime as number}
+                thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
+                results={reportStore.scapeResults as CanaryAnalysisExecutionResult}
+                selectedCanaryExecutionResult={reportStore.selectedCanaryExecutionResult as CanaryExecutionResult}
+                result={reportStore.canaryResult as CanaryResult}
+                selectedMetric={reportStore.selectedMetric as string}
+                request={reportStore.scapeExecutionRequest as CanaryAnalysisExecutionRequest}
+                canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
+                canaryAnalysisResultByIdMap={reportStore.canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
+                idListByMetricGroupNameMap={reportStore.idListByMetricGroupNameMap as KvMap<string[]>}
+                groupScoreByMetricGroupNameMap={
+                  reportStore.groupScoreByMetricGroupNameMap as KvMap<CanaryJudgeGroupScore>
+                }
+                metricSetPairsByIdMap={reportStore.metricSetPairsByIdMap as KvMap<MetricSetPair>}
+                classificationCountMap={reportStore.classificationCountMap as Map<string, number>}
+                metricGroupNamesDescByWeight={configEditorStore.metricGroupNamesDescByWeight as string[]}
+                displayMetricOverview={reportStore.displayMetricOverview as boolean}
+                handleOverviewSelection={reportStore.handleOverviewSelection}
+                handleCanaryRunSelection={this.handleCanaryRunSelection}
+                handleMetricSelection={reportStore.handleMetricSelection}
+                handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
+              />
+            </div>
           );
         } else {
           log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${this.state.executionId}`);

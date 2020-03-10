@@ -1,0 +1,112 @@
+@import '../../../styles/shared.scss';
+
+$selected-size: 100px;
+$un-selected-size: 85px;
+
+.scape-in-progress-report-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .scape-metadata-container {
+    padding-top: 2px;
+  }
+
+  .scape-executions {
+    padding-top: 50px;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
+    .scape-executions-tabs {
+      padding-left: 50px;
+      padding-right: 50px;
+      display: flex;
+
+      .scape-tab-wrapper {
+        display: flex;
+        flex-flow: column;
+
+        .scape-tab {
+          display: flex;
+          margin-top: 2px;
+          margin-left: 15px;
+          justify-content: center;
+          border: 2px solid $black;
+          border-radius: 8px;
+          height: 50px;
+          width: $un-selected-size;
+
+          .score-wrapper {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            justify-self: center;
+            text-align: center;
+
+            .score {
+              margin-bottom: -5px;
+              font-weight: bold;
+              font-size: 25px;
+              @extend .content-font;
+            }
+
+            .label {
+              margin-top: -4px;
+              margin-bottom: 1px;
+              font-weight: bold;
+              font-size: 15px;
+            }
+          }
+        }
+
+        .selected {
+          z-index: 1000;
+          height: 60px;
+          width: $selected-size;
+          margin-top: -1px;
+          border-radius: 10px 10px 0 0;
+        }
+      }
+    }
+    @media screen and (max-width: 700px) {
+      .scape-executions-tabs {
+        flex-direction: column;
+        align-content: center;
+        padding: 0;
+      }
+    }
+
+    .scape-executions-result-wrapper {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-top: 3px solid $black;
+      border-right: 3px solid $black;
+      border-left: 3px solid $black;
+      margin-top: -3px;
+      z-index: 1;
+      height: 100%;
+
+      .img-container {
+        margin: 150px;
+        height: 100%;
+
+        #logo {
+          display: block;
+          margin: 0 auto;
+          width: 40%;
+          height: 40%;
+        }
+      }
+    }
+  }
+
+  .message-bar {
+    margin-top: 30px;
+    padding: 5px 0 5px 0;
+    text-align: center;
+    background-color: $light-gray;
+    font-size: 20px;
+    @extend .heading-font;
+  }
+}

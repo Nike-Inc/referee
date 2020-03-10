@@ -107,7 +107,7 @@ export default class ReportStore {
     this.endTime = scapeExecutionStatusResponse.endTimeIso as string;
 
     safeGet(() => this.scapeResults).ifPresent(results => {
-      const lastRun = results.canaryScores.length - 1;
+      const lastRun = safeGet(() => results.canaryExecutionResults.length - 1).orElse(0);
       this.selectedCanaryExecutionResult = results.canaryExecutionResults[lastRun];
       this.canaryResult = this.selectedCanaryExecutionResult.result;
       this.metricSetPairListId = this.selectedCanaryExecutionResult.metricSetPairListId as string;
