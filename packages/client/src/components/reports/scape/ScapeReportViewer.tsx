@@ -26,6 +26,7 @@ import ListStore from '../../../stores/ListStore';
 import { DisplayableError } from '../../../domain/Referee';
 import './ScapeReportViewer.scss';
 import Optional from 'optional-js';
+import { add } from '../../../validation/configValidators';
 
 interface PathParams {
   executionId: string;
@@ -83,6 +84,22 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
           )
         );
         this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
+      }
+
+      const totalGroupWeights: number = Object.values(this.stores.configEditorStore.computedGroupWeights).reduce(
+        add,
+        0
+      );
+      if (totalGroupWeights !== 100) {
+        log.error(`Configuration Error: Group weights need to equal 100.`);
+        this.stores.errorStore.push({
+          heading: `Configuration Error: Group weights need to equal 100.`,
+          content: (
+            <div>
+              Your group weights equal {totalGroupWeights}. This might affect your canary results. Please click "Go To Config" to set group weights to 100.
+            </div>
+          )
+        });
       }
 
       // TODO confirm if this is the best way to check if map exists before calling the API
