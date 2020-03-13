@@ -9,7 +9,7 @@ import PrometheusCanaryMetricSetQueryConfig from './PrometheusCanaryMetricSetQue
 
 export default class PrometheusMetricModal extends AbstractMetricModal<PrometheusCanaryMetricSetQueryConfig> {
   validateCanaryMetricConfig(existingMetric: CanaryMetricConfig, type: string): ValidationResultsWrapper {
-    return validateCanaryMetricConfig(existingMetric, type, true);
+    return validateCanaryMetricConfig(existingMetric, type, false);
   }
 
   getQueryInitialState(): PrometheusCanaryMetricSetQueryConfig {

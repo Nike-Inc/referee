@@ -86,7 +86,7 @@ const classifierSchema = object()
 
 const judgeSchema = object().required();
 
-const customInlineQuerySchema = {
+const customSignalFXQuerySchema = {
   customInlineTemplate: string()
     .trim()
     .test({
@@ -94,6 +94,20 @@ const customInlineQuerySchema = {
       message: 'Custom inline template must be a valid SignalFlow function',
       test: sut => {
         const regex = /data\(.+\)\.publish\(\)/;
+        return regex.test(sut);
+      }
+    })
+    .required()
+};
+
+const customPrometheusQueryScheme = {
+  customInlineTemplate: string()
+    .trim()
+    .test({
+      name: 'Custom inline template must be a valid PromQL query',
+      message: 'Custom inline template must be a valid PromQL query',
+      test: sut => {
+        const regex = /PromQL:\w+\((.*?)\)/;
         return regex.test(sut);
       }
     })
@@ -128,11 +142,17 @@ export const validateCanaryMetricConfig = (
 ): ValidationResultsWrapper => {
   let error: ValidationError | undefined;
   const errors: KvMap<string> = {};
-
   try {
-    const querySchema = isQueryTypeSimple
-      ? metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema
-      : customInlineQuerySchema;
+    let querySchema: KvMap<Schema<any>> = {};
+      if (isQueryTypeSimple) {
+        querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
+      } else {
+        if (type == 'prometheus') {
+          querySchema = customPrometheusQueryScheme;
+        } else if (type == 'signalfx') {
+          querySchema = customSignalFXQuerySchema;
+        }
+      }
     getCanaryMetricConfigSchema(querySchema).validateSync(metric, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;
