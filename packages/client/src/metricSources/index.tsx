@@ -2,6 +2,8 @@ import { CanaryMetricSetQueryConfig, MetricSetPairAttributes } from '../domain/K
 import { MetricSourceIntegration } from './MetricSourceIntegration';
 import NewRelic from './NewRelic';
 import SignalFx from './SignalFx';
+import Prometheus from './Prometheus';
+
 
 const MIN_TO_MS_CONVERSION: number = 60000;
 /**
@@ -10,7 +12,8 @@ const MIN_TO_MS_CONVERSION: number = 60000;
 // prettier-ignore
 const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[] = [
   NewRelic,
-  SignalFx
+  SignalFx,
+  Prometheus
 ];
 
 /**
