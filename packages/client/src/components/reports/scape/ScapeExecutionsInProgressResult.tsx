@@ -140,26 +140,27 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
         <div className="scape-executions">
           <div className="scape-executions-tabs">
             {runCanaryStages.map((stageMetadata, index) => {
-              // TODO clean up this code
+              // TODO turn this conditional logic into a function
               let score: string = '...';
-              let status: string;
+              let status: string = 'in-progress';
               let availableResult: CanaryExecutionResult | undefined = undefined;
 
               if (stageMetadata.status === stageStatus.TERMINAL) {
                 score = '0';
                 status = 'fail';
               } else if (stageMetadata.status === stageStatus.SUCCEEDED) {
-                availableResult = results.canaryExecutionResults.find(
-                  result => result.executionId === stageMetadata.executionId
+                // TODO error can show up here when canaryExecutionResults is undefined
+                safeGet(() => results.canaryExecutionResults).ifPresent(
+                  (results: CanaryExecutionResult[]) =>
+                    (availableResult = results.find(result => result.executionId === stageMetadata.executionId))
                 );
-                if (availableResult)
+                if (availableResult) {
                   score = safeGet(() => availableResult)
                     .get()
                     .result.judgeResult!.score.score.toFixed(0)
                     .toString();
-                status = ScoreClassUtils.getClassFromScore(parseInt(score), results.canaryScores, thresholds, index);
-              } else {
-                status = 'in-progress';
+                  status = ScoreClassUtils.getClassFromScore(parseInt(score), results.canaryScores, thresholds, index);
+                }
               }
 
               return (

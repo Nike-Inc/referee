@@ -60,7 +60,9 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
     const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
 
     try {
-      scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
+      scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponseFromNikeKayenta(
+        executionId
+      );
       this.stores.reportStore.updateFromScapeResponse(scapeExecutionStatusResponse);
     } catch (e) {
       log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${executionId}`);
