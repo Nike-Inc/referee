@@ -99,7 +99,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
           heading: `Configuration Error: Group weights need to add up to 100.`,
           content: (
             <div>
-              Your group weights equal {totalGroupWeights}. This might affect your canary results. Please click "Go To Config" to set group weights to 100.
+              Your group weights equal {totalGroupWeights}. This might affect your canary results. Please click "Go To
+              Config" to set group weights to 100.
             </div>
           )
         });

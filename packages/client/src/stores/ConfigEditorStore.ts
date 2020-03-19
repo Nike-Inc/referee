@@ -97,7 +97,9 @@ export default class ConfigEditorStore {
   @action.bound
   setCanaryConfigObject(canaryConfigObject: CanaryConfig): void {
     // account for ad-hoc configurations with nested 'canaryConfig' object
-    canaryConfigObject.metrics == null && canaryConfigObject.canaryConfig != null ? this.canaryConfigObject = canaryConfigObject.canaryConfig : this.canaryConfigObject = canaryConfigObject
+    canaryConfigObject.metrics == null && canaryConfigObject.canaryConfig != null
+      ? (this.canaryConfigObject = canaryConfigObject.canaryConfig)
+      : (this.canaryConfigObject = canaryConfigObject);
     this.canaryConfigObject.metrics.forEach(metric => metric.groups.forEach(g => this.createNewGroup(g, false)));
     this.hasTheCopyOrSaveButtonBeenClicked = false;
     const uniqueGroups = new Set();

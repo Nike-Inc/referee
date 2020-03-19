@@ -144,15 +144,15 @@ export const validateCanaryMetricConfig = (
   const errors: KvMap<string> = {};
   try {
     let querySchema: KvMap<Schema<any>> = {};
-      if (isQueryTypeSimple) {
-        querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
-      } else {
-        if (type == 'prometheus') {
-          querySchema = customPrometheusQueryScheme;
-        } else if (type == 'signalfx') {
-          querySchema = customSignalFXQuerySchema;
-        }
+    if (isQueryTypeSimple) {
+      querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
+    } else {
+      if (type == 'prometheus') {
+        querySchema = customPrometheusQueryScheme;
+      } else if (type == 'signalfx') {
+        querySchema = customSignalFXQuerySchema;
       }
+    }
     getCanaryMetricConfigSchema(querySchema).validateSync(metric, { abortEarly: false, strict: true });
   } catch (e) {
     error = e;

@@ -74,7 +74,9 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryAnalysisExecutionStatusResponseFromNikeKayenta(executionId: string): Promise<CanaryAnalysisExecutionStatusResponse> {
+  async fetchCanaryAnalysisExecutionStatusResponseFromNikeKayenta(
+    executionId: string
+  ): Promise<CanaryAnalysisExecutionStatusResponse> {
     try {
       const response = await kayentaClient.get('/v2/standalone_canary_analysis/' + executionId);
       return response.data;
