@@ -37,7 +37,6 @@ interface Props {
   metricsAccountName: string;
   storageAccountName: string;
   startTime: string;
-  endTime: string;
   lifetime: number;
   thresholds: CanaryClassifierThresholdsConfig;
   results: CanaryAnalysisExecutionResult;
@@ -62,6 +61,18 @@ interface Props {
 interface State {
   selectedCAEIndex: number;
   isSelectedRunComplete: boolean;
+}
+
+class RefereeStageMetadata {
+  score: string;
+  status: string;
+  availableResult: CanaryExecutionResult | undefined;
+
+  constructor(score: string, status: string, availableResult: CanaryExecutionResult | undefined) {
+    this.score = score;
+    this.status = status;
+    this.availableResult = availableResult;
+  }
 }
 
 const isTerminalFailure = (selectedCanaryExecutionResult: CanaryExecutionResult) =>
@@ -92,7 +103,6 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
       metricsAccountName,
       storageAccountName,
       startTime,
-      endTime,
       lifetime,
       thresholds,
       results,
@@ -117,6 +127,31 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
     const selectedRunNumber = this.state.selectedCAEIndex + 1;
     const runCanaryStages = stageStatusList.filter(stageMetadata => stageMetadata.type === 'runCanary');
 
+    const determineRefereeStageMetadata = (stageMetadata: StageMetadata, index: number): RefereeStageMetadata => {
+      let score: string = '...';
+      let status: string = 'in-progress';
+      let availableResult: CanaryExecutionResult | undefined = undefined;
+
+      if (stageMetadata.status === stageStatus.TERMINAL) {
+        score = '0';
+        status = 'fail';
+      } else if (stageMetadata.status === stageStatus.SUCCEEDED) {
+        safeGet(() => results.canaryExecutionResults).ifPresent(
+          (results: CanaryExecutionResult[]) =>
+            (availableResult = results.find(result => result.executionId === stageMetadata.executionId))
+        );
+        if (availableResult) {
+          score = safeGet(() => availableResult)
+            .get()
+            .result.judgeResult!.score.score.toFixed(0)
+            .toString();
+          status = ScoreClassUtils.getClassFromScore(parseInt(score), results.canaryScores, thresholds, index);
+        }
+      }
+
+      return new RefereeStageMetadata(score, status, availableResult);
+    };
+
     return (
       <div className="scape-in-progress-report-container">
         <div className="scape-metadata-container">
@@ -128,7 +163,7 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
             metricsAccountName={metricsAccountName as string}
             storageAccountName={storageAccountName as string}
             startTime={startTime as string}
-            endTime={endTime as string}
+            endTime={stageStatus.IN_PROGRESS}
             lifetime={lifetime as number}
             request={request as CanaryAnalysisExecutionRequest}
             scope={safeGet(() => request.scopes[0]).get() as CanaryAnalysisExecutionRequestScope}
@@ -140,28 +175,7 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
         <div className="scape-executions">
           <div className="scape-executions-tabs">
             {runCanaryStages.map((stageMetadata, index) => {
-              // TODO turn this conditional logic into a function
-              let score: string = '...';
-              let status: string = 'in-progress';
-              let availableResult: CanaryExecutionResult | undefined = undefined;
-
-              if (stageMetadata.status === stageStatus.TERMINAL) {
-                score = '0';
-                status = 'fail';
-              } else if (stageMetadata.status === stageStatus.SUCCEEDED) {
-                // TODO error can show up here when canaryExecutionResults is undefined
-                safeGet(() => results.canaryExecutionResults).ifPresent(
-                  (results: CanaryExecutionResult[]) =>
-                    (availableResult = results.find(result => result.executionId === stageMetadata.executionId))
-                );
-                if (availableResult) {
-                  score = safeGet(() => availableResult)
-                    .get()
-                    .result.judgeResult!.score.score.toFixed(0)
-                    .toString();
-                  status = ScoreClassUtils.getClassFromScore(parseInt(score), results.canaryScores, thresholds, index);
-                }
-              }
+              const refereeStageMetadata: RefereeStageMetadata = determineRefereeStageMetadata(stageMetadata, index);
 
               return (
                 <div className="scape-tab-wrapper" key={stageMetadata.name}>
@@ -170,19 +184,21 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
                     className={[
                       'btn',
                       'scape-tab',
-                      status,
+                      refereeStageMetadata.status,
                       index === this.state.selectedCAEIndex ? 'selected' : 'not-selected'
                     ].join(' ')}
                     onClick={() => {
-                      this.onCAETabClick(index, status);
-                      if (availableResult) {
-                        handleCanaryRunSelection(availableResult);
+                      this.onCAETabClick(index, refereeStageMetadata.status);
+                      if (refereeStageMetadata.availableResult) {
+                        handleCanaryRunSelection(refereeStageMetadata.availableResult);
                       }
                     }}
                   >
                     <div className="score-wrapper headline-md-marketing">
-                      <div className="score">{score}</div>
-                      <div className="label uppercase">{status === stageStatus.IN_PROGRESS ? '' : status}</div>
+                      <div className="score">{refereeStageMetadata.score}</div>
+                      <div className="label uppercase">
+                        {refereeStageMetadata.status === stageStatus.IN_PROGRESS ? '' : refereeStageMetadata.status}
+                      </div>
                     </div>
                   </div>
                 </div>

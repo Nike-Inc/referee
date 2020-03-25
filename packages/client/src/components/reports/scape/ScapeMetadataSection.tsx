@@ -25,6 +25,10 @@ interface Props {
   handleGoToConfigButtonClick: (config: CanaryConfig) => void;
 }
 
+enum time {
+  IN_PROGRESS = 'in-progress'
+}
+
 export default class ScapeMetadataSection extends React.Component<Props> {
   render(): React.ReactNode {
     const {
@@ -121,7 +125,11 @@ export default class ScapeMetadataSection extends React.Component<Props> {
                 </div>
                 <div className="scope-item-wrapper timestamp-min-width">
                   <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
-                  <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
+                  {endTime === time.IN_PROGRESS ? (
+                    'In Progress'
+                  ) : (
+                    <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
+                  )}
                 </div>
               </div>
             </div>

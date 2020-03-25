@@ -74,18 +74,6 @@ export default class KayentaApiService {
     }
   }
 
-  async fetchCanaryAnalysisExecutionStatusResponseFromNikeKayenta(
-    executionId: string
-  ): Promise<CanaryAnalysisExecutionStatusResponse> {
-    try {
-      const response = await kayentaClient.get('/v2/standalone_canary_analysis/' + executionId);
-      return response.data;
-    } catch (e) {
-      log.error(`Failed to fetch standalone canary analysis pipeline execution status from Nike Kayenta`, e);
-      throw e;
-    }
-  }
-
   async fetchCanaryConfig(configId: string): Promise<CanaryConfig> {
     try {
       const response = await kayentaClient.get(`/canaryConfig/${configId}`);
