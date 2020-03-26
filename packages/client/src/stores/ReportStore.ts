@@ -103,8 +103,13 @@ export default class ReportStore {
     this.scapeExecutionStatusResponse = scapeExecutionStatusResponse;
     this.scapeResults = scapeExecutionStatusResponse.canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult;
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
-    this.startTime = scapeExecutionStatusResponse.startTimeIso as string;
-    this.endTime = scapeExecutionStatusResponse.endTimeIso as string;
+
+    if (scapeExecutionStatusResponse.startTimeIso != null) {
+      this.startTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].startTimeIso as string).orElse(scapeExecutionStatusResponse.startTimeIso);
+    }
+    if (scapeExecutionStatusResponse.endTimeIso != null) {
+      this.endTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].endTimeIso as string).orElse(scapeExecutionStatusResponse.endTimeIso);
+    }
 
     safeGet(() => this.scapeResults).ifPresent(results => {
       const lastRun = safeGet(() => results.canaryExecutionResults.length - 1).orElse(0);

@@ -243,7 +243,7 @@ export interface StageMetadata {
   type: string;
   name: string;
   status: string;
-  executionId: string;
+  executionId?: string;
 }
 
 export interface CanaryAnalysisExecutionResult {
