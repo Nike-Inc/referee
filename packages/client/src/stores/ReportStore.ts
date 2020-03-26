@@ -105,10 +105,14 @@ export default class ReportStore {
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
 
     if (scapeExecutionStatusResponse.startTimeIso != null) {
-      this.startTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].startTimeIso as string).orElse(scapeExecutionStatusResponse.startTimeIso);
+      this.startTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].startTimeIso as string).orElse(
+        scapeExecutionStatusResponse.startTimeIso
+      );
     }
     if (scapeExecutionStatusResponse.endTimeIso != null) {
-      this.endTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].endTimeIso as string).orElse(scapeExecutionStatusResponse.endTimeIso);
+      this.endTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].endTimeIso as string).orElse(
+        scapeExecutionStatusResponse.endTimeIso
+      );
     }
 
     safeGet(() => this.scapeResults).ifPresent(results => {
