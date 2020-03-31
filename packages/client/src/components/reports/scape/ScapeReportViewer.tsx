@@ -13,7 +13,7 @@ import {
   MetricSetPair
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
-import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
+import { mapIfPresentOrElse, ofNullable, safeGet } from '../../../util/OptionalUtils';
 import ScapeExecutionsResult from './ScapeExecutionsResult';
 import { boundMethod } from 'autobind-decorator';
 import ConfigEditorStore from '../../../stores/ConfigEditorStore';
@@ -46,6 +46,8 @@ interface State {
   executionId?: string;
 }
 
+const REPORT_UPDATE_WAIT_IN_MS = 300000;
+
 @connect('configEditorStore', 'reportStore', 'errorStore')
 @observer
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
@@ -54,11 +56,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
     this.state = {};
   }
 
-  async componentDidMount(): Promise<void> {
+  async fetchScapeResponse(executionId: string) {
     let scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined = undefined;
-
-    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
-
     try {
       scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
       this.stores.reportStore.updateFromScapeResponse(scapeExecutionStatusResponse);
@@ -72,6 +71,24 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
       });
       throw e;
     }
+    this.setState({
+      scapeExecutionStatusResponse,
+      executionId
+    });
+  }
+
+  async componentDidMount(): Promise<void> {
+    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
+    const self = this;
+
+    this.fetchScapeResponse(executionId);
+    const intervalId = setInterval(function() {
+      self.fetchScapeResponse(executionId);
+      const scapeExecutionStatusResponseValue = safeGet(() => self.state.scapeExecutionStatusResponse);
+      if (scapeExecutionStatusResponseValue.isPresent() ? scapeExecutionStatusResponseValue.get().complete : false) {
+        clearInterval(intervalId);
+      }
+    }, REPORT_UPDATE_WAIT_IN_MS);
 
     ofNullable(this.stores.reportStore.scapeExecutionStatusResponse).ifPresent(async response => {
       let canaryConfig: CanaryConfig | undefined = undefined;
@@ -115,10 +132,6 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
           this.stores.reportStore.setMetricSetPairListMap(metricSetPairListMap);
         }
       }
-    });
-    this.setState({
-      scapeExecutionStatusResponse,
-      executionId
     });
   }
 
