@@ -83,10 +83,11 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
 
     this.fetchScapeResponse(executionId);
     const intervalId = setInterval(function() {
-      self.fetchScapeResponse(executionId);
       const scapeExecutionStatusResponseValue = safeGet(() => self.state.scapeExecutionStatusResponse);
       if (scapeExecutionStatusResponseValue.isPresent() ? scapeExecutionStatusResponseValue.get().complete : false) {
         clearInterval(intervalId);
+      } else {
+        self.fetchScapeResponse(executionId);
       }
     }, REPORT_UPDATE_WAIT_IN_MS);
 
