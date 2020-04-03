@@ -78,8 +78,6 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         this.stores.configEditorStore.setCanaryConfigObject(response.canaryConfig);
       }
       if (!this.stores.configEditorStore.canaryConfigObject) {
-        console.log('fetching canary config object');
-
         canaryConfig = await kayentaApiService.fetchCanaryConfig(
           ofNullable(response.canaryConfigId).orElseThrow(
             () => new Error('Expected either a canary config id or canary config object to be present')
