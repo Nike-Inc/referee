@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MetricSourceIntegration } from '../MetricSourceIntegration';
 import { MetricModalProps } from '../../components/config/AbstractMetricModal';
 import PrometheusMetricModal from './PrometheusMetricModal';
-import PrometheusCanaryMetricSetQueryConfig from './PrometheusCanaryMetricSetQueryConfig'
+import PrometheusCanaryMetricSetQueryConfig from './PrometheusCanaryMetricSetQueryConfig';
 import { string } from 'yup';
 
 export const PROMETHEUS_SERVICE_TYPE: string = 'prometheus';

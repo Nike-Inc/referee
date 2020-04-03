@@ -4,7 +4,6 @@ import NewRelic from './NewRelic';
 import SignalFx from './SignalFx';
 import Prometheus from './Prometheus';
 
-
 const MIN_TO_MS_CONVERSION: number = 60000;
 /**
  * The list of enabled metric source integrations

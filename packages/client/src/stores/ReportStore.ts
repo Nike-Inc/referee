@@ -12,7 +12,8 @@ import {
   CanaryResult,
   MetricSetPair
 } from '../domain/Kayenta';
-import { safeGet } from '../util/OptionalUtils';
+import { mapIfPresent, safeGet } from '../util/OptionalUtils';
+import Optional from 'optional-js';
 
 enum classifications {
   FAIL = 'Fail',
@@ -103,11 +104,20 @@ export default class ReportStore {
     this.scapeExecutionStatusResponse = scapeExecutionStatusResponse;
     this.scapeResults = scapeExecutionStatusResponse.canaryAnalysisExecutionResult as CanaryAnalysisExecutionResult;
     this.scapeExecutionRequest = scapeExecutionStatusResponse.canaryAnalysisExecutionRequest as CanaryAnalysisExecutionRequest;
-    this.startTime = scapeExecutionStatusResponse.startTimeIso as string;
-    this.endTime = scapeExecutionStatusResponse.endTimeIso as string;
+
+    if (scapeExecutionStatusResponse.startTimeIso != null) {
+      this.startTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].startTimeIso as string).orElse(
+        scapeExecutionStatusResponse.startTimeIso
+      );
+    }
+    if (scapeExecutionStatusResponse.endTimeIso != null) {
+      this.endTime = safeGet(() => this.scapeExecutionRequest!.scopes[0].endTimeIso as string).orElse(
+        scapeExecutionStatusResponse.endTimeIso
+      );
+    }
 
     safeGet(() => this.scapeResults).ifPresent(results => {
-      const lastRun = results.canaryScores.length - 1;
+      const lastRun = safeGet(() => results.canaryExecutionResults.length - 1).orElse(0);
       this.selectedCanaryExecutionResult = results.canaryExecutionResults[lastRun];
       this.canaryResult = this.selectedCanaryExecutionResult.result;
       this.metricSetPairListId = this.selectedCanaryExecutionResult.metricSetPairListId as string;
@@ -176,10 +186,11 @@ export default class ReportStore {
     }
 
     const metricSetPairsByIdMap: KvMap<MetricSetPair> = {};
-    metricSetPairList.forEach(metricSetPair => {
-      metricSetPairsByIdMap[metricSetPair.id] = metricSetPair;
-    });
-
+    mapIfPresent(Optional.ofNullable(metricSetPairList), metricSetPairList =>
+      metricSetPairList.forEach(metricSetPair => {
+        metricSetPairsByIdMap[metricSetPair.id] = metricSetPair;
+      })
+    );
     return metricSetPairsByIdMap;
   }
 

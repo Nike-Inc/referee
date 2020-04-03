@@ -9,6 +9,7 @@ $nodata: #bbb;
 $dark-background-color: #222222;
 $dark-bg-font-color: #F7F7F7;
 $off-white: #f2f2f2;
+$light-gray: #d6d6d6;
 
 $pass-color: $success;
 $marginal-color: yellow;
@@ -93,6 +94,10 @@ $fail-color: $error;
 
 .marginal {
   background: $marginal-color;
+}
+
+.in-progress {
+  background: $light-gray;
 }
 
 .pass {

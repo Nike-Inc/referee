@@ -13,7 +13,7 @@ import {
   MetricSetPair
 } from '../../../domain/Kayenta';
 import { kayentaApiService } from '../../../services';
-import { mapIfPresentOrElse, ofNullable } from '../../../util/OptionalUtils';
+import { mapIfPresentOrElse, ofNullable, safeGet } from '../../../util/OptionalUtils';
 import ScapeExecutionsResult from './ScapeExecutionsResult';
 import { boundMethod } from 'autobind-decorator';
 import ConfigEditorStore from '../../../stores/ConfigEditorStore';
@@ -26,6 +26,7 @@ import ListStore from '../../../stores/ListStore';
 import { DisplayableError } from '../../../domain/Referee';
 import './ScapeReportViewer.scss';
 import Optional from 'optional-js';
+import ScapeExecutionsInProgressResult from './ScapeExecutionsInProgressResult';
 import { add } from '../../../validation/configValidators';
 
 interface PathParams {
@@ -45,6 +46,8 @@ interface State {
   executionId?: string;
 }
 
+const REPORT_UPDATE_WAIT_IN_MS = 300000;
+
 @connect('configEditorStore', 'reportStore', 'errorStore')
 @observer
 export default class ScapeReportViewer extends ConnectedComponent<Props, Stores, State> {
@@ -53,11 +56,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
     this.state = {};
   }
 
-  async componentDidMount(): Promise<void> {
+  async fetchScapeResponseAndUpdateStores(executionId: string) {
     let scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined = undefined;
-
-    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
-
     try {
       scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
       this.stores.reportStore.updateFromScapeResponse(scapeExecutionStatusResponse);
@@ -96,7 +96,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
           heading: `Configuration Error: Group weights need to add up to 100.`,
           content: (
             <div>
-              Your group weights equal {totalGroupWeights}. This might affect your canary results. Please click "Go To Config" to set group weights to 100.
+              Your group weights equal {totalGroupWeights}. This might affect your canary results. Please click "Go To
+              Config" to set group weights to 100.
             </div>
           )
         });
@@ -114,10 +115,26 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         }
       }
     });
+
     this.setState({
       scapeExecutionStatusResponse,
       executionId
     });
+  }
+
+  async componentDidMount(): Promise<void> {
+    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
+    const self = this;
+
+    this.fetchScapeResponseAndUpdateStores(executionId);
+    const intervalId = setInterval(function() {
+      const scapeExecutionStatusResponseValue = safeGet(() => self.state.scapeExecutionStatusResponse);
+      if (scapeExecutionStatusResponseValue.isPresent() ? scapeExecutionStatusResponseValue.get().complete : false) {
+        clearInterval(intervalId);
+      } else {
+        self.fetchScapeResponseAndUpdateStores(executionId);
+      }
+    }, REPORT_UPDATE_WAIT_IN_MS);
   }
 
   @boundMethod
@@ -170,6 +187,42 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
               handleMetricSelection={reportStore.handleMetricSelection}
               handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
             />
+          );
+        } else if (!scapeExecutionStatusResponse.complete && reportStore.scapeExecutionRequest) {
+          return (
+            <div>
+              <ScapeExecutionsInProgressResult
+                stageStatusList={ofNullable(scapeExecutionStatusResponse.stageStatus).orElse([])}
+                application={ofNullable(scapeExecutionStatusResponse.application).orElse('ad-hoc') as string}
+                user={ofNullable(scapeExecutionStatusResponse.user).orElse('anonymous') as string}
+                metricSourceType={configEditorStore.metricSourceType as string}
+                metricsAccountName={scapeExecutionStatusResponse.metricsAccountName as string}
+                storageAccountName={scapeExecutionStatusResponse.storageAccountName as string}
+                applicationMetadata={reportStore.applicationMetadata as KvMap<string>}
+                startTime={reportStore.startTime as string}
+                lifetime={reportStore.lifetime as number}
+                thresholds={reportStore.thresholds as CanaryClassifierThresholdsConfig}
+                results={reportStore.scapeResults as CanaryAnalysisExecutionResult}
+                selectedCanaryExecutionResult={reportStore.selectedCanaryExecutionResult as CanaryExecutionResult}
+                result={reportStore.canaryResult as CanaryResult}
+                selectedMetric={reportStore.selectedMetric as string}
+                request={reportStore.scapeExecutionRequest as CanaryAnalysisExecutionRequest}
+                canaryConfig={configEditorStore.canaryConfigObject as CanaryConfig}
+                canaryAnalysisResultByIdMap={reportStore.canaryAnalysisResultByIdMap as KvMap<CanaryAnalysisResult>}
+                idListByMetricGroupNameMap={reportStore.idListByMetricGroupNameMap as KvMap<string[]>}
+                groupScoreByMetricGroupNameMap={
+                  reportStore.groupScoreByMetricGroupNameMap as KvMap<CanaryJudgeGroupScore>
+                }
+                metricSetPairsByIdMap={reportStore.metricSetPairsByIdMap as KvMap<MetricSetPair>}
+                classificationCountMap={reportStore.classificationCountMap as Map<string, number>}
+                metricGroupNamesDescByWeight={configEditorStore.metricGroupNamesDescByWeight as string[]}
+                displayMetricOverview={reportStore.displayMetricOverview as boolean}
+                handleOverviewSelection={reportStore.handleOverviewSelection}
+                handleCanaryRunSelection={this.handleCanaryRunSelection}
+                handleMetricSelection={reportStore.handleMetricSelection}
+                handleGoToConfigButtonClick={this.handleGoToConfigButtonClick}
+              />
+            </div>
           );
         } else {
           log.error(`Failed to fetch the canaryExecutionStatusResponse for id: ${this.state.executionId}`);

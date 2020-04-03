@@ -1,4 +1,5 @@
 import { CanaryClassifierThresholdsConfig } from '../domain/Kayenta';
+import { safeGet } from './OptionalUtils';
 
 export function getClassFromScore(
   score: number,
@@ -7,7 +8,7 @@ export function getClassFromScore(
   canaryRunIndex: number
 ) {
   const { pass, marginal } = scoreThresholds;
-  const isLastCanaryExecution = canaryRunIndex + 1 === canaryScores.length;
+  const isLastCanaryExecution = canaryRunIndex + 1 === safeGet(() => canaryScores.length).orElse(0);
 
   if (isLastCanaryExecution) {
     return score < pass ? 'fail' : 'pass';
