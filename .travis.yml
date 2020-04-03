@@ -7,5 +7,6 @@ dist: xenial
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y oathtool
+
 script:
   - yarn test
