@@ -56,7 +56,7 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
     this.state = {};
   }
 
-  async fetchScapeResponse(executionId: string) {
+  async fetchScapeResponseAndUpdateStores(executionId: string) {
     let scapeExecutionStatusResponse: CanaryAnalysisExecutionStatusResponse | undefined = undefined;
     try {
       scapeExecutionStatusResponse = await kayentaApiService.fetchCanaryAnalysisExecutionStatusResponse(executionId);
@@ -71,25 +71,6 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
       });
       throw e;
     }
-    this.setState({
-      scapeExecutionStatusResponse,
-      executionId
-    });
-  }
-
-  async componentDidMount(): Promise<void> {
-    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
-    const self = this;
-
-    this.fetchScapeResponse(executionId);
-    const intervalId = setInterval(function() {
-      const scapeExecutionStatusResponseValue = safeGet(() => self.state.scapeExecutionStatusResponse);
-      if (scapeExecutionStatusResponseValue.isPresent() ? scapeExecutionStatusResponseValue.get().complete : false) {
-        clearInterval(intervalId);
-      } else {
-        self.fetchScapeResponse(executionId);
-      }
-    }, REPORT_UPDATE_WAIT_IN_MS);
 
     ofNullable(this.stores.reportStore.scapeExecutionStatusResponse).ifPresent(async response => {
       let canaryConfig: CanaryConfig | undefined = undefined;
@@ -97,6 +78,8 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         this.stores.configEditorStore.setCanaryConfigObject(response.canaryConfig);
       }
       if (!this.stores.configEditorStore.canaryConfigObject) {
+        console.log('fetching canary config object');
+
         canaryConfig = await kayentaApiService.fetchCanaryConfig(
           ofNullable(response.canaryConfigId).orElseThrow(
             () => new Error('Expected either a canary config id or canary config object to be present')
@@ -134,6 +117,26 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         }
       }
     });
+
+    this.setState({
+      scapeExecutionStatusResponse,
+      executionId
+    });
+  }
+
+  async componentDidMount(): Promise<void> {
+    const executionId = Optional.ofNullable(this.props.match.params.executionId).orElse('');
+    const self = this;
+
+    this.fetchScapeResponseAndUpdateStores(executionId);
+    const intervalId = setInterval(function() {
+      const scapeExecutionStatusResponseValue = safeGet(() => self.state.scapeExecutionStatusResponse);
+      if (scapeExecutionStatusResponseValue.isPresent() ? scapeExecutionStatusResponseValue.get().complete : false) {
+        clearInterval(intervalId);
+      } else {
+        self.fetchScapeResponseAndUpdateStores(executionId);
+      }
+    }, REPORT_UPDATE_WAIT_IN_MS);
   }
 
   @boundMethod

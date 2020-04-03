@@ -12,7 +12,8 @@ import {
   CanaryResult,
   MetricSetPair
 } from '../domain/Kayenta';
-import { safeGet } from '../util/OptionalUtils';
+import { mapIfPresent, safeGet } from '../util/OptionalUtils';
+import Optional from 'optional-js';
 
 enum classifications {
   FAIL = 'Fail',
@@ -185,10 +186,11 @@ export default class ReportStore {
     }
 
     const metricSetPairsByIdMap: KvMap<MetricSetPair> = {};
-    metricSetPairList.forEach(metricSetPair => {
-      metricSetPairsByIdMap[metricSetPair.id] = metricSetPair;
-    });
-
+    mapIfPresent(Optional.ofNullable(metricSetPairList), metricSetPairList =>
+      metricSetPairList.forEach(metricSetPair => {
+        metricSetPairsByIdMap[metricSetPair.id] = metricSetPair;
+      })
+    );
     return metricSetPairsByIdMap;
   }
 
