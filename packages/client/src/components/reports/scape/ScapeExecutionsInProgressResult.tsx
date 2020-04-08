@@ -60,6 +60,7 @@ interface Props {
 
 interface State {
   selectedCAEIndex: number;
+  isSelectedRunComplete: boolean;
 }
 
 class RefereeStageMetadata {
@@ -83,12 +84,13 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
     super(props);
 
     this.state = {
-      selectedCAEIndex: safeGet(() => this.props.results.canaryExecutionResults.length - 1).orElse(0)
+      selectedCAEIndex: safeGet(() => this.props.results.canaryExecutionResults.length - 1).orElse(0),
+      isSelectedRunComplete: true
     };
   }
 
   onCAETabClick(index: number, status: string) {
-    this.setState({ selectedCAEIndex: index });
+    this.setState({ selectedCAEIndex: index, isSelectedRunComplete: status !== stageStatus.IN_PROGRESS });
   }
 
   render(): React.ReactNode {
@@ -204,7 +206,8 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
             })}
           </div>
           <div className="scape-executions-result-wrapper">
-            {safeGet(() => this.props.results.canaryExecutionResults.length > 0).orElse(false) ? (
+            {safeGet(() => this.props.results.canaryExecutionResults.length > 0).orElse(false) &&
+            this.state.isSelectedRunComplete ? (
               isTerminalFailure(selectedCanaryExecutionResult) ? (
                 <div className="terminal-canary-wrapper">
                   <TerminalResult exception={selectedCanaryExecutionResult.exception} />
