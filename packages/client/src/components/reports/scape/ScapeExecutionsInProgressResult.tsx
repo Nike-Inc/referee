@@ -281,7 +281,7 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
                       </div>
                     </div>
                     <div className="logo-spinner-container">
-                      <img id="logo" src={logo} alt="" />
+                      <img id="logo" className="spinner-animation" src={logo} alt="" />
                     </div>
                   </div>
                 </div>

@@ -16,7 +16,7 @@ $marginal-color: yellow;
 $fail-color: $error;
 
 .btn-outline-warning {
-  font-weight: bold!important;
+  font-weight: bold !important;
 }
 
 .line-break {
@@ -64,6 +64,30 @@ $fail-color: $error;
 
   @media (min-width: 2200px) {
     width: 55%;
+  }
+}
+
+.spinner-animation {
+  -webkit-animation: spin 4s linear infinite;
+  -moz-animation: spin 4s linear infinite;
+  animation: spin 4s linear 0s infinite both;
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
   }
 }
 

@@ -121,26 +121,6 @@
       width: 300px;
       height: 300px;
       margin: -180px 0 0 -150px;
-
-      -webkit-animation: spin 4s linear infinite;
-      -moz-animation: spin 4s linear infinite;
-      animation: spin 4s linear 0s infinite both;
-    }
-
-    @-moz-keyframes spin {
-      100% {
-        -moz-transform: rotate(360deg);
-      }
-    }
-    @-webkit-keyframes spin {
-      100% {
-        -webkit-transform: rotate(360deg);
-      }
-    }
-    @keyframes spin {
-      100% {
-        transform: rotate(360deg);
-        }
     }
   }
 }
