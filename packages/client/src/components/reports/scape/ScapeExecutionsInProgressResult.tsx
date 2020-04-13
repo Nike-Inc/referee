@@ -20,7 +20,10 @@ import ScoreClassUtils from '../../../util/ScoreClassUtils';
 import TerminalResult from '../../shared/TerminalResult';
 import TitledSection from '../../../layout/titledSection';
 import { observer } from 'mobx-react';
-import logo from '../../../assets/logo.svg';
+import logo from '../../../assets/logo-modified.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import ToggleableTimeStamp from '../../shared/ToggleableTimeStamp';
 
 enum stageStatus {
   SUCCEEDED = 'SUCCEEDED',
@@ -77,6 +80,8 @@ class RefereeStageMetadata {
 
 const isTerminalFailure = (selectedCanaryExecutionResult: CanaryExecutionResult) =>
   selectedCanaryExecutionResult.executionStatus === stageStatus.TERMINAL && selectedCanaryExecutionResult.exception;
+
+const SEC_TO_MS = 60000;
 
 @observer
 export default class ScapeExecutionsInProgressResult extends React.Component<Props, State> {
@@ -152,6 +157,12 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
       return new RefereeStageMetadata(score, status, availableResult);
     };
 
+    const calculateEstimatedRunEndTime = (runNumber: number, startTime: string, interval: number): string => {
+      const startDate = new Date(startTime).getTime();
+      const offset = interval * SEC_TO_MS * runNumber;
+      return new Date(startDate + offset).toISOString();
+    };
+
     return (
       <div className="scape-in-progress-report-container">
         <div className="scape-metadata-container">
@@ -176,7 +187,6 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
           <div className="scape-executions-tabs">
             {runCanaryStages.map((stageMetadata, index) => {
               const refereeStageMetadata: RefereeStageMetadata = determineRefereeStageMetadata(stageMetadata, index);
-
               return (
                 <div className="scape-tab-wrapper" key={stageMetadata.name}>
                   <div
@@ -239,8 +249,42 @@ export default class ScapeExecutionsInProgressResult extends React.Component<Pro
                 />
               )
             ) : (
-              <div className="img-container">
-                <img id="logo" src={logo} alt="" />
+              <div className="in-progress-result-container">
+                <div className="estimated-time-card">
+                  <div className="estimated-time-card-content">
+                    <div className="kv-wrapper">
+                      <div className="key">Run</div>
+                      <div className="value">
+                        {selectedRunNumber} of {runCanaryStages.length}
+                      </div>
+                    </div>
+                    <div className="run-time-container">
+                      <div className="run-time-container-row">
+                        <FontAwesomeIcon className="img spinner" size="lg" color="black" icon={faSpinner} />
+                        <div className="in-progress-time">
+                          <div className="eta-label">Estimated Start: </div>
+                          <ToggleableTimeStamp timeStamp={startTime} />
+                        </div>
+                      </div>
+                      <div className="run-time-container-row">
+                        <FontAwesomeIcon className="img spinner" size="lg" color="black" icon={faSpinner} />
+                        <div className="in-progress-time">
+                          <div className="eta-label">Estimated End: </div>
+                          <ToggleableTimeStamp
+                            timeStamp={calculateEstimatedRunEndTime(
+                              selectedRunNumber,
+                              startTime,
+                              request.analysisIntervalMins
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="logo-spinner-container">
+                      <img id="logo" src={logo} alt="" />
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

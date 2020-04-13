@@ -7,7 +7,13 @@ import {
 import './ScapeMetadataSection.scss';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHourglassEnd, faHourglassStart, faLayerGroup, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHourglassEnd,
+  faHourglassStart,
+  faLayerGroup,
+  faMapMarkerAlt,
+  faSpinner
+} from '@fortawesome/free-solid-svg-icons';
 import ToggleableTimeStamp from '../../shared/ToggleableTimeStamp';
 
 interface Props {
@@ -29,6 +35,8 @@ enum time {
   IN_PROGRESS = 'in-progress'
 }
 
+const SEC_TO_MS = 60000;
+
 export default class ScapeMetadataSection extends React.Component<Props> {
   render(): React.ReactNode {
     const {
@@ -45,6 +53,11 @@ export default class ScapeMetadataSection extends React.Component<Props> {
       canaryConfig,
       handleGoToConfigButtonClick
     } = this.props;
+
+    const calculateEstimatedCompletionTime = (startTime: string, lifetime: number): string => {
+      const startDate = new Date(startTime).getTime();
+      return new Date(startDate + lifetime * SEC_TO_MS).toISOString();
+    };
 
     return (
       <div className="scape-metadata-section">
@@ -124,9 +137,22 @@ export default class ScapeMetadataSection extends React.Component<Props> {
                   <ToggleableTimeStamp timeStamp={scope.startTimeIso ? scope.startTimeIso : startTime} />
                 </div>
                 <div className="scope-item-wrapper timestamp-min-width">
-                  <FontAwesomeIcon className="img hourglass" size="lg" color="black" icon={faHourglassEnd} />
+                  <FontAwesomeIcon
+                    className={endTime === time.IN_PROGRESS ? 'img spinner' : 'img hourglass'}
+                    size="lg"
+                    color="black"
+                    icon={endTime === time.IN_PROGRESS ? faSpinner : faHourglassEnd}
+                  />
                   {endTime === time.IN_PROGRESS ? (
-                    'In Progress'
+                    <div className="in-progress-time">
+                      <div className="eta-label">ETA: </div>
+                      <ToggleableTimeStamp
+                        timeStamp={calculateEstimatedCompletionTime(
+                          scope.startTimeIso ? scope.startTimeIso : startTime,
+                          lifetime
+                        )}
+                      />
+                    </div>
                   ) : (
                     <ToggleableTimeStamp timeStamp={scope.endTimeIso ? scope.endTimeIso : endTime} />
                   )}

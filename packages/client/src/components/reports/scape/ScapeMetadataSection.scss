@@ -87,15 +87,31 @@
 
             .hourglass {
               padding-right: 5px;
+              margin-right: 3px;
             }
 
             .map-marker {
               padding-right: 5px;
             }
+
+            .spinner {
+              padding-right: 6px;
+            }
           }
 
           .timestamp-min-width {
-            min-width: 250px;
+            min-width: 315px;
+
+            .in-progress-time {
+              display: flex;
+              align-items: center;
+              flex-grow: 1;
+
+              .eta-label {
+                text-align: center;
+                padding-right: 5px;
+              }
+            }
           }
         }
       }
