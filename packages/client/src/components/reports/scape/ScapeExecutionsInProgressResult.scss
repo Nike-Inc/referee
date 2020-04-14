@@ -87,15 +87,80 @@ $un-selected-size: 85px;
       z-index: 1;
       height: 100%;
 
-      .img-container {
-        margin: 150px;
+      .in-progress-result-container {
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-        #logo {
-          display: block;
-          margin: 0 auto;
-          width: 40%;
-          height: 40%;
+        .estimated-time-card {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin: 50px;
+          padding: 50px 50px 10px 50px;
+
+          .estimated-time-card-content {
+            .kv-wrapper {
+              display: flex;
+              flex-direction: column;
+              padding: 3px 0 3px 0;
+              justify-content: center;
+              margin-right: 50px;
+
+              .key {
+                @extend .content-font;
+                font-weight: 700;
+              }
+
+              .value {
+                @extend .content-font;
+              }
+            }
+
+            .run-time-container {
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 20px;
+
+              .run-time-container-row {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                width: 450px;
+                margin: 3px 0 3px 0;
+
+                .spinner {
+                  padding-right: 5px;
+                }
+
+                .in-progress-time {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  flex-grow: 1;
+
+                  .eta-label {
+                    text-align: center;
+                    padding-right: 5px;
+                  }
+                }
+              }
+            }
+
+            .logo-spinner-container {
+              margin: 40px;
+
+              #logo {
+                display: block;
+                margin: 0 auto;
+                width: 350px;
+                height: 350px;
+              }
+            }
+          }
         }
       }
     }

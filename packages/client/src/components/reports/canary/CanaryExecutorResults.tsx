@@ -54,7 +54,7 @@ export default class CanaryExecutorResults extends ConnectedComponent<Props, Sto
       <div className="canary-executor-results">
         {!canaryExecutorStore.resultsRequestComplete ? (
           <div className="canary-executor-spinner">
-            <img className="logo" src={logo} alt="" />
+            <img className="logo spinner-animation" src={logo} alt="" />
           </div>
         ) : (
           <div>
