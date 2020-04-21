@@ -77,6 +77,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:junit": "yarn test --ci --coverage --reporters=jest-junit",
     "eject": "react-scripts eject",
     "format": "prettier --write --single-quote --print-width=120 --tab-width=2 'src/**/*.{ts,tsx,js,jsx}'",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
