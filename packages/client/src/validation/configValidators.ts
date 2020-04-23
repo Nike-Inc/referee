@@ -70,7 +70,7 @@ const groupWeightSchema = object()
     message: 'FormGroup weights should add up to 100',
     test: sut => {
       try {
-        return (Object.values(sut) as number[]).reduce(add) === 100;
+        return Math.round((Object.values(sut) as number[]).reduce(add)) === 100;
       } catch (e) {
         return false;
       }
