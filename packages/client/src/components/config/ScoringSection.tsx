@@ -75,7 +75,7 @@ export const ScoringSection = observer(
                 </div>
               </Col>
             </div>
-            <div className="weight-total">Weight Total: {Object.values(computedGroupWeights).reduce(add, 0)} / 100</div>
+            <div className="weight-total">Weight Total: {Math.round(Object.values(computedGroupWeights).reduce(add, 0))} / 100</div>
           </Form.Group>
         </div>
         {touched && error && <Alert variant="danger">{error}</Alert>}

@@ -86,10 +86,10 @@ export default class ScapeReportViewer extends ConnectedComponent<Props, Stores,
         this.stores.configEditorStore.setCanaryConfigObject(canaryConfig);
       }
 
-      const totalGroupWeights: number = Object.values(this.stores.configEditorStore.computedGroupWeights).reduce(
+      const totalGroupWeights: number = Math.round(Object.values(this.stores.configEditorStore.computedGroupWeights).reduce(
         add,
         0
-      );
+      ));
       if (totalGroupWeights !== 100) {
         log.error(`Configuration Error: Group weights need to add up to 100.`);
         this.stores.errorStore.push({
