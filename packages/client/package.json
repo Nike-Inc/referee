@@ -25,7 +25,7 @@
     "human-format": "^0.10.1",
     "js-yaml": "^3.13.0",
     "loglevel": "^1.6.1",
-    "marked": "^0.6.2",
+    "marked": "^1.1.1",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
