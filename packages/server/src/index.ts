@@ -5,6 +5,7 @@ import Optional from 'optional-js';
 import path from 'path';
 import { publicRoot } from './const/appPaths';
 import { SelfReportingMetricsRegistry, LoggingReporter, Dimensions } from 'measured-reporting';
+import { createProcessMetrics, createOSMetrics, createExpressMiddleware } from 'measured-node-metrics';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -25,6 +26,15 @@ const customizations: CustomizableConfiguration = require('../../../customizatio
 const metricsRegistry: SelfReportingMetricsRegistry = Optional.ofNullable(customizations.metricsRegistry).orElse(
   new SelfReportingMetricsRegistry(new LoggingReporter({ defaultDimensions: {} }))
 );
+
+// Add default Operating System Metrics, See https://yaorg.github.io/node-measured/global.html#nodeOsMetrics
+createOSMetrics(metricsRegistry);
+
+// Add default Node process Metrics. See https://yaorg.github.io/node-measured/global.html#nodeProcessMetrics.
+createProcessMetrics(metricsRegistry);
+
+// See https://yaorg.github.io/node-measured/module-node-http-request-metrics.html
+app.use(createExpressMiddleware(metricsRegistry));
 
 const port = process.env.PORT || 3001;
 

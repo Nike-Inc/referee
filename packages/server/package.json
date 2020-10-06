@@ -24,6 +24,7 @@
     "express": "^4.17.1",
     "express-http-proxy": "^1.5.1",
     "measured-core": "^1.50.0",
+    "measured-node-metrics": "^2.0.0",
     "measured-reporting": "^1.50.0",
     "measured-signalfx-reporter": "1.51.0",
     "optional-js": "^2.1.1",
