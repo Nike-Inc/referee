@@ -57,11 +57,11 @@ export const ScoringSection = observer(
                           <InputGroup.Text>{key}: </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                          onChange={(e: React.SyntheticEvent<Event>) => {
+                          onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             updateGroupWeight(
                               key,
-                              parseInt((e.target as HTMLInputElement).value, 10)
-                                ? parseInt((e.target as HTMLInputElement).value, 10)
+                              parseInt((event.target as HTMLInputElement).value, 10)
+                                ? parseInt((event.target as HTMLInputElement).value, 10)
                                 : 0
                             );
                           }}
@@ -75,7 +75,9 @@ export const ScoringSection = observer(
                 </div>
               </Col>
             </div>
-            <div className="weight-total">Weight Total: {Math.round(Object.values(computedGroupWeights).reduce(add, 0))} / 100</div>
+            <div className="weight-total">
+              Weight Total: {Math.round(Object.values(computedGroupWeights).reduce(add, 0))} / 100
+            </div>
           </Form.Group>
         </div>
         {touched && error && <Alert variant="danger">{error}</Alert>}
