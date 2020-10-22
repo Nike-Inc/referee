@@ -102,10 +102,11 @@ export default class ScopeItem extends React.Component<ScopeProps> {
             <div>
               <p>
                 The unique identifier for your deployed server group. <br />
-                From Spinnaker docs on server groups: "The base resource, the Server Group, identifies the deployable
-                artifact (VM image, Docker image, source location) and basic configuration settings such as number of
-                instances, autoscaling policies, metadata, etc. When deployed, a Server Group is a collection of
-                instances of the running software (VM instances, Kubernetes pods)."
+                Refers to the group of instances running your software (autoscaling groups, etc.).
+                {/*From Spinnaker docs on server groups: "The base resource, the Server Group, identifies the deployable*/}
+                {/*artifact (VM image, Docker image, source location) and basic configuration settings such as number of*/}
+                {/*instances, autoscaling policies, metadata, etc. When deployed, a Server Group is a collection of*/}
+                {/*instances of the running software (VM instances, Kubernetes pods)."*/}
               </p>
             </div>
           }
@@ -124,7 +125,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           id={scopeType + '-location'}
           label="Location"
           placeHolderText="ex: us-east-1 (AWS region)"
-          tooltipText="Location of your deployed service."
+          tooltipText="Location or region of your deployed service."
           value={scope.location}
           disabled={disabled}
           onChange={e => {
@@ -179,6 +180,9 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Start Time (ISO)"
           value={scope.start}
           disabled={disabled}
+          tooltipText={
+            'The starting timestamp of the period you are interested in seeing historical data for, must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
+          }
           placeHolderText="start time stamp"
           onChange={e => {
             this.handleStartChange(e.target.value, scope);
@@ -212,6 +216,9 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="End Time (ISO)"
           value={scope.end}
           disabled={disabled}
+          tooltipText={
+            'The end timestamp of the period you are interested in seeing historical data for, must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
+          }
           placeHolderText="end time stamp"
           onChange={e => {
             this.handleEndChange(e.target.value, scope);
