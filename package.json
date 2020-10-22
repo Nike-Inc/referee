@@ -15,7 +15,7 @@
     "jest-junit": "^10.0.0",
     "lerna": "^3.14.1",
     "prettier": "^1.17.1",
-    "typescript": "3.3.4000"
+    "typescript": "3.9.7"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",

@@ -5,14 +5,17 @@ import log from '../util/LoggerFactory';
 import { validateCanaryConfig } from '../validation/configValidators';
 import { metricSourceTypes } from '../metricSources';
 import { safeGet } from '../util/OptionalUtils';
+import { persist } from 'mobx-persist';
 
 /**
  * Mobx store for the configuration editor component
  */
 export default class ConfigEditorStore {
+  @persist
   @observable
   metricSourceType: string = metricSourceTypes()[0];
 
+  @persist('object')
   @observable
   canaryConfigObject: CanaryConfig = CanaryConfigFactory.createNewCanaryConfig();
 
@@ -37,7 +40,7 @@ export default class ConfigEditorStore {
   @computed
   get computedGroupWeights(): GroupWeights {
     const groupWeights: GroupWeights = {};
-    const uniqueGroups = new Set();
+    const uniqueGroups = new Set<string>();
     if (this.canaryConfigObject && Array.isArray(this.canaryConfigObject.metrics)) {
       this.canaryConfigObject.metrics.forEach(metric => {
         metric.groups.forEach(group => {
@@ -46,7 +49,7 @@ export default class ConfigEditorStore {
       });
     }
 
-    Array.from(uniqueGroups).forEach(group => {
+    Array.from(uniqueGroups).forEach((group: string) => {
       if (
         this.canaryConfigObject &&
         this.canaryConfigObject.classifier &&
@@ -96,10 +99,9 @@ export default class ConfigEditorStore {
 
   @action.bound
   setCanaryConfigObject(canaryConfigObject: CanaryConfig): void {
+    // todo figure out if this ad hoc config is necessary
     // account for ad-hoc configurations with nested 'canaryConfig' object
-    canaryConfigObject.metrics == null && canaryConfigObject.canaryConfig != null
-      ? (this.canaryConfigObject = canaryConfigObject.canaryConfig)
-      : (this.canaryConfigObject = canaryConfigObject);
+    this.canaryConfigObject = canaryConfigObject;
     this.canaryConfigObject.metrics.forEach(metric => metric.groups.forEach(g => this.createNewGroup(g, false)));
     this.hasTheCopyOrSaveButtonBeenClicked = false;
     const uniqueGroups = new Set();

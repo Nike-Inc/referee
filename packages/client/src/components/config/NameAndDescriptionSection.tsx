@@ -72,7 +72,7 @@ export const NameAndDescriptionSection = observer(
           tooltipHeader="Description"
           tooltipText="Text description of what this configuration will be used for."
           area={true}
-          rows="1"
+          rows={1}
           onChange={(e: any) => {
             updateConfigDescription(e.target.value);
           }}

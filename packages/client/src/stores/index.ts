@@ -3,6 +3,7 @@ import DocsStore from './DocsStore';
 import ListStore from './ListStore';
 import CanaryExecutorStore from './CanaryExecutorStore';
 import ReportStore from './ReportStore';
+import { create } from 'mobx-persist';
 
 export const stores = {
   configEditorStore: new ConfigEditorStore(),
@@ -12,3 +13,10 @@ export const stores = {
   canaryExecutorStore: new CanaryExecutorStore(),
   reportStore: new ReportStore()
 };
+
+const hydrate = create({
+  storage: localStorage,
+  jsonify: true
+});
+
+hydrate('configEditor', stores.configEditorStore);
