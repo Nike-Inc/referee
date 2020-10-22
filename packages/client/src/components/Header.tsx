@@ -5,7 +5,7 @@ import log from '../util/LoggerFactory';
 import logo from '../assets/logo.svg';
 
 import './Header.scss';
-import { RouteComponentProps, RouterProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { connect, ConnectedComponent } from './connectedComponent';
 import ConfigEditorStore from '../stores/ConfigEditorStore';
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
@@ -41,7 +41,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
     return (
       <div id="header-wrapper">
         <Container fluid={true} id="header">
-          <Navbar bg="header-navbar" variant="dark" expand="lg">
+          <Navbar bg="header-navbar" variant="dark" expand="sm">
             <Navbar.Brand
               onClick={() => {
                 this.props.history.push('/');
