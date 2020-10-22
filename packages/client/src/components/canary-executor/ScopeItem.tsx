@@ -103,10 +103,6 @@ export default class ScopeItem extends React.Component<ScopeProps> {
               <p>
                 The unique identifier for your deployed server group. <br />
                 Refers to the group of instances running your software (autoscaling groups, etc.).
-                {/*From Spinnaker docs on server groups: "The base resource, the Server Group, identifies the deployable*/}
-                {/*artifact (VM image, Docker image, source location) and basic configuration settings such as number of*/}
-                {/*instances, autoscaling policies, metadata, etc. When deployed, a Server Group is a collection of*/}
-                {/*instances of the running software (VM instances, Kubernetes pods)."*/}
               </p>
             </div>
           }
