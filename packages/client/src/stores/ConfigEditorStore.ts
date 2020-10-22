@@ -5,14 +5,17 @@ import log from '../util/LoggerFactory';
 import { validateCanaryConfig } from '../validation/configValidators';
 import { metricSourceTypes } from '../metricSources';
 import { safeGet } from '../util/OptionalUtils';
+import { persist } from 'mobx-persist';
 
 /**
  * Mobx store for the configuration editor component
  */
 export default class ConfigEditorStore {
+  @persist
   @observable
   metricSourceType: string = metricSourceTypes()[0];
 
+  @persist('object')
   @observable
   canaryConfigObject: CanaryConfig = CanaryConfigFactory.createNewCanaryConfig();
 

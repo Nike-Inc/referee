@@ -12,7 +12,7 @@ export const TextInputGroup = ({
   value,
   onChange,
   area = false,
-  rows = '1',
+  rows = 1,
   onBlur,
   touched,
   error
@@ -25,7 +25,7 @@ export const TextInputGroup = ({
   value?: string;
   onChange?: any;
   area?: boolean;
-  rows?: string;
+  rows?: number;
   onBlur: () => void;
   touched: boolean;
   error: undefined | string;
@@ -44,7 +44,7 @@ export const TextInputGroup = ({
               onBlur();
             }}
             type="text"
-            as={area ? 'textarea' : 'input'}
+            as="textarea"
             rows={rows}
             value={value}
             placeholder={placeHolderText}

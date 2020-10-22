@@ -57,7 +57,7 @@ export const ScoringSection = observer(
                           <InputGroup.Text>{key}: </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                          onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateGroupWeight(
                               key,
                               parseInt((event.target as HTMLInputElement).value, 10)

@@ -190,7 +190,7 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
                 this.updateQueryObject('customInlineTemplate', e.target.value);
               }}
               as="textarea"
-              rows="3"
+              rows={3}
             />
             <Form.Text className="text-muted">
               For advanced configuration only. See{' '}
