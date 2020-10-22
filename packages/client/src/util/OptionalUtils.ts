@@ -7,18 +7,18 @@ import Optional from 'optional-js';
  * @return an optional of the supplied type that maybe contains the value that the provider was supposed to resolve.
  */
 export function safeGet<T>(supplier: () => T | null | undefined): Optional<T> {
-  let value = null;
+  let value;
 
   try {
-    value = supplier();
+    value = supplier()!;
   } catch (e) {
     return Optional.empty();
   }
-  return Optional.ofNullable(value);
+  return Optional.ofNullable(value)!;
 }
 
 export async function safeGetAsync<T>(supplier: () => Promise<T | null | undefined>): Promise<Optional<T>> {
-  let value = null;
+  let value;
 
   try {
     value = await supplier();
