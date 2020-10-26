@@ -18,10 +18,6 @@ Deck is meant to be the UI for the complete Spinnaker user experiance and its go
 
 We decided it would be easier to just have a separate project for the standalone Kayenta use case, even if there is some duplicated logic.
 
-## Warning
-
-This project is very much in a beta state and is undergoing active development.
-
 ## Features
 
 ### Canary Config Generation Tool
