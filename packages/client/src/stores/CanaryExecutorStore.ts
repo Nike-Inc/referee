@@ -13,7 +13,7 @@ import {
 } from '../validation/executionValidators';
 import { ofNullable, trimToEmpty } from '../util/OptionalUtils';
 import log from '../util/LoggerFactory';
-import {persist} from "mobx-persist";
+import { persist } from 'mobx-persist';
 
 const METRICS_STORE = 'METRICS_STORE';
 const OBJECT_STORE = 'OBJECT_STORE';
