@@ -100,10 +100,8 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           label="Scope"
           tooltipText={
             <div>
-              <p>
-                The unique identifier for your deployed server group. <br />
-                Refers to the group of instances running your software (autoscaling groups, etc.).
-              </p>
+              The unique identifier for your deployed server group. <br />
+              Refers to the group of instances running your software (autoscaling groups, etc).
             </div>
           }
           value={scope.scope}
@@ -177,7 +175,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           value={scope.start}
           disabled={disabled}
           tooltipText={
-            'The starting timestamp of the period you are interested in seeing historical data for, must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
+            'The start time stamp of the period you are interested in seeing historical data for. Must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
           }
           placeHolderText="start time stamp"
           onChange={e => {
@@ -213,7 +211,7 @@ export default class ScopeItem extends React.Component<ScopeProps> {
           value={scope.end}
           disabled={disabled}
           tooltipText={
-            'The end timestamp of the period you are interested in seeing historical data for, must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
+            'The end timestamp of the period you are interested in seeing historical data for. Must not exceed current time. Use the calendar dropdown for local time or directly supply the time in ISO format.'
           }
           placeHolderText="end time stamp"
           onChange={e => {

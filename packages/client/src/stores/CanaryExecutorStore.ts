@@ -13,6 +13,7 @@ import {
 } from '../validation/executionValidators';
 import { ofNullable, trimToEmpty } from '../util/OptionalUtils';
 import log from '../util/LoggerFactory';
+import { persist } from 'mobx-persist';
 
 const METRICS_STORE = 'METRICS_STORE';
 const OBJECT_STORE = 'OBJECT_STORE';
@@ -21,15 +22,19 @@ export default class CanaryExecutorStore {
   @observable
   private credentialsData: KayentaCredential[] = [];
 
+  @persist
   @observable
   applicationName = '';
 
+  @persist
   @observable
   metricsAccountName = '';
 
+  @persist
   @observable
   storageAccountName = '';
 
+  @persist('object')
   @observable
   private internalCanaryExecutionRequestObject: CanaryExecutionRequest = CanaryExecutionFactory.createNewCanaryExecutionRequest();
 
@@ -45,6 +50,7 @@ export default class CanaryExecutorStore {
   @observable
   hasTheRunButtonBeenClicked = false;
 
+  @persist
   @observable
   testingType = 'AA';
 

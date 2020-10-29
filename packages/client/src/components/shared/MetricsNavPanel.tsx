@@ -10,7 +10,7 @@ import {
 } from '../../domain/Kayenta';
 import { Checkbox } from './Checkbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './MetricsNavPanel.scss';
 import classNames from 'classnames';
 import ScoreClassUtils from '../../util/ScoreClassUtils';
@@ -231,7 +231,7 @@ const Key = (): JSX.Element => {
       </div>
       <div className="metrics-key-item">
         <div className="metrics-key-symbol">
-          <FontAwesomeIcon className="exclamation" size="1x" color="black" icon={faExclamation} />
+          <FontAwesomeIcon className="exclamation" size="1x" color="black" icon={faStar} />
         </div>
         <div className="metrics-key">Critical</div>
       </div>
@@ -275,7 +275,7 @@ const Metric = ({
               className="exclamation"
               size="1x"
               color={id === selectedMetric ? 'white' : 'black'}
-              icon={faExclamation}
+              icon={faStar}
             />
           </div>
         )}
