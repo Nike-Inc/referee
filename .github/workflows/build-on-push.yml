@@ -1,4 +1,4 @@
-name: test-github-actions
+name: Build
 on: [push]
 jobs:
   build-referee:
