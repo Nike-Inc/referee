@@ -41,7 +41,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
     return (
       <div id="header-wrapper">
         <Container fluid={true} id="header">
-          <Navbar bg="header-navbar" variant="dark" expand="sm">
+          <Navbar bg="header-navbar" variant="dark" expand="lg">
             <Navbar.Brand
               onClick={() => {
                 this.props.history.push('/');
@@ -50,6 +50,7 @@ export default class Header extends ConnectedComponent<Props, Stores> {
               <img id="header-logo" src={logo} alt="" />
               <div id="header-label">Referee</div>
             </Navbar.Brand>
+            <Navbar.Toggle />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
                 {Optional.ofNullable(this.stores.docsStore.tableOfContents).isPresent() && (

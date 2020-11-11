@@ -20,3 +20,4 @@ const hydrate = create({
 });
 
 hydrate('configEditor', stores.configEditorStore);
+hydrate('canaryExecutor', stores.canaryExecutorStore);
