@@ -146,7 +146,7 @@ export interface CanaryAnalysisConfiguration {
   nanStrategy?: string;
   critical?: boolean;
   mustHaveData?: boolean;
-  effectSize?: CanaryMetricEffectSizeConfigs;
+  effectSize?: CanaryMetricEffectSizeConfig;
   outliers?: CanaryMetricOutliersConfig;
 }
 
@@ -174,10 +174,6 @@ export interface CanaryMetricEffectSizeConfig {
   allowedDecrease?: number;
   criticalIncrease?: number;
   criticalDecrease?: number;
-}
-
-export interface CanaryMetricEffectSizeConfigs {
-  [name: string]: CanaryMetricEffectSizeConfig;
 }
 
 export interface CanaryJudgeConfig {

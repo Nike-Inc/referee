@@ -40,11 +40,16 @@ const getCanaryMetricConfigSchema = (metricQueryObjectSchema: KvMap<Schema<any>>
             nanStrategy: mixed().oneOf(['remove', 'replace']),
             critical: boolean(),
             mustHaveData: boolean(),
-            effectSize: object().shape({
-              allowedIncrease: number(),
-              allowedDecrease: number(),
-              criticalIncrease: number(),
-              criticalDecrease: number()
+            effectSize: object().when('critical', {
+              is: true,
+              then: object({
+                criticalIncrease: number().required('Critical Increase is a required field. Defaults to 1.'),
+                criticalDecrease: number().required('Critical Decrease is a required field. Defaults to 1.')
+              }),
+              otherwise: object({
+                allowedIncrease: number().required('Allowed Increase is a required field. Defaults to 1.'),
+                allowedDecrease: number().required('Allowed Decrease is a required field. Defaults to 1.')
+              })
             }),
             outliers: object().shape({
               strategy: string().oneOf(['keep', 'remove']),

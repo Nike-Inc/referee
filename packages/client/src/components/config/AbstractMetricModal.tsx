@@ -33,6 +33,10 @@ const initialState = {
     metricName: false,
     aggregationMethod: false,
     dimensions: false,
+    criticalIncrease: false,
+    criticalDecrease: false,
+    allowedIncrease: false,
+    allowedDecrease: false,
     outlierStrategy: false
   },
   isValid: true,
@@ -47,7 +51,15 @@ const initialMetricState = {
   analysisConfigurations: {
     canary: {
       direction: 'either',
-      nanStrategy: 'remove'
+      critical: false,
+      nanStrategy: 'remove',
+      effectSize: {
+        allowedIncrease: 1,
+        allowedDecrease: 1
+      },
+      outliers: {
+        strategy: 'keep'
+      }
     }
   },
   scopeName: 'default'
@@ -304,6 +316,10 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     if (criticality === 'critical') {
       delete canaryAnalysisConfigurationCopy['mustHaveData'];
       canaryAnalysisConfigurationCopy['critical'] = true;
+      canaryAnalysisConfigurationCopy['effectSize'] = {
+        criticalIncrease: 1,
+        criticalDecrease: 1
+      };
     }
 
     if (criticality === 'mustHaveData') {
@@ -312,8 +328,12 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
     }
 
     if (criticality === 'normal') {
-      delete canaryAnalysisConfigurationCopy['critical'];
+      canaryAnalysisConfigurationCopy['critical'] = false;
       delete canaryAnalysisConfigurationCopy['mustHaveData'];
+      canaryAnalysisConfigurationCopy['effectSize'] = {
+        allowedIncrease: 1,
+        allowedDecrease: 1
+      };
     }
 
     this.setState(
@@ -631,7 +651,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                           <InlineTextGroup
                             id="criticalIncrease"
                             label="Critical Increase"
-                            touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalIncrease']}
+                            touched={this.state.touched.criticalIncrease}
                             error={this.state.errors['analysisConfigurations.canary.effectSize.criticalIncrease']}
                             value={this.getEffectSizeObject('criticalIncrease')}
                             onChange={e => this.handleEffectSizeObjectChange('criticalIncrease', e.target.value)}
@@ -645,7 +665,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                           <InlineTextGroup
                             id="criticalDecrease"
                             label="Critical Decrease"
-                            touched={this.state.touched['analysisConfigurations.canary.effectSize.criticalDecrease']}
+                            touched={this.state.touched.criticalDecrease}
                             error={this.state.errors['analysisConfigurations.canary.effectSize.criticalDecrease']}
                             value={this.getEffectSizeObject('criticalDecrease')}
                             onChange={e => this.handleEffectSizeObjectChange('criticalDecrease', e.target.value)}
@@ -662,7 +682,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                           <InlineTextGroup
                             id="allowedIncrease"
                             label="Allowed Increase"
-                            touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedIncrease']}
+                            touched={this.state.touched.allowedIncrease}
                             error={this.state.errors['analysisConfigurations.canary.effectSize.allowedIncrease']}
                             value={this.getEffectSizeObject('allowedIncrease')}
                             onChange={e => this.handleEffectSizeObjectChange('allowedIncrease', e.target.value)}
@@ -676,7 +696,7 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                           <InlineTextGroup
                             id="allowedDecrease"
                             label="Allowed Decrease"
-                            touched={this.state.touched['analysisConfigurations.canary.effectSize.allowedDecrease']}
+                            touched={this.state.touched.allowedDecrease}
                             error={this.state.errors['analysisConfigurations.canary.effectSize.allowedDecrease']}
                             value={this.getEffectSizeObject('allowedDecrease')}
                             onChange={e => this.handleEffectSizeObjectChange('allowedDecrease', e.target.value)}
@@ -773,7 +793,11 @@ export abstract class AbstractMetricModal<T extends CanaryMetricSetQueryConfig> 
                       scopeName: true,
                       metricName: true,
                       aggregationMethod: true,
-                      dimensions: true
+                      dimensions: true,
+                      criticalIncrease: true,
+                      criticalDecrease: true,
+                      allowedIncrease: true,
+                      allowedDecrease: true
                     }
                   });
                   return;
