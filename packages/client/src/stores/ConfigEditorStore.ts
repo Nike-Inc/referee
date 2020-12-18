@@ -1,5 +1,5 @@
-import { observable, action, computed } from 'mobx';
-import { CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/Kayenta';
+import { action, computed, observable } from 'mobx';
+import { CanaryAnalysisConfiguration, CanaryConfig, CanaryMetricConfig, GroupWeights } from '../domain/Kayenta';
 import CanaryConfigFactory from '../util/CanaryConfigFactory';
 import log from '../util/LoggerFactory';
 import { validateCanaryConfig } from '../validation/configValidators';
@@ -97,6 +97,34 @@ export default class ConfigEditorStore {
     this.metricSourceType = type;
   }
 
+  checkCanaryAnalysisConfiguration(canaryAnalysisConfig: CanaryAnalysisConfiguration): CanaryAnalysisConfiguration {
+    const canaryAnalysisConfigCopy = Object.assign({}, canaryAnalysisConfig);
+    if (!canaryAnalysisConfig['direction']) {
+      canaryAnalysisConfigCopy['direction'] = 'either';
+    }
+    if (!canaryAnalysisConfig['nanStrategy']) {
+      canaryAnalysisConfigCopy['nanStrategy'] = 'remove';
+    }
+    if (!canaryAnalysisConfig['critical']) {
+      canaryAnalysisConfigCopy['critical'] = false;
+      canaryAnalysisConfigCopy['effectSize'] = {
+        allowedIncrease: 1,
+        allowedDecrease: 1
+      };
+    } else {
+      canaryAnalysisConfigCopy['effectSize'] = {
+        criticalIncrease: 1,
+        criticalDecrease: 1
+      };
+    }
+    if (!canaryAnalysisConfig['outliers']) {
+      canaryAnalysisConfigCopy['outliers'] = {
+        strategy: 'keep'
+      };
+    }
+    return canaryAnalysisConfigCopy;
+  }
+
   @action.bound
   setCanaryConfigObject(canaryConfigObject: CanaryConfig): void {
     // todo figure out if this ad hoc config is necessary
@@ -112,6 +140,9 @@ export default class ConfigEditorStore {
         metric.groups.forEach(group => {
           uniqueGroups.add(group);
         });
+        metric.analysisConfigurations['canary'] = this.checkCanaryAnalysisConfiguration(
+          metric.analysisConfigurations['canary']
+        );
       });
     }
 
