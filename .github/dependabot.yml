@@ -8,18 +8,18 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     target-branch: dep/dependency_staging
-    open-pull-requests-limit: 30
+    open-pull-requests-limit: 50
     schedule:
       interval: "daily"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "packages/client/" # Location of package manifests
     target-branch: dep/dependency_staging
-    open-pull-requests-limit: 30
+    open-pull-requests-limit: 50
     schedule:
       interval: "daily"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "packages/server/" # Location of package manifests
-    open-pull-requests-limit: 30
+    open-pull-requests-limit: 50
     target-branch: dep/dependency_staging
     schedule:
       interval: "daily"
