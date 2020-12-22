@@ -26,7 +26,7 @@
     "js-yaml": "^3.13.0",
     "loglevel": "^1.6.1",
     "marked": "^1.1.1",
-    "mobx": "^5.9.0",
+    "mobx": "^5.15.7",
     "mobx-persist": "^0.4.1",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
