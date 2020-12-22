@@ -6,6 +6,7 @@ on:
   pull_request:
     branches:
       - master
+      - dep/dependency_staging
   schedule:
     - cron: "0 22 * * 1"
 jobs:
