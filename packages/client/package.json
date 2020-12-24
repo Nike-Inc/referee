@@ -35,7 +35,7 @@
     "react": "^16.14.0",
     "react-accessible-accordion": "^3.0.0",
     "react-bootstrap": "1.4.0",
-    "react-chartjs-2": "^2.7.6",
+    "react-chartjs-2": "^2.11.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.5",
     "react-flatpickr": "^3.9.0",
