@@ -46,7 +46,7 @@
     "react-spinners": "^0.9.0",
     "react-syntax-highlighter": "^11.0.2",
     "typeface-assistant": "^1.1.13",
-    "uuid": "^3.3.2",
+    "uuid": "^8.3.2",
     "yup": "^0.27.0"
   },
   "devDependencies": {
