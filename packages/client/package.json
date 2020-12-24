@@ -19,7 +19,7 @@
     "capitalize": "^2.0.0",
     "chart.js": "^2.9.4",
     "classnames": "^2.2.6",
-    "d3-format": "^1.4.1",
+    "d3-format": "^2.0.0",
     "file-saver": "^2.0.5",
     "formik": "^1.5.1",
     "github-markdown-css": "^4.0.0",
