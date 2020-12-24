@@ -18,7 +18,7 @@
     "chart.js": "^2.9.4",
     "classnames": "^2.2.6",
     "d3-format": "^1.4.1",
-    "file-saver": "^2.0.1",
+    "file-saver": "^2.0.5",
     "formik": "^1.5.1",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^10.4.1",
