@@ -5361,10 +5361,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-d3-format@^1.4.1:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.4.5.tgz#374f2ba1320e3717eb74a9356c67daee17a7edb4"
-  integrity sha512-J0piedu6Z8iB6TbIGfZgDzfXxUFN3qQRMofy2oPdXzQibYGqPB/9iMcxr/TGalU+2RsyDO+U4f33id8tbnSRMQ==
+d3-format@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-2.0.0.tgz#a10bcc0f986c372b729ba447382413aabf5b0767"
+  integrity sha512-Ab3S6XuE/Q+flY96HXT0jOXcM4EAClYFnRGY5zsjRGNy6qCYrQsMffs7cV5Q9xejb35zxW5hf/guKw34kvIKsA==
 
 damerau-levenshtein@^1.0.4, damerau-levenshtein@^1.0.6:
   version "1.0.6"
@@ -9657,7 +9657,7 @@ measured-node-metrics@^2.0.0:
   dependencies:
     measured-core "^2.0.0"
 
-measured-reporting@^1.50.0, measured-reporting@^1.51.0:
+measured-reporting@^1.51.0:
   version "1.51.1"
   resolved "https://registry.yarnpkg.com/measured-reporting/-/measured-reporting-1.51.1.tgz#6aeb209ad55edf3940e8afa75c8f97f541216b31"
   integrity sha512-JCt+2u6XT1I5lG3SuYqywE0e62DJuAzBcfMzWGUhIYtPQV2Vm4HiYt/durqmzsAbZV181CEs+o/jMKWJKkYIWw==
@@ -9665,6 +9665,16 @@ measured-reporting@^1.50.0, measured-reporting@^1.51.0:
     console-log-level "^1.4.1"
     mapcap "^1.0.0"
     measured-core "^1.51.1"
+    optional-js "^2.0.0"
+
+measured-reporting@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/measured-reporting/-/measured-reporting-2.0.0.tgz#26084e0bca938884889a57fcee60f438ad089340"
+  integrity sha512-GTIKYdrXnLLV3LStaq85LvvrWa2F+MR/RpBA0REzvBFd2QbsQp3H2Dwx7Iiz2xf5+skHFcA5q07czDPYmEnAuQ==
+  dependencies:
+    console-log-level "^1.4.1"
+    mapcap "^1.0.0"
+    measured-core "^2.0.0"
     optional-js "^2.0.0"
 
 measured-signalfx-reporter@1.51.0:
