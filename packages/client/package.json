@@ -63,7 +63,7 @@
     "@types/react-dom": "17.0.0",
     "@types/react-flatpickr": "^3.8.0",
     "@types/react-fontawesome": "^1.6.4",
-    "@types/react-router-dom": "^4.3.1",
+    "@types/react-router-dom": "^5.1.6",
     "@types/react-select": "^3.0.28",
     "@types/react-syntax-highlighter": "^13.5.0",
     "@types/uuid": "^8.3.0",
