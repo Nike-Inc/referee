@@ -26,7 +26,7 @@
     "measured-core": "^2.0.0",
     "measured-node-metrics": "^2.0.0",
     "measured-reporting": "^2.0.0",
-    "measured-signalfx-reporter": "1.51.0",
+    "measured-signalfx-reporter": "2.0.0",
     "optional-js": "^2.1.1",
     "signalfx": "^7.0.1"
   },
