@@ -50,7 +50,7 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
-    "@types/capitalize": "^1.0.1",
+    "@types/capitalize": "^2.0.0",
     "@types/classnames": "^2.2.11",
     "@types/file-saver": "^2.0.0",
     "@types/highlight.js": "^9.12.3",
