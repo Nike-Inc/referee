@@ -9483,7 +9483,7 @@ measured-node-metrics@^2.0.0:
   dependencies:
     measured-core "^2.0.0"
 
-measured-reporting@^1.50.0, measured-reporting@^1.51.0:
+measured-reporting@^1.51.0:
   version "1.51.1"
   resolved "https://registry.yarnpkg.com/measured-reporting/-/measured-reporting-1.51.1.tgz#6aeb209ad55edf3940e8afa75c8f97f541216b31"
   integrity sha512-JCt+2u6XT1I5lG3SuYqywE0e62DJuAzBcfMzWGUhIYtPQV2Vm4HiYt/durqmzsAbZV181CEs+o/jMKWJKkYIWw==
@@ -9491,6 +9491,16 @@ measured-reporting@^1.50.0, measured-reporting@^1.51.0:
     console-log-level "^1.4.1"
     mapcap "^1.0.0"
     measured-core "^1.51.1"
+    optional-js "^2.0.0"
+
+measured-reporting@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/measured-reporting/-/measured-reporting-2.0.0.tgz#26084e0bca938884889a57fcee60f438ad089340"
+  integrity sha512-GTIKYdrXnLLV3LStaq85LvvrWa2F+MR/RpBA0REzvBFd2QbsQp3H2Dwx7Iiz2xf5+skHFcA5q07czDPYmEnAuQ==
+  dependencies:
+    console-log-level "^1.4.1"
+    mapcap "^1.0.0"
+    measured-core "^2.0.0"
     optional-js "^2.0.0"
 
 measured-signalfx-reporter@1.51.0:
