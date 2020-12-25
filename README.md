@@ -63,6 +63,7 @@ Kayenta has many metrics source integrations, this project does not currently su
 Referee currently supports
 
 - New Relic Insights
+- Prometheus
 - SignalFx
 
 To add a new integration you must implement the [MetricSourceIntegration](/packages/client/src/metricSources/MetricSourceIntegration.ts) interface and then add it to the [enabled metric sources](/packages/client/src/metricSources/index.tsx).
