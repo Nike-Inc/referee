@@ -11,15 +11,8 @@ updates:
     open-pull-requests-limit: 50
     schedule:
       interval: "daily"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "packages/client/" # Location of package manifests
-    target-branch: dep/dependency_staging
-    open-pull-requests-limit: 50
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    open-pull-requests-limit: 10
     schedule:
-      interval: "daily"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "packages/server/" # Location of package manifests
-    open-pull-requests-limit: 50
-    target-branch: dep/dependency_staging
-    schedule:
-      interval: "daily"
+      interval: daily
