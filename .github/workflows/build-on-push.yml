@@ -20,7 +20,7 @@ jobs:
       - run: yarn prepare-artifacts
       - name: Slack Notification on Master
         if: ${{ failure() && github.ref == 'refs/heads/master'}}
-        uses: rtCamp/action-slack-notify@v2.1.0
+        uses: rtCamp/action-slack-notify@v2.1.2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: referee-alerts
