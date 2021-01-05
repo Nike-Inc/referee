@@ -25,7 +25,7 @@ jobs:
           file: packages/client/coverage/clover.xml # optional
           fail_ci_if_error: true # optional (default = false)
           verbose: true
-- name: Slack Notification on Master
+      - name: Slack Notification on Master
         if: ${{ failure() && github.ref == 'refs/heads/master'}}
         uses: rtCamp/action-slack-notify@v2.1.2
         env:
