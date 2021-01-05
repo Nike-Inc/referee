@@ -18,7 +18,14 @@ jobs:
       - run: sudo apt-get -qq update
       - run: sudo apt-get install -y oathtool
       - run: yarn prepare-artifacts
-      - name: Slack Notification on Master
+      - run: yarn test
+      - name: Upload coverage report to CodeCov
+      - uses: codecov/codecov-action@v1
+        with:
+          file: packages/client/coverage/clover.xml # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true
+- name: Slack Notification on Master
         if: ${{ failure() && github.ref == 'refs/heads/master'}}
         uses: rtCamp/action-slack-notify@v2.1.2
         env:
