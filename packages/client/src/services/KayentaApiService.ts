@@ -11,7 +11,7 @@ import {
   MetricSetPair
 } from '../domain/Kayenta';
 
-const kayentaClient = axios.create({
+export const kayentaClient = axios.create({
   baseURL: `${window.location.origin}/kayenta/`,
   timeout: 10000
 });
