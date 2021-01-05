@@ -32,7 +32,7 @@
     "moment": "^2.29.1",
     "optional-js": "^2.1.1",
     "path-browserify": "^1.0.0",
-    "react": "^16.14.0",
+    "react": "^17.0.1",
     "react-accessible-accordion": "^3.0.0",
     "react-bootstrap": "1.4.0",
     "react-chartjs-2": "^2.11.1",
@@ -77,7 +77,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false --coverage",
     "test:junit": "yarn test --ci --coverage --reporters=jest-junit",
     "eject": "react-scripts eject",
     "format": "prettier --write --single-quote --print-width=120 --tab-width=2 'src/**/*.{ts,tsx,js,jsx}'",
