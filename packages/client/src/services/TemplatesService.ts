@@ -1,6 +1,5 @@
 import { stores } from '../stores';
 import axios from 'axios';
-
 const { configEditorStore } = stores;
 
 export default class TemplatesService {
@@ -14,9 +13,8 @@ export default class TemplatesService {
       templateName = templateNameMatcher ? templateNameMatcher[1] : '';
       const fileName = `${templateName}.json`;
 
-      axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`).then(response => {
-        configEditorStore.setCanaryConfigObject(response.data);
-      });
+      const response = await axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`);
+      configEditorStore.setCanaryConfigObject(response.data);
     }
   }
 }

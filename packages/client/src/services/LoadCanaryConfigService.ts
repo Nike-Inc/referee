@@ -35,13 +35,12 @@ export default class LoadCanaryConfigService {
       templateName = templateNameMatcher ? templateNameMatcher[1] : '';
       const fileName = `${templateName}.json`;
 
-      axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`).then(response => {
-        configEditorStore.setCanaryConfigObject(response.data);
-        trackEvent(EVENT.LOAD_CONFIG, {
-          source: 'template',
-          template: templateName,
-          name: safeGet(() => response.data.name).orElse('UNKNOWN')
-        });
+      const response = await axios.get(`${process.env.PUBLIC_URL}/templates/${fileName}`)
+      configEditorStore.setCanaryConfigObject(response.data);
+      trackEvent(EVENT.LOAD_CONFIG, {
+        source: 'template',
+        template: templateName,
+        name: safeGet(() => response.data.name).orElse('UNKNOWN')
       });
     }
   }

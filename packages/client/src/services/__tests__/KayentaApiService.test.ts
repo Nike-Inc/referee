@@ -2,6 +2,13 @@ import MockAdapter from 'axios-mock-adapter';
 import KayentaApiService, { kayentaClient } from '../KayentaApiService';
 import { CanaryExecutionResult } from '../../domain/Kayenta';
 
+jest.mock('../../util/LoggerFactory', () => {
+    return {
+      error: () => {},
+      info: () => {}
+    };
+});
+
 describe('KayentaApiService', () => {
   let httpMock;
   let kayentaApiService;
