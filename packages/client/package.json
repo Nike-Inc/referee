@@ -34,7 +34,7 @@
     "path-browserify": "^1.0.0",
     "react": "^17.0.1",
     "react-accessible-accordion": "^3.0.0",
-    "react-bootstrap": "1.4.0",
+    "react-bootstrap": "1.4.3",
     "react-chartjs-2": "^2.11.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^17.0.1",
@@ -47,14 +47,16 @@
     "react-syntax-highlighter": "^15.4.3",
     "typeface-assistant": "^1.1.13",
     "uuid": "^8.3.2",
-    "yup": "^0.27.0"
+    "yup": "^0.27.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
     "@types/capitalize": "^2.0.0",
     "@types/classnames": "^2.2.11",
     "@types/file-saver": "^2.0.0",
     "@types/highlight.js": "^10.1.0",
-    "@types/jest": "26.0.19",
+    "@types/jest": "26.0.20",
     "@types/js-yaml": "^3.12.0",
     "@types/loglevel": "^1.5.4",
     "@types/marked": "^0.6.5",
