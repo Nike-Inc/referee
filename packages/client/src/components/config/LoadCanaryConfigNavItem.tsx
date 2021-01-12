@@ -49,6 +49,7 @@ export default class LoadCanaryConfigNavItem extends React.Component<Props> {
       source: 'file',
       name: safeGet(() => unvalidatedJsonObject.name).orElse('UNKNOWN')
     });
+    alert('Successfully loaded canary config from file');
   }
 
   render(): React.ReactNode {

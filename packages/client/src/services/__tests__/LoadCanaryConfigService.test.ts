@@ -1,18 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import LoadCanaryConfigService from '../LoadCanaryConfigService';
-import ConfigEditorStore from '../../stores/ConfigEditorStore';
-import { mocked } from 'ts-jest/utils';
-import axios from "axios";
-
-jest.mock('../../stores/ConfigEditorStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      setCanaryConfigObject: () => {
-        console.log('setCanaryConfigObject was called');
-      }
-    };
-  });
-});
+import axios from 'axios';
 
 jest.mock('../../util/LoggerFactory', () => {
   return {
@@ -20,16 +8,9 @@ jest.mock('../../util/LoggerFactory', () => {
   };
 });
 
-Object.assign(navigator, {
-  clipboard: {
-    readText: () => {},
-  },
-});
-
 describe('LoadCanaryConfigService', () => {
   let httpMock;
   let loadCanaryConfigService;
-  const mockedConfigEditorStore = mocked(ConfigEditorStore, true);
 
   beforeEach(() => {
     httpMock = new MockAdapter(axios);
@@ -38,24 +19,39 @@ describe('LoadCanaryConfigService', () => {
 
   afterEach(() => {
     httpMock.restore();
-    mockedConfigEditorStore.mockRestore();
   });
 
-  // TODO figure out how to mock reading from clipboard
-  // it('should load canary config from clipboard', async () => {
-  //   jest.spyOn(navigator.clipboard, "readText");
-  //   await loadCanaryConfigService.loadCanaryFromClipboard();
-  //   expect(navigator.clipboard.readText()).toHaveBeenCalled();
-  // });
+  it('should load canary config from clipboard', async () => {
+    Object.assign(navigator, {
+      clipboard: {
+        readText: () => {
+          return '{"name": "example-canary-config"}';
+        }
+      }
+    });
+
+    const expectedCanaryConfig = { name: 'example-canary-config' };
+    jest.spyOn(navigator.clipboard, 'readText');
+    jest.spyOn(window, 'alert').mockImplementation(() => {});
+    const actualCanaryConfig = await loadCanaryConfigService.loadCanaryFromClipboard();
+    expect(actualCanaryConfig).toEqual(expectedCanaryConfig);
+  });
 
   it('should fail loading canary config from clipboard', async () => {
+    Object.assign(navigator, {
+      clipboard: {
+        readText: () => {}
+      }
+    });
+
+    jest.spyOn(navigator.clipboard, 'readText');
     jest.spyOn(window, 'alert').mockImplementation(() => {});
     await loadCanaryConfigService.loadCanaryFromClipboard();
     expect(window.alert).toBeCalled();
   });
 
-  it('should load canary from template', async () => {
-    const hrefExample = 'http://example.com/template=test';
+  it('should not error on config editor', () => {
+    const hrefExample = 'http://example.com/config/edit';
     Object.defineProperty(window, 'location', {
       value: {
         href: hrefExample
@@ -64,46 +60,58 @@ describe('LoadCanaryConfigService', () => {
     });
     window = Object.create(window);
 
-    console.log = jest.fn();
+    expect(loadCanaryConfigService.loadCanaryFromTemplate()).resolves;
+  });
+
+  it('should recognize blank config and return true', () => {
+    const url = 'http://example.com/config/edit';
+    const expectedResult = true;
+    const actualResult = loadCanaryConfigService.isBlankConfig(url);
+    expect(actualResult).toEqual(expectedResult);
+  });
+
+  it('should not recognize blank config and return false', () => {
+    const url = 'http://example.com/config/edit?tempte=hello-world-config';
+    expect(() => {
+      loadCanaryConfigService.getTemplateName(url);
+    }).toThrowError(/Template URL does not match pattern/);
+  });
+
+  it('should recognize template and return false', () => {
+    const url = 'http://example.com/template=test';
+    const expectedResult = false;
+    const actualResult = loadCanaryConfigService.isBlankConfig(url);
+    expect(actualResult).toEqual(expectedResult);
+  });
+
+  it('should get template name', () => {
+    const url = 'http://example.com/config/edit?template=test';
+    const expectedTemplateName = 'test';
+    const actualTemplateName = loadCanaryConfigService.getTemplateName(url);
+    expect(actualTemplateName).toEqual(expectedTemplateName);
+  });
+
+  it('should not get template name from pattern mismatch', () => {
+    const url = 'http://example.com/config/edit?test';
+    expect(() => {
+      loadCanaryConfigService.getTemplateName(url);
+    }).toThrowError(/Template URL does not match pattern/);
+  });
+
+  it('should fetch template content', async () => {
     const expectedData = { response: true };
     const url = new RegExp(`${process.env.PUBLIC_URL}/templates/*`);
     httpMock.onGet(url).reply(200, expectedData);
-    await loadCanaryConfigService.loadCanaryFromTemplate();
-    expect(console.log).toHaveBeenCalledWith('setCanaryConfigObject was called');
+    const actualData = await loadCanaryConfigService.fetchTemplateContent();
+    expect(actualData).toEqual(expectedData);
   });
 
-  it('should not load canary from template from template not found', async () => {
-    const hrefExample = 'http://example.com/template=test';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: hrefExample
-      },
-      writable: true
-    });
-    window = Object.create(window);
-
-    console.log = jest.fn();
+  it('should not fetch template content because template is not found', async () => {
     const expectedData = { response: true };
     const url = new RegExp(`${process.env.PUBLIC_URL}/templates/*`);
     httpMock.onGet(url).reply(404, expectedData);
-    await expect(loadCanaryConfigService.loadCanaryFromTemplate()).rejects.toThrow();
-  });
-
-  it('should not load canary from template from pattern mismatch', async () => {
-    const hrefExample = 'http://example.com/';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: hrefExample
-      },
-      writable: true
-    });
-    window = Object.create(window);
-
-    console.log = jest.fn();
-    const expectedData = { response: true };
-    const url = new RegExp(`${process.env.PUBLIC_URL}/templates/*`);
-    httpMock.onGet(url).reply(200, expectedData);
-    await loadCanaryConfigService.loadCanaryFromTemplate();
-    expect(console.log).not.toHaveBeenCalledWith('setCanaryConfigObject was called');
+    await expect(loadCanaryConfigService.fetchTemplateContent()).rejects.toThrowError(
+      /Request failed with status code 404/
+    );
   });
 });

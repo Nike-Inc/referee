@@ -23,6 +23,7 @@ export default class KayentaApiService {
       return response.data;
     } catch (e) {
       log.error('Failed to fetch account metadata from Kayenta', e);
+      alert('Failed to fetch account metadata from Kayenta');
       throw e;
     }
   }

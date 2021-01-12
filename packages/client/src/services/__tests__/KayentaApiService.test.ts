@@ -3,10 +3,10 @@ import KayentaApiService, { kayentaClient } from '../KayentaApiService';
 import { CanaryExecutionResult } from '../../domain/Kayenta';
 
 jest.mock('../../util/LoggerFactory', () => {
-    return {
-      error: () => {},
-      info: () => {}
-    };
+  return {
+    error: () => {},
+    info: () => {}
+  };
 });
 
 describe('KayentaApiService', () => {
@@ -30,8 +30,9 @@ describe('KayentaApiService', () => {
   });
 
   it('should not fetch credentials and throw error', async () => {
+    jest.spyOn(window, 'alert').mockImplementation(() => {});
     httpMock.onGet(`/credentials`).reply(500);
-    await expect(kayentaApiService.fetchCredentials()).rejects.toThrow();
+    await expect(kayentaApiService.fetchCredentials()).rejects.toThrowError(/Request failed with status code 500/);
   });
 
   it('should initiate canary with config with empty data', async () => {
@@ -73,7 +74,9 @@ describe('KayentaApiService', () => {
   it('should not fetch canary execution status response and throw error', async () => {
     const executionId = 'executionId';
     httpMock.onGet(`/canary/${executionId}`).reply(404);
-    await expect(kayentaApiService.fetchCanaryExecutionStatusResponse(executionId)).rejects.toThrow();
+    await expect(kayentaApiService.fetchCanaryExecutionStatusResponse(executionId)).rejects.toThrowError(
+      /Request failed with status code 404/
+    );
   });
 
   it('should fetch canary config', async () => {
@@ -87,7 +90,9 @@ describe('KayentaApiService', () => {
   it('should not fetch canary config and throw error', async () => {
     const configId = 'configId';
     httpMock.onGet(`/canaryConfig/${configId}`).reply(404);
-    await expect(kayentaApiService.fetchCanaryConfig(configId)).rejects.toThrow();
+    await expect(kayentaApiService.fetchCanaryConfig(configId)).rejects.toThrowError(
+      /Request failed with status code 404/
+    );
   });
 
   it('should fetch metric set pair list', async () => {
@@ -101,7 +106,9 @@ describe('KayentaApiService', () => {
   it('should not fetch metric set pair list and throw error', async () => {
     const metricSetPairListId = 'metricSetPairListId';
     httpMock.onGet(`/metricSetPairList/${metricSetPairListId}`).reply(404);
-    await expect(kayentaApiService.fetchMetricSetPairList(metricSetPairListId)).rejects.toThrow();
+    await expect(kayentaApiService.fetchMetricSetPairList(metricSetPairListId)).rejects.toThrowError(
+      /Request failed with status code 404/
+    );
   });
 
   it('should create metric set pair list map with empty results', async () => {

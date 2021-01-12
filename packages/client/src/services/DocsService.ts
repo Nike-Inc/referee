@@ -55,8 +55,8 @@ export default class DocsService {
   async fetchAndUpdateToc(): Promise<void> {
     if (docsStore.tableOfContents == null) {
       try {
-        const response = await axios.get(`${process.env.PUBLIC_URL}/docs/table-of-contents.yaml`);
-        const tocData: any = yaml.load(response.data);
+        const data = await this.fetchToc();
+        const tocData: any = yaml.safeLoad(data);
         const validationResults = validateToc(tocData);
 
         // TODO wire up error component rather than crash entire site.
@@ -73,6 +73,15 @@ export default class DocsService {
     }
   }
 
+  async fetchToc(): Promise<string> {
+    try {
+      const response = await axios.get(`${process.env.PUBLIC_URL}/docs/table-of-contents.yaml`);
+      return response.data;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   fetchAndUpdateDocContent(path: string): void {
     const resolvedPath = OptionalUtils.trimToEmpty(path).orElse(
       OptionalUtils.safeGet(() => docsStore.tableOfContents!.home).orElse('index')
@@ -84,11 +93,20 @@ export default class DocsService {
       log.debug(`${markdown} - in mem cache hit, using that`);
       docsStore.updateContent(docCache.get(markdown) as string);
     } else {
-      axios.get(`${process.env.PUBLIC_URL}/docs/${markdown}`).then(response => {
-        const renderedContent = marked.parse(Optional.ofNullable(response.data).orElse(' '));
+      this.fetchDocContent(markdown).then(data => {
+        const renderedContent = marked.parse(Optional.ofNullable(data).orElse(' '));
         docCache.set(markdown, renderedContent);
         docsStore.updateContent(renderedContent);
       });
+    }
+  }
+
+  async fetchDocContent(markdown): Promise<string> {
+    try {
+      const response = await axios.get(`${process.env.PUBLIC_URL}/docs/${markdown}`);
+      return response.data;
+    } catch (e) {
+      throw e;
     }
   }
 }
