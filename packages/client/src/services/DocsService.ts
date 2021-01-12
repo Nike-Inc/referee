@@ -56,7 +56,7 @@ export default class DocsService {
     if (docsStore.tableOfContents == null) {
       try {
         const response = await axios.get(`${process.env.PUBLIC_URL}/docs/table-of-contents.yaml`);
-        const tocData: any = yaml.safeLoad(response.data);
+        const tocData: any = yaml.load(response.data);
         const validationResults = validateToc(tocData);
 
         // TODO wire up error component rather than crash entire site.
