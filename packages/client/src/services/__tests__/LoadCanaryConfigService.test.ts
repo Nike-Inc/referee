@@ -50,7 +50,7 @@ describe('LoadCanaryConfigService', () => {
     expect(window.alert).toBeCalled();
   });
 
-  it('should not error on config editor', () => {
+  it('should not error on config editor', async () => {
     const hrefExample = 'http://example.com/config/edit';
     Object.defineProperty(window, 'location', {
       value: {
@@ -59,8 +59,7 @@ describe('LoadCanaryConfigService', () => {
       writable: true
     });
     window = Object.create(window);
-
-    expect(loadCanaryConfigService.loadCanaryFromTemplate()).resolves;
+    await expect(loadCanaryConfigService.loadCanaryFromTemplate()).resolves;
   });
 
   it('should recognize blank config and return true', () => {
@@ -99,18 +98,18 @@ describe('LoadCanaryConfigService', () => {
   });
 
   it('should fetch template content', async () => {
+    const fileName = "hello-world-config";
     const expectedData = { response: true };
-    const url = new RegExp(`${process.env.PUBLIC_URL}/templates/*`);
-    httpMock.onGet(url).reply(200, expectedData);
-    const actualData = await loadCanaryConfigService.fetchTemplateContent();
+    httpMock.onGet(`${process.env.PUBLIC_URL}/templates/${fileName}`).reply(200, expectedData);
+    const actualData = await loadCanaryConfigService.fetchTemplateContent(fileName);
     expect(actualData).toEqual(expectedData);
   });
 
   it('should not fetch template content because template is not found', async () => {
+    const fileName = "fileName";
     const expectedData = { response: true };
-    const url = new RegExp(`${process.env.PUBLIC_URL}/templates/*`);
-    httpMock.onGet(url).reply(404, expectedData);
-    await expect(loadCanaryConfigService.fetchTemplateContent()).rejects.toThrowError(
+    httpMock.onGet(`${process.env.PUBLIC_URL}/templates/${fileName}`).reply(404, expectedData);
+    await expect(loadCanaryConfigService.fetchTemplateContent(fileName)).rejects.toThrowError(
       /Request failed with status code 404/
     );
   });
