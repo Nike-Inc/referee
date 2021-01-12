@@ -49,12 +49,12 @@ export default class LoadCanaryConfigService {
   }
 
   isBlankConfig(url: string): boolean {
-    const pattern = new RegExp(/.+config\/edit$/);
+    const pattern = /.+config\/edit$/;
     return url.match(pattern) !== null;
   }
 
   getTemplateName(url: string): string {
-    const pattern = new RegExp(/.+template=([\w.-]+)(.+)?/);
+    const pattern = /.+template=([\w.-]+)(.+)?/;
 
     if (url.match(pattern) == null) {
       throw new Error(`Template URL does not match pattern: ${url}`);
