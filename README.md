@@ -2,6 +2,8 @@
 
 <img src="https://github.com/Nike-Inc/referee/workflows/Build/badge.svg?branch=master">
 
+[![codecov](https://codecov.io/gh/Nike-Inc/referee/branch/master/graph/badge.svg?token=AnFq6ZDkIg)](https://codecov.io/gh/Nike-Inc/referee)
+
 Referee is a user interface for using Spinnaker's Kayenta, a platform for Automated Canary Analysis (ACA), as a standalone service.
 
 Referee is very much inspired by the Spinnakers official UI (Deck).
