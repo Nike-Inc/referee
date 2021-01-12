@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import './IndividualMetricView.scss';
 import { Line } from 'react-chartjs-2';
@@ -44,7 +44,7 @@ export const calculateTimeLabels = (
   let timeLabels: number[] = [];
 
   if (metricSourceType === SIGNAL_FX_SERVICE_TYPE) {
-    const { controlTimeLabels, experimentTimeLabels } = mapIfPresent(
+    const { controlTimeLabels } = mapIfPresent(
       Optional.ofNullable(metricSourceIntegrations()[metricSourceType].graphData),
       graphDataMapper => {
         return safeGet(() => graphDataMapper(metricSetPairsByIdMap[selectedMetric].attributes));

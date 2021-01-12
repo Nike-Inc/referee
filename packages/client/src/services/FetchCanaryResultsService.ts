@@ -19,12 +19,13 @@ export default class FetchCanaryResultsService {
   }
 
   async pollForResponse(): Promise<CanaryExecutionStatusResponse> {
+    const data = async () => {
+      await delay(1000);
+      response = await kayentaApiService.fetchCanaryExecutionStatusResponse(canaryExecutorStore.canaryExecutionId);
+      canaryExecutorStore.updateStageStatus(response.stageStatus);
+    };
+
     do {
-      const data = async () => {
-        await delay(1000);
-        response = await kayentaApiService.fetchCanaryExecutionStatusResponse(canaryExecutorStore.canaryExecutionId);
-        canaryExecutorStore.updateStageStatus(response.stageStatus);
-      };
       await data();
     } while (!response.complete);
     return response;

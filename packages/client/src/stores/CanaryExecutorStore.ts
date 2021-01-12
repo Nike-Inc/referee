@@ -1,7 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import {
   CanaryExecutionRequest,
-  CanaryExecutionStatusResponse,
   CanaryScope,
   KayentaCredential
 } from '../domain/Kayenta';

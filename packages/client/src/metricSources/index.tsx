@@ -1,4 +1,4 @@
-import { CanaryMetricSetQueryConfig, MetricSetPairAttributes } from '../domain/Kayenta';
+import { CanaryMetricSetQueryConfig } from '../domain/Kayenta';
 import { MetricSourceIntegration } from './MetricSourceIntegration';
 import NewRelic from './NewRelic';
 import SignalFx from './SignalFx';

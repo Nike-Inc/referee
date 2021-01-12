@@ -1,15 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
-import KayentaApiService, { kayentaClient } from '../KayentaApiService';
-import FetchCanaryResultsService from '../FetchCanaryResultsService';
+import { kayentaClient } from '../KayentaApiService';
 import { fetchCanaryResultsService } from '../index';
 
 describe('FetchCanaryResultsService', () => {
   let httpMock;
-  let kayentaApiService;
 
   beforeEach(() => {
     httpMock = new MockAdapter(kayentaClient);
-    kayentaApiService = new KayentaApiService();
   });
 
   afterEach(() => {

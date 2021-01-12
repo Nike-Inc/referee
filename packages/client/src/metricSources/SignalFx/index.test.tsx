@@ -1,4 +1,3 @@
-import React from 'react';
 import { lifetimeMillis, scale, timeLabels } from './index';
 import Optional from 'optional-js';
 
