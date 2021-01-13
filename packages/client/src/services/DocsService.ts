@@ -56,7 +56,7 @@ export default class DocsService {
     if (docsStore.tableOfContents == null) {
       try {
         const data = await this.fetchToc();
-        const tocData: any = yaml.safeLoad(data);
+        const tocData: any = yaml.load(data);
         const validationResults = validateToc(tocData);
 
         // TODO wire up error component rather than crash entire site.
