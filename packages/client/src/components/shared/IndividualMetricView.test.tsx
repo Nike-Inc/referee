@@ -1,4 +1,3 @@
-import React from 'react';
 import { filterNansFromData, calculateTimeLabels } from './IndividualMetricView';
 import { MetricSetPair } from '../../domain/Kayenta';
 

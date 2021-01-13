@@ -1,4 +1,3 @@
-import React from 'react';
 import { defaultGraphDataMapper } from './index';
 
 it('generates default graph labels with populated parameters', () => {

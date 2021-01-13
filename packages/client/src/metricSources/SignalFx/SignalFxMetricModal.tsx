@@ -197,6 +197,7 @@ export default class SignalFxMetricModal extends AbstractMetricModal<SignalFxCan
               <a
                 href="https://developers.signalfx.com/signalflow_analytics/signalflow_overview.html#_computation_behavior"
                 target="_blank"
+                rel="noreferrer"
               >
                 Using SignalFlow
               </a>{' '}

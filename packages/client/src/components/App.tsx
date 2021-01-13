@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as H from 'history';
 import { Provider } from 'mobx-react';
 import { BrowserRouter, Route } from 'react-router-dom';
 

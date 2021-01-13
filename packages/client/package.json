@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The client lib for the Referee UX",
   "author": "Justin Field <fieldju@gmail.com>",
   "homepage": "https://example.com/dashboard/",
@@ -70,6 +70,7 @@
     "@types/react-syntax-highlighter": "^13.5.0",
     "@types/uuid": "^8.3.0",
     "@types/yup": "^0.26.12",
+    "axios-mock-adapter": "^1.19.0",
     "node-sass": "^4.12.0"
   },
   "repository": {
