@@ -2,16 +2,16 @@ import axios from 'axios';
 import log from './LoggerFactory';
 import { ofNullable } from './OptionalUtils';
 
-export const trackEvent = (event: EVENT, dimensions?: KvMap<string>): void => {
-  dimensions = ofNullable(dimensions).orElse({});
-  try {
-    axios.post(`/metrics`, {
-      name: event,
-      dimensions: dimensions
-    });
-  } catch (e) {
-    log.error(`Unable to send metric: ${event} with dimensions: ${dimensions}`, e);
-  }
+export const trackEvent = async (event: EVENT, dimensions?: KvMap<string>): Promise<void> => {
+    dimensions = ofNullable(dimensions).orElse({});
+    try {
+        await axios.post(`/metrics`, {
+            name: event,
+            dimensions: dimensions
+        });
+    } catch (e) {
+        log.error(`Unable to send metric: ${event} with dimensions: ${dimensions}`, e);
+    }
 };
 
 export enum EVENT {
