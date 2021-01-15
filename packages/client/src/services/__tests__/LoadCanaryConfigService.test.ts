@@ -98,7 +98,7 @@ describe('LoadCanaryConfigService', () => {
   });
 
   it('should fetch template content', async () => {
-    const fileName = "hello-world-config";
+    const fileName = 'hello-world-config';
     const expectedData = { response: true };
     httpMock.onGet(`${process.env.PUBLIC_URL}/templates/${fileName}`).reply(200, expectedData);
     const actualData = await loadCanaryConfigService.fetchTemplateContent(fileName);
@@ -106,7 +106,7 @@ describe('LoadCanaryConfigService', () => {
   });
 
   it('should not fetch template content because template is not found', async () => {
-    const fileName = "fileName";
+    const fileName = 'fileName';
     const expectedData = { response: true };
     httpMock.onGet(`${process.env.PUBLIC_URL}/templates/${fileName}`).reply(404, expectedData);
     await expect(loadCanaryConfigService.fetchTemplateContent(fileName)).rejects.toThrowError(
