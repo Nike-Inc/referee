@@ -11,7 +11,7 @@ import {
   MetricSetPair
 } from '../domain/Kayenta';
 
-const kayentaClient = axios.create({
+export const kayentaClient = axios.create({
   baseURL: `${window.location.origin}/kayenta/`,
   timeout: 10000
 });
@@ -23,6 +23,7 @@ export default class KayentaApiService {
       return response.data;
     } catch (e) {
       log.error('Failed to fetch account metadata from Kayenta', e);
+      alert('Failed to fetch account metadata from Kayenta');
       throw e;
     }
   }

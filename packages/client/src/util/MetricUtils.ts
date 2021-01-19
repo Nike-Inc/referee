@@ -2,10 +2,10 @@ import axios from 'axios';
 import log from './LoggerFactory';
 import { ofNullable } from './OptionalUtils';
 
-export const trackEvent = (event: EVENT, dimensions?: KvMap<string>): void => {
+export const trackEvent = async (event: EVENT, dimensions?: KvMap<string>): Promise<void> => {
   dimensions = ofNullable(dimensions).orElse({});
   try {
-    axios.post(`/metrics`, {
+    await axios.post(`/metrics`, {
       name: event,
       dimensions: dimensions
     });

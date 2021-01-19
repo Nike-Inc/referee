@@ -152,9 +152,9 @@ export const validateCanaryMetricConfig = (
     if (isQueryTypeSimple) {
       querySchema = metricSourceIntegrations()[type].canaryMetricSetQueryConfigSchema;
     } else {
-      if (type == 'prometheus') {
+      if (type === 'prometheus') {
         querySchema = customPrometheusQueryScheme;
-      } else if (type == 'signalfx') {
+      } else if (type === 'signalfx') {
         querySchema = customSignalFXQuerySchema;
       }
     }

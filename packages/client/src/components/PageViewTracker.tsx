@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps, RouterProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { EVENT, trackEvent } from '../util/MetricUtils';
 import { ofNullable, trimToEmpty } from '../util/OptionalUtils';
 
