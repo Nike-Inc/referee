@@ -47,7 +47,7 @@
     "react-syntax-highlighter": "^15.4.3",
     "typeface-assistant": "^1.1.13",
     "uuid": "^8.3.2",
-    "yup": "^0.27.0",
+    "yup": "^0.32.9",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
   },
