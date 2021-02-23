@@ -67,6 +67,7 @@ Referee currently supports
 - New Relic Insights
 - Prometheus
 - SignalFx
+- Datadog
 
 To add a new integration you must implement the [MetricSourceIntegration](/packages/client/src/metricSources/MetricSourceIntegration.ts) interface and then add it to the [enabled metric sources](/packages/client/src/metricSources/index.tsx).
 
