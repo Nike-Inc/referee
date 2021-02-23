@@ -3,6 +3,7 @@ import { MetricSourceIntegration } from './MetricSourceIntegration';
 import NewRelic from './NewRelic';
 import SignalFx from './SignalFx';
 import Prometheus from './Prometheus';
+import Datadog from './Datadog';
 
 const MIN_TO_MS_CONVERSION: number = 60000;
 /**
@@ -12,7 +13,8 @@ const MIN_TO_MS_CONVERSION: number = 60000;
 const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[] = [
   NewRelic,
   SignalFx,
-  Prometheus
+  Prometheus,
+  Datadog
 ];
 
 /**
