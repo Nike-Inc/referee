@@ -59,7 +59,7 @@
     "@types/jest": "26.0.20",
     "@types/js-yaml": "^4.0.0",
     "@types/loglevel": "^1.5.4",
-    "@types/marked": "^0.6.5",
+    "@types/marked": "^2.0.1",
     "@types/react": "17.0.0",
     "@types/react-chartjs-2": "^2.5.7",
     "@types/react-dom": "17.0.0",
