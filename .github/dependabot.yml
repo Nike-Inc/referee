@@ -8,12 +8,16 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     target-branch: dep/dependency_staging
-    open-pull-requests-limit: 50
+    open-pull-requests-limit: 20
     schedule:
-      interval: "daily"
+      interval: "monthly"
+      time: "08:00"
+      timezone: "America/Los_Angeles"
   - package-ecosystem: "github-actions"
     directory: "/"
     target-branch: dep/dependency_staging
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     schedule:
-      interval: daily
+      interval: "monthly"
+      time: "08:00"
+      timezone: "America/Los_Angeles"
