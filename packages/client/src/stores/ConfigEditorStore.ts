@@ -105,18 +105,24 @@ export default class ConfigEditorStore {
     if (!canaryAnalysisConfig['nanStrategy']) {
       canaryAnalysisConfigCopy['nanStrategy'] = 'remove';
     }
+
     if (!canaryAnalysisConfig['critical']) {
       canaryAnalysisConfigCopy['critical'] = false;
-      canaryAnalysisConfigCopy['effectSize'] = {
-        allowedIncrease: 1,
-        allowedDecrease: 1
-      };
+      if (!canaryAnalysisConfig['effectSize']) {
+        canaryAnalysisConfigCopy['effectSize'] = {
+          allowedIncrease: 1,
+          allowedDecrease: 1
+        };
+      }
     } else {
-      canaryAnalysisConfigCopy['effectSize'] = {
-        criticalIncrease: 1,
-        criticalDecrease: 1
-      };
+      if (!canaryAnalysisConfig['effectSize']) {
+        canaryAnalysisConfigCopy['effectSize'] = {
+          criticalIncrease: 1,
+          criticalDecrease: 1
+        };
+      }
     }
+
     if (!canaryAnalysisConfig['outliers']) {
       canaryAnalysisConfigCopy['outliers'] = {
         strategy: 'keep'

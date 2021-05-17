@@ -9,8 +9,8 @@ export const DATADOG_SERVICE_TYPE: string = 'datadog';
 
 const schema = {
   customInlineTemplate: string()
-      .trim()
-      .required()
+    .trim()
+    .required()
 };
 
 const modalFactory = (props: MetricModalProps) => React.createElement(DatadogMetricModal, props);

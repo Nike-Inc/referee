@@ -14,8 +14,8 @@ export default class DatadogMetricModal extends AbstractMetricModal<DatadogCanar
 
   getQueryInitialState(): DatadogCanaryMetricSetQueryConfig {
     return {
-        type: DATADOG_SERVICE_TYPE,
-        customInlineTemplate: '',
+      type: DATADOG_SERVICE_TYPE,
+      customInlineTemplate: ''
     };
   }
 
