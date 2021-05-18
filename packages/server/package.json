@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "The backend for the Referee UI",
   "author": "Justin Field <fieldju@gmail.com>",
   "homepage": "",
