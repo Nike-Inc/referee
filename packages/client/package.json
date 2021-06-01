@@ -62,7 +62,7 @@
     "@types/marked": "^0.6.5",
     "@types/react": "17.0.0",
     "@types/react-chartjs-2": "^2.5.7",
-    "@types/react-dom": "17.0.0",
+    "@types/react-dom": "17.0.5",
     "@types/react-flatpickr": "^3.8.0",
     "@types/react-fontawesome": "^1.6.4",
     "@types/react-router-dom": "^5.1.7",
