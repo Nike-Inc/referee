@@ -11992,10 +11992,10 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-accessible-accordion@^3.0.0:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/react-accessible-accordion/-/react-accessible-accordion-3.3.3.tgz#387a3f4ab1840b5b6dff9f1f16544f658d5c8e12"
-  integrity sha512-I1Niy21IIyXIzcDuIlTnnN3k8bUux7puq60eyNuwf+lhvftnocn7hLhAz2NycXrZOqBClqi50YBqXlnbOTNrjQ==
+react-accessible-accordion@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-accessible-accordion/-/react-accessible-accordion-4.0.0.tgz#83bf0c3e403e7627dbf3109c628b597142923937"
+  integrity sha512-MovuWj2Uweo57LSgTIPpB83IYq8BNdZJ44j4NmDKYxaHC/H0JjYiqt8OfNMt+YK+XN8qRON13ERQnLfM73vmqw==
 
 react-app-polyfill@^0.2.2:
   version "0.2.2"
