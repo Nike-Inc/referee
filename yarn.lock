@@ -12032,21 +12032,10 @@ react-bootstrap@1.4.3:
     uncontrollable "^7.0.0"
     warning "^4.0.3"
 
-react-chartjs-2@*:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.10.0.tgz#857e7f4788cae27e872624ba7826d53cf82f1ee6"
-  integrity sha512-1MjWEkUn8LLFf6GVyYUOrruJTW3yVU5hlEJOwGj3MiokuC+jH/BahjWVGAMonbe9UYbEIUbd2Rn36iVlC0Hb7w==
-  dependencies:
-    lodash "^4.17.19"
-    prop-types "^15.7.2"
-
-react-chartjs-2@^2.11.1:
-  version "2.11.1"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.11.1.tgz#a78d0df05fc8bc8ffcd4c4ab5b89a25dd2ca3278"
-  integrity sha512-G7cNq/n2Bkh/v4vcI+GKx7Q1xwZexKYhOSj2HmrFXlvNeaURWXun6KlOUpEQwi1cv9Tgs4H3kGywDWMrX2kxfA==
-  dependencies:
-    lodash "^4.17.19"
-    prop-types "^15.7.2"
+react-chartjs-2@*, react-chartjs-2@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-3.3.0.tgz#3f62681645acccc1ab27a9186c70f79d6d417f73"
+  integrity sha512-4Mt0SR2aiUbWi/4762odRBYSnbNKSs4HWc0o3IW43py5bMfmfpeZU95w6mbvtuLZH/M3GsPJMU8DvDc+5U9blQ==
 
 react-copy-to-clipboard@^5.0.1:
   version "5.0.3"
