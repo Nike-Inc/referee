@@ -56,7 +56,7 @@
     "@types/classnames": "^2.2.11",
     "@types/file-saver": "^2.0.0",
     "@types/highlight.js": "^10.1.0",
-    "@types/jest": "26.0.20",
+    "@types/jest": "27.4.0",
     "@types/js-yaml": "^4.0.0",
     "@types/loglevel": "^1.5.4",
     "@types/marked": "^0.6.5",
