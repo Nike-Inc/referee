@@ -9871,10 +9871,10 @@ mobx-react@^6.3.1:
   dependencies:
     mobx-react-lite "^2.2.0"
 
-mobx@^5.9.4:
-  version "5.15.7"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.15.7.tgz#b9a5f2b6251f5d96980d13c78e9b5d8d4ce22665"
-  integrity sha512-wyM3FghTkhmC+hQjyPGGFdpehrcX1KOXsDuERhfK2YbJemkUhEB+6wzEN639T21onxlfYBmriA1PFnvxTUhcKw==
+mobx@^6.3.13:
+  version "6.3.13"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.3.13.tgz#93e56a57ee72369f850cf3d6398fd36ee8ef062e"
+  integrity sha512-zDDKDhYUk9QCHQUdLG+wb4Jv/nXutSLt/P8kkwHyjdbrJO4OZS6QTEsrOnrKM39puqXSrJZHdB6+yRys2NBFFA==
 
 modify-values@^1.0.0:
   version "1.0.1"
