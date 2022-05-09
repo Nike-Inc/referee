@@ -51,6 +51,10 @@ app.post('/metrics', (req, res) => {
   res.status(201).end();
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).end();
+});
+
 app.use(
   '/kayenta',
   proxy(Optional.ofNullable(process.env.KAYENTA_BASE_URL).orElse('http://localhost:8090'), {
