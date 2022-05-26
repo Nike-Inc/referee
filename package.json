@@ -40,6 +40,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "signalfx": "^7.0.1"
+    "signalfx": "^7.0.1",
+    "eventsource": "2.0.2"
   }
 }
