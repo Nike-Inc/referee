@@ -68,6 +68,7 @@ Referee currently supports
 - Prometheus
 - SignalFx
 - Datadog
+- InfluxDB
 
 To add a new integration you must implement the [MetricSourceIntegration](/packages/client/src/metricSources/MetricSourceIntegration.ts) interface and then add it to the [enabled metric sources](/packages/client/src/metricSources/index.tsx).
 
@@ -80,11 +81,11 @@ As stated in the [main description](#referee) Referee has an express backend tha
 To configure how Referee talks to Kayenta you can set the following environment variable.
 If you do nothing Referee defaults to talking to Kayenta on http://localhost:8090, the default when running Kayenta locally.
 
-Env Var | Default | Description
---------|---------|-------------
-*KAYENTA_BASE_URL* | `http://localhost:8090` | The base URL for where Kayenta is is serving traffic
-*KAYENTA_BASE_PATH* | NULL | If present this will be appended to the base URL when reverse proxying Kayenta requests, useful if want to local dev against a deployed Kayenta that is behind a reverse proxy.
-*DISABLE_KAYENTA_SSL_VERIFICATION* | `false` | [A hook for self signed cert issues](https://www.npmjs.com/package/express-http-proxy#q-how-to-ignore-self-signed-certificates-)
+| Env Var                            | Default                 | Description                                                                                                                                                                     |
+| ---------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| *KAYENTA_BASE_URL*                 | `http://localhost:8090` | The base URL for where Kayenta is is serving traffic                                                                                                                            |
+| *KAYENTA_BASE_PATH*                | NULL                    | If present this will be appended to the base URL when reverse proxying Kayenta requests, useful if want to local dev against a deployed Kayenta that is behind a reverse proxy. |
+| *DISABLE_KAYENTA_SSL_VERIFICATION* | `false`                 | [A hook for self signed cert issues](https://www.npmjs.com/package/express-http-proxy#q-how-to-ignore-self-signed-certificates-)                                                |
 
 ### bootstrap the project
 

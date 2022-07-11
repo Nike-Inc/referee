@@ -4,6 +4,7 @@ import NewRelic from './NewRelic';
 import SignalFx from './SignalFx';
 import Prometheus from './Prometheus';
 import Datadog from './Datadog';
+import InfluxDB from './InfluxDB';
 
 const MIN_TO_MS_CONVERSION: number = 60000;
 /**
@@ -14,7 +15,8 @@ const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[
   NewRelic,
   SignalFx,
   Prometheus,
-  Datadog
+  Datadog,
+  InfluxDB
 ];
 
 /**
@@ -23,9 +25,9 @@ const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[
 // prettier-ignore
 export const metricSourceIntegrations: () => KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>> = () => {
   return enabledMetricSources.reduce((result, metricsSource) => {
-      result[metricsSource.type] = metricsSource;
-      return result;
-    },
+    result[metricsSource.type] = metricsSource;
+    return result;
+  },
     {} as KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>>
   );
 };
