@@ -25,9 +25,9 @@ const enabledMetricSources: MetricSourceIntegration<CanaryMetricSetQueryConfig>[
 // prettier-ignore
 export const metricSourceIntegrations: () => KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>> = () => {
   return enabledMetricSources.reduce((result, metricsSource) => {
-    result[metricsSource.type] = metricsSource;
-    return result;
-  },
+      result[metricsSource.type] = metricsSource;
+      return result;
+    },
     {} as KvMap<MetricSourceIntegration<CanaryMetricSetQueryConfig>>
   );
 };
