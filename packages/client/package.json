@@ -15,7 +15,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "capitalize": "^2.0.0",
-    "chart.js": "^2.9.4",
+    "chart.js": "^3.9.1",
     "classnames": "^2.2.6",
     "d3-format": "^2.0.0",
     "file-saver": "^2.0.5",
