@@ -2594,9 +2594,9 @@
     "@types/react" "*"
 
 "@types/react-flatpickr@^3.8.0":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@types/react-flatpickr/-/react-flatpickr-3.8.1.tgz#9bdda7fdbee5fb2c2770c01eb720082789bc5bb8"
-  integrity sha512-+f4Cw3K+jaxHVcqsJXfsEyS9ps+9L8qZclJzZp7Si1+Vj26IufF+BMYU83FBMKLR66Hsq68xTpt3w0i2GHOldA==
+  version "3.8.8"
+  resolved "https://registry.yarnpkg.com/@types/react-flatpickr/-/react-flatpickr-3.8.8.tgz#bff2d88f814ad7b63837110e46ccf48ff518c23d"
+  integrity sha512-wxpSvmO23Qj6Ig0grw+nLAf2CzJZsS6WljXm6PiljSIZPAZrXLH1ggJPShi/uZZ1BPWIIRLJcehH685NiSFjzw==
   dependencies:
     "@types/react" "*"
     flatpickr "^4.0.6"
@@ -12107,9 +12107,9 @@ react-fast-compare@^2.0.1:
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
 react-flatpickr@^3.9.0:
-  version "3.10.6"
-  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.10.6.tgz#d6fe73ee12d13f2a804e5362c82e2688b6fbd409"
-  integrity sha512-Gg2zYFs+EoY7PNSk6lkiRyXV3nYmCp+ps29B4XFgZ1O4txOu6TvfHK2YCKT9zCpXbk5CcIGKMlvbupivWzy1+A==
+  version "3.10.13"
+  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.10.13.tgz#5b9d8f35f84e43f342fb0f0334b78a8dcd7d67c4"
+  integrity sha512-4m+K1K8jhvRFI8J/AHmQfA5hLALzhebEtEK8mLevXjX24MV3u502crzBn+EGFIBOfNUtrL5PId9FsGwgtuz/og==
   dependencies:
     flatpickr "^4.6.2"
     prop-types "^15.5.10"
