@@ -28,7 +28,7 @@
     "marked": "^1.2.7",
     "mobx": "^5.9.4",
     "mobx-persist": "^0.4.1",
-    "mobx-react": "^6.3.1",
+    "mobx-react": "^7.6.0",
     "moment": "^2.29.1",
     "optional-js": "^2.1.1",
     "path-browserify": "^1.0.0",
